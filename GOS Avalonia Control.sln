@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GOSTextEditor", "GOSTextEdi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TextMate Models", "SindarinTextMate\TextMate Models.csproj", "{80547C5A-FC32-4F85-BDC6-B10ADAAE96A8}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GOSImageViewer", "GOSImageViewer\GOSImageViewer.csproj", "{71148992-41F7-4397-9963-FCFBF0DEFC4B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +43,18 @@ Global
 		{80547C5A-FC32-4F85-BDC6-B10ADAAE96A8}.Release|x64.Build.0 = Release|x64
 		{80547C5A-FC32-4F85-BDC6-B10ADAAE96A8}.Release|x86.ActiveCfg = Release|x86
 		{80547C5A-FC32-4F85-BDC6-B10ADAAE96A8}.Release|x86.Build.0 = Release|x86
+		{71148992-41F7-4397-9963-FCFBF0DEFC4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71148992-41F7-4397-9963-FCFBF0DEFC4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71148992-41F7-4397-9963-FCFBF0DEFC4B}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{71148992-41F7-4397-9963-FCFBF0DEFC4B}.Debug|x64.Build.0 = Debug|Any CPU
+		{71148992-41F7-4397-9963-FCFBF0DEFC4B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{71148992-41F7-4397-9963-FCFBF0DEFC4B}.Debug|x86.Build.0 = Debug|Any CPU
+		{71148992-41F7-4397-9963-FCFBF0DEFC4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71148992-41F7-4397-9963-FCFBF0DEFC4B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{71148992-41F7-4397-9963-FCFBF0DEFC4B}.Release|x64.ActiveCfg = Release|Any CPU
+		{71148992-41F7-4397-9963-FCFBF0DEFC4B}.Release|x64.Build.0 = Release|Any CPU
+		{71148992-41F7-4397-9963-FCFBF0DEFC4B}.Release|x86.ActiveCfg = Release|Any CPU
+		{71148992-41F7-4397-9963-FCFBF0DEFC4B}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
