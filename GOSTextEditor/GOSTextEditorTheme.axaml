@@ -1,0 +1,62 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:gos="using:GOSAvaloniaControls"
+		xmlns:edit="using:AvaloniaEdit"
+		xmlns:doc="using:AvaloniaEdit.Document"
+		xmlns:sys="clr-namespace:System;assembly=mscorlib">
+	
+	<Design.PreviewWith>
+		<gos:GOSTextEditor/>
+	</Design.PreviewWith>
+
+	<Styles.Resources>
+		<Geometry x:Key="icon_wrapinternal">M2.75 5C2.33579 5 2 5.33579 2 5.75C2 6.16421 2.33579 6.5 2.75 6.5H21.25C21.6642 6.5 22 6.16421 22 5.75C22 5.33579 21.6642 5 21.25 5H2.75Z M2.75 11.5C2.33579 11.5 2 11.8358 2 12.25C2 12.6642 2.33579 13 2.75 13H19C20.3807 13 21.5 14.1193 21.5 15.5C21.5 16.8807 20.3807 18 19 18H14.5607L15.2803 17.2803C15.5732 16.9874 15.5732 16.5126 15.2803 16.2197C14.9874 15.9268 14.5126 15.9268 14.2197 16.2197L12.2197 18.2197C11.9268 18.5126 11.9268 18.9874 12.2197 19.2803L14.2197 21.2803C14.5126 21.5732 14.9874 21.5732 15.2803 21.2803C15.5732 20.9874 15.5732 20.5126 15.2803 20.2197L14.5607 19.5H19C21.2091 19.5 23 17.7091 23 15.5C23 13.2909 21.2091 11.5 19 11.5H2.75Z M2 18.75C2 18.3358 2.33579 18 2.75 18H9.25C9.66421 18 10 18.3358 10 18.75C10 19.1642 9.66421 19.5 9.25 19.5H2.75C2.33579 19.5 2 19.1642 2 18.75Z</Geometry>
+		<Geometry x:Key="icon_editinternal">M14.75,0.6029 L15.4,1.25 C16.2,2.054 16.2,3.357 15.4,4.161 L14.27,5.293 L10.71,1.735 L11.84,0.6029 C12.64,-0.201 13.95,-0.201 14.75,0.6029 z M4.885,14.67 L1.327,11.11 L10.06,2.382 L13.62,5.94 L4.885,14.67 z M1.004,12.41 L3.591,15 L-4.062E-007,16 L1.004,12.41 z</Geometry>
+		<sys:Double x:Key="button_size">35</sys:Double>
+		<!--<StyleInclude Source="avares://AvaloniaEdit/AvaloniaEdit.xaml"/>-->
+	</Styles.Resources>
+
+	<Style Selector="gos|GOSTextEditor">
+		<!-- Set Defaults -->
+		<Setter Property="Template">
+			<ControlTemplate>
+				<Border x:Name="RootBorder"
+						Background="{TemplateBinding Background}"
+						BorderBrush="{TemplateBinding BorderBrush}"
+						BorderThickness="{TemplateBinding BorderThickness}"
+						CornerRadius="{TemplateBinding CornerRadius}">
+					<Grid RowDefinitions="Auto, *">
+						<DockPanel HorizontalAlignment="Stretch" Margin="0,5">
+							<DockPanel.Styles>
+								<Style Selector=":is(Button)">
+									<Setter Property="Width" Value="{StaticResource button_size}"/>
+									<Setter Property="Height" Value="{StaticResource button_size}"/>
+									<Setter Property="Padding" Value="7"/>
+								</Style>
+							</DockPanel.Styles>
+							<StackPanel DockPanel.Dock="Left" Orientation="Horizontal" HorizontalAlignment="Left">
+								<ToggleButton x:Name="PART_WrapButton" IsChecked="{TemplateBinding IsWrap, Mode=TwoWay}" ToolTip.Tip="Word Wrap">
+									<Viewbox>
+										<!--Fill="{Binding $parent[Button].Foreground}"-->
+										<Path Stretch="UniformToFill" Fill="{Binding $parent[Button].Foreground}" Data="{StaticResource icon_wrapinternal}" />
+									</Viewbox>
+								</ToggleButton>
+							</StackPanel>
+							<StackPanel DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Right">
+								<ToggleButton x:Name="PART_EditSwitch" IsChecked="{TemplateBinding IsEditing, Mode=TwoWay}" ToolTip.Tip="Enable Edition">
+									<Viewbox>
+										<Path Stretch="UniformToFill" Fill="{Binding $parent[Button].Foreground}" Data="{StaticResource icon_editinternal}" />
+									</Viewbox>
+								</ToggleButton>
+							</StackPanel>
+						</DockPanel>
+						<edit:TextEditor x:Name="PART_Editor" Grid.Row="1" ShowLineNumbers="True" WordWrap="{TemplateBinding IsWrap}" ScrollViewer.VerticalScrollBarVisibility="Auto"
+										 LineNumbersForeground="#FF2B91AF" FontFamily="Cascadia Mono"
+										 IsReadOnly="{TemplateBinding IsReadOnly, Mode=OneWay}">
+						</edit:TextEditor>
+					</Grid>
+				</Border>
+			</ControlTemplate>
+		</Setter>
+	</Style>
+</Styles>
