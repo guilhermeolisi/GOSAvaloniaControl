@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>GOSAvaloniaControls</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="0.10.17" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="GOSImageViewerTheme.axaml.cs">
+      <DependentUpon>GOSImageViewerTheme.axaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+</Project>

@@ -4,6 +4,7 @@
     {
         internal static string[] SupportedGrammars = new string[] {
             "Sindarin",
+            "BAT",
             //"Clojure",
             //"CoffeeScript",
             //"Cpp",
@@ -17,11 +18,11 @@
             //"Groovy",
             //"HandleBars",
             //"HLSL",
-            //"HTML",
+            "HTML",
             //"Ini",
-            //"Java",
+            "Java",
             //"Javascript",
-            //"Json",
+            "Json",
             //"Julia",
             //"Less",
             //"Log",
@@ -33,7 +34,7 @@
             //"Pascal",
             //"Perl",
             //"PHP",
-            //"PowerShell",
+            "PowerShell",
             //"Pug",
             //"Python",
             //"R",
@@ -42,12 +43,12 @@
             //"Rust",
             //"SCSS",
             //"ShaderLab",
-            //"ShellScript",
-            //"SQL",
+            "ShellScript",
+            "SQL",
             //"Swift",
             //"TypescriptBasics",
             //"VB",
-            //"XML",
+            "XML",
             //"YAML"
         };
     }

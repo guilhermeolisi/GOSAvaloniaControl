@@ -39,7 +39,7 @@ public partial class GOSTextEditor : TemplatedControl
     bool isTextChanged = false;
     private async void FileSave(string text, bool isAsync)
     {
-        if (string.IsNullOrWhiteSpace(File))
+        if (string.IsNullOrWhiteSpace(FilePath))
             return;
 
         if (textTemp is not null)
@@ -80,14 +80,14 @@ public partial class GOSTextEditor : TemplatedControl
     {
         if (Document is null)
             return;
-        fileManager.SetPathFile(string.IsNullOrWhiteSpace(File) ? null : File.Substring(0));
+        fileManager.SetPathFile(string.IsNullOrWhiteSpace(FilePath) ? null : FilePath.Substring(0));
         changingFile = true;
-        if (!string.IsNullOrWhiteSpace(File) && !Directory.Exists(Path.GetDirectoryName(File)))
+        if (!string.IsNullOrWhiteSpace(FilePath) && !Directory.Exists(Path.GetDirectoryName(FilePath)))
         {
             //TODO throw exception
             return;
         }
-        if (!string.IsNullOrWhiteSpace(File) && !await fileManager.ReadTXTAsync())
+        if (!string.IsNullOrWhiteSpace(FilePath) && !await fileManager.ReadTXTAsync())
         {
             //TODO pegar o erro de acesso
             return;
