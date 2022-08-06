@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>GOSAvaloniaControls</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="0.10.17" />
+    <PackageReference Include="OxyPlot.Avalonia" Version="2.1.0-Preview1" />
+    <PackageReference Include="SkiaSharp" Version="2.88.1-preview.91" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="GOSChartViewer.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>%(Filename)</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+</Project>

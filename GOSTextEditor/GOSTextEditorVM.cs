@@ -113,9 +113,7 @@ public partial class GOSTextEditor : TemplatedControl
     }
     private string GetDocumentText()
     {
-        if (!isTextChanged)
-            return null;
-
+        
         if (UIDispatcher.CheckAccess())
         {
             return Document.Text.Substring(0);

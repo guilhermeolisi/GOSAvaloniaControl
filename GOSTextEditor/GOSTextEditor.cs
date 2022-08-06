@@ -23,7 +23,7 @@ public partial class GOSTextEditor : TemplatedControl
     public static readonly DirectProperty<GOSTextEditor, bool> IsReadOnlyProperty = AvaloniaProperty.RegisterDirect<GOSTextEditor, bool>(nameof(IsReadOnly), o => o.IsReadOnly);
     public static readonly StyledProperty<bool> IsWrapProperty = AvaloniaProperty.Register<GOSTextEditor, bool>(nameof(IsWrap), true, false, BindingMode.TwoWay);
     public static readonly StyledProperty<bool> ShowToolBarProperty = AvaloniaProperty.Register<GOSTextEditor, bool>(nameof(ShowToolBar), true, false, BindingMode.OneWay);
-    public static readonly StyledProperty<bool> ThemeProperty = AvaloniaProperty.Register<GOSTextEditor, bool>(nameof(Theme), true, false, BindingMode.OneWay);
+    public static readonly StyledProperty<bool> ThemeProperty = AvaloniaProperty.Register<GOSTextEditor, bool>(nameof(Theme), defaultBindingMode: BindingMode.OneWay);
 
     public string? FilePath
     {
@@ -67,8 +67,8 @@ public partial class GOSTextEditor : TemplatedControl
     /// </summary>
     public bool Theme
     {
-        get => GetValue(IsEditingProperty);
-        set => SetValue(IsEditingProperty, value);
+        get => GetValue(ThemeProperty);
+        set => SetValue(ThemeProperty, value);
     }
     public GOSTextEditor()
     {
@@ -86,7 +86,8 @@ public partial class GOSTextEditor : TemplatedControl
 
         var wrap = e.NameScope.Find<ToggleButton>("PART_WrapCheck");
         var edit = e.NameScope.Find<ToggleButton>("PART_EditCheck");
-
+        var clip = e.NameScope.Find<Button>("PART_CopyClipBoard");
+        clip.Click += Clip_Click;
         //https://github.com/AvaloniaUI/Avalonia/issues/4616
         //http://reference.avaloniaui.net/api/Avalonia.Controls/ResourceDictionary/50FEA02D
         //if (Application.Current.TryFindResource(""))
@@ -114,6 +115,25 @@ public partial class GOSTextEditor : TemplatedControl
             ChangeTheme();
         }
     }
+
+    private async void Clip_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        if (_editor is null)
+            return;
+        string temp = null;
+        if (!_editor.TextArea.Selection.IsEmpty)
+        {
+            temp = _editor.TextArea.Selection.GetText();
+        }
+        else
+        {
+            temp = GetDocumentText();
+        }
+        if (temp is null)
+            return;
+        await Application.Current.Clipboard.SetTextAsync(temp);
+    }
+
     private async void Document_Changed(object? sender, DocumentChangeEventArgs e)
     {
         if (!string.IsNullOrWhiteSpace(FilePath) && changingFile)
@@ -153,12 +173,10 @@ public partial class GOSTextEditor : TemplatedControl
 
         }
         isEditNull = false;
-        Task? task = null;
         if (string.IsNullOrWhiteSpace(Extension))
         {
             if (!string.IsNullOrWhiteSpace(FilePath))
             {
-                //task = new(() => _textMateInstallation.SetGrammar(_registryOptions.GetScopeByExtension(Path.GetExtension(File))));
 #if DEBUG
                 var trash = _registryOptions.GetScopeByExtension(Path.GetExtension(FilePath));
 #endif
@@ -169,19 +187,12 @@ public partial class GOSTextEditor : TemplatedControl
         {
             if (Extension == ".SIN" || Extension == ".DAT")
             {
-                //task = new(() => _textMateInstallation.SetGrammar(_registryOptions.GetScopeByLanguageId(_sindarinLanguage.Id)));
                 _textMateInstallation.SetGrammar(_registryOptions.GetScopeByLanguageId(_sindarinLanguage.Id));
             }
             else
             {
-                //task = new(() => _textMateInstallation.SetGrammar(_registryOptions.GetScopeByExtension(Extension)));
                 _textMateInstallation.SetGrammar(_registryOptions.GetScopeByExtension(Extension));
             }
-        }
-        if (task is not null)
-        {
-            task.Start();
-            await task;
         }
     }
     bool isEditNull = false;
@@ -195,21 +206,13 @@ public partial class GOSTextEditor : TemplatedControl
 
         }
         isEditNull = false;
-        Task? task = null;
         if (Theme)
         {
-            //task = new(() => _textMateInstallation.SetTheme(_registryOptions.LoadTheme(ThemeName.DarkPlus)));
             _textMateInstallation.SetTheme(_registryOptions.LoadTheme(ThemeName.DarkPlus));
         }
         else
         {
-            //task = new(() => _textMateInstallation.SetTheme(_registryOptions.LoadTheme(ThemeName.LightPlus)));
             _textMateInstallation.SetTheme(_registryOptions.LoadTheme(ThemeName.LightPlus));
-        }
-        if (task is not null)
-        {
-            task.Start();
-            await task;
         }
     }
 }
