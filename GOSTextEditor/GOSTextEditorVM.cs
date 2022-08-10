@@ -98,22 +98,15 @@ public partial class GOSTextEditor : TemplatedControl
 
         ReplaceDocument(text is not null ? text : string.Empty);
 
-        if (UIDispatcher.CheckAccess())
+        UIDispatcher.Post(() =>
         {
             Document.UndoStack.ClearAll();
-        }
-        else
-        {
-            UIDispatcher.Post(() =>
-            {
-                Document.UndoStack.ClearAll();
-            }, DispatcherPriority.Send);
-        }
+        }, DispatcherPriority.Send);
         changingFile = false;
     }
     private string GetDocumentText()
     {
-        
+
         if (UIDispatcher.CheckAccess())
         {
             return Document.Text.Substring(0);
@@ -145,17 +138,11 @@ public partial class GOSTextEditor : TemplatedControl
         if (start == 0 && length == Document.TextLength && text == Document.Text)
             return;
 
-        if (UIDispatcher.CheckAccess())
+
+        UIDispatcher.Post(() =>
         {
             ReplaceAction(text, start, length);
-        }
-        else
-        {
-            UIDispatcher.Post(() =>
-            {
-                ReplaceAction(text, start, length);
-            });
-        }
+        });
 
         void ReplaceAction(string text, int start, int length)
         {

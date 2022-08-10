@@ -25,7 +25,7 @@ public partial class GOSChartViewer
     int SelectedIndex { get; set; }
     private void ChangeTheme()
     {
-       
+
         if (Theme)
         {
             PlotModel.TextColor = OxyColors.White;
@@ -125,17 +125,8 @@ public partial class GOSChartViewer
                 PlotModel.Series[0] = SerieExp[0];
 
         }
-        if (UIDispatcher.CheckAccess())
-        {
-            UpdateChart();
-        }
-        else
-        {
-            UIDispatcher.Post(() =>
-            {
-                UpdateChart();
-            });
-        }
+
+        UpdateChart();
     }
     private void Data_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
     {
@@ -169,21 +160,12 @@ public partial class GOSChartViewer
                 break;
 
         }
-        if (UIDispatcher.CheckAccess())
-        {
-            UpdateChart();
-        }
-        else
-        {
-            UIDispatcher.Post(() =>
-            {
-                UpdateChart();
-            });
-        }
+        UpdateChart();
+
     }
     private void UpdateChart()
     {
-        PlotModel.InvalidatePlot(true);
+
         if (PlotModel.DefaultYAxis is not null && (double.IsNaN(PlotModel.DefaultYAxis.FontSize) || PlotModel.DefaultYAxis.FontSize != 0))
             PlotModel.DefaultYAxis.FontSize = 0;
         if (PlotModel.DefaultYAxis is not null && PlotModel.DefaultYAxis.TickStyle != TickStyle.None)
@@ -196,7 +178,10 @@ public partial class GOSChartViewer
             PlotModel.DefaultYAxis.TicklineColor = Theme ? OxyColors.White : OxyColors.Black;
         if (PlotModel.DefaultXAxis is not null && ((Theme && PlotModel.DefaultXAxis.TicklineColor != OxyColors.White) || (!Theme && PlotModel.DefaultXAxis.TicklineColor != OxyColors.Black)))
             PlotModel.DefaultXAxis.TicklineColor = Theme ? OxyColors.White : OxyColors.Black;
-
+        UIDispatcher.Post(() =>
+        {
+            PlotModel.InvalidatePlot(true);
+        });
     }
     private static void AddFromArray(XYAxisSeries serie, ObservableCollection<(double X, double Y)> data, ObservableCollection<DataPoint> dataOxy)
     {

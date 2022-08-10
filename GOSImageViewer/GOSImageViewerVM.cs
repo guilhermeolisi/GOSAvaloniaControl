@@ -57,17 +57,9 @@ public partial class GOSImageViewer
             await Task.Delay(50);
         }
 
-
-        if (UIDispatcher.CheckAccess())
+        UIDispatcher.Post(() =>
         {
             _imageControl.Source = ImageToView;
-        }
-        else
-        {
-            UIDispatcher.Post(() =>
-            {
-                _imageControl.Source = ImageToView;
-            }, DispatcherPriority.Layout);
-        }
+        }, DispatcherPriority.Layout);
     }
 }

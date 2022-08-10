@@ -48,11 +48,12 @@
 								</Button>
 							</StackPanel>
 							<StackPanel DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Right">
-								<ToggleButton x:Name="PART_EditCheck" IsChecked="{TemplateBinding IsEditing, Mode=TwoWay}" ToolTip.Tip="Enable Edition">
-									<Viewbox>
+								<TextBlock Text="Editing" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0"/>
+								<ToggleSwitch x:Name="PART_EditCheck" IsChecked="{TemplateBinding IsEditing, Mode=TwoWay}" ToolTip.Tip="Enable Edition">
+									<!--<Viewbox>
 										<Path Stretch="UniformToFill" Fill="{Binding $parent[Button].Foreground}" Data="{StaticResource icon_editinternal}" />
-									</Viewbox>
-								</ToggleButton>
+									</Viewbox>-->
+								</ToggleSwitch>
 							</StackPanel>
 						</DockPanel>
 						<edit:TextEditor x:Name="PART_Editor" Grid.Row="1" ShowLineNumbers="True" WordWrap="{TemplateBinding IsWrap}" ScrollViewer.VerticalScrollBarVisibility="Auto"
