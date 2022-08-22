@@ -21,7 +21,7 @@ public partial class GOSTextEditor : TemplatedControl
     public static readonly StyledProperty<string?> ExtensionProperty = AvaloniaProperty.Register<GOSTextEditor, string?>(nameof(Extension));
     public static readonly StyledProperty<bool> IsEditingProperty = AvaloniaProperty.Register<GOSTextEditor, bool>(nameof(IsEditing), true, false, BindingMode.TwoWay);
     public static readonly DirectProperty<GOSTextEditor, bool> IsReadOnlyProperty = AvaloniaProperty.RegisterDirect<GOSTextEditor, bool>(nameof(IsReadOnly), o => o.IsReadOnly);
-    public static readonly StyledProperty<bool> IsWrapProperty = AvaloniaProperty.Register<GOSTextEditor, bool>(nameof(IsWrap), true, false, BindingMode.TwoWay);
+    public static readonly StyledProperty<bool> IsWrapProperty = AvaloniaProperty.Register<GOSTextEditor, bool>(nameof(IsWrap), false, false, BindingMode.TwoWay);
     public static readonly StyledProperty<bool> ShowToolBarProperty = AvaloniaProperty.Register<GOSTextEditor, bool>(nameof(ShowToolBar), true, false, BindingMode.OneWay);
     public static readonly StyledProperty<bool> ThemeProperty = AvaloniaProperty.Register<GOSTextEditor, bool>(nameof(Theme), defaultBindingMode: BindingMode.OneWay);
 

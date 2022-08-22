@@ -139,10 +139,17 @@ public partial class GOSTextEditor : TemplatedControl
             return;
 
 
-        UIDispatcher.Post(() =>
+        if (UIDispatcher.CheckAccess())
         {
             ReplaceAction(text, start, length);
-        });
+        }
+        else
+        {
+            UIDispatcher.Post(() =>
+            {
+                ReplaceAction(text, start, length);
+            });
+        }
 
         void ReplaceAction(string text, int start, int length)
         {

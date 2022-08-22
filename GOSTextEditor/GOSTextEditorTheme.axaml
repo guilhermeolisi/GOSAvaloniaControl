@@ -47,9 +47,9 @@
 									</Viewbox>
 								</Button>
 							</StackPanel>
-							<StackPanel DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Right">
+							<StackPanel DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Right" ToolTip.Tip="Enable Edition">
 								<TextBlock Text="Editing" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0"/>
-								<ToggleSwitch x:Name="PART_EditCheck" IsChecked="{TemplateBinding IsEditing, Mode=TwoWay}" ToolTip.Tip="Enable Edition">
+								<ToggleSwitch x:Name="PART_EditCheck" IsChecked="{TemplateBinding IsEditing, Mode=TwoWay}"  Margin="0" VerticalAlignment="Center">
 									<!--<Viewbox>
 										<Path Stretch="UniformToFill" Fill="{Binding $parent[Button].Foreground}" Data="{StaticResource icon_editinternal}" />
 									</Viewbox>-->
