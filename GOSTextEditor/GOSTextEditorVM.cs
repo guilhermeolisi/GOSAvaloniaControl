@@ -19,7 +19,7 @@ public partial class GOSTextEditor : TemplatedControl
     TextEditorOptions? EditorOptions { get; set; }
 
     bool isSavingTextSync, changingFile;
-    private FileTXTIO fileManager = new(null, true);
+    private IFileTXTIO fileManager;
     private Dispatcher UIDispatcher = Dispatcher.UIThread;
 
     public void IsClosing()
@@ -63,7 +63,6 @@ public partial class GOSTextEditor : TemplatedControl
                 if (temp is not null && temp.CompareTo(textTemp) == 0)
                     return;
                 temp = textTemp.Substring(0);
-                //SaveSinTask = new Task(() => FileMethods.WriteTXTAsync(FileSindarin, sinTextTemp));
                 saveTask = new Task(() => fileManager.WriteTXT(textTemp));
                 saveTask.Start();
                 if (isAsync)

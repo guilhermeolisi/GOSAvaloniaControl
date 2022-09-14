@@ -2,20 +2,20 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
-using Avalonia.Markup.Xaml.MarkupExtensions;
-using Avalonia.Threading;
 using AvaloniaEdit;
 using AvaloniaEdit.Document;
 using AvaloniaEdit.TextMate;
 using BaseLibrary;
 using Nimloth.TextMate.Models;
-using System.Threading;
-using System.Threading.Tasks;
+using Splat;
 
 namespace GOSAvaloniaControls;
 
 public partial class GOSTextEditor : TemplatedControl
 {
+    //TODO fazer uma propriedade Text bindinble
+
+
     public static readonly StyledProperty<string?> FilePathProperty = AvaloniaProperty.Register<GOSTextEditor, string?>(nameof(FilePath));
     //public static readonly DirectProperty<TextEditorTemplated, string?> FileProperty =        AvaloniaProperty.RegisterDirect<TextEditorTemplated, string?>(nameof(File), o => o.File, (o, v) => o.File = v);
     public static readonly StyledProperty<string?> ExtensionProperty = AvaloniaProperty.Register<GOSTextEditor, string?>(nameof(Extension));
@@ -72,6 +72,9 @@ public partial class GOSTextEditor : TemplatedControl
     }
     public GOSTextEditor()
     {
+        this.fileManager = Locator.Current!.GetService<IFileTXTIO>()!;
+        fileManager.SetStayBak(true);
+
         _registryOptions = new RegistryOptions(ThemeName.Dark);
         _sindarinLanguage = _registryOptions.GetLanguageByExtension(".sin");
 

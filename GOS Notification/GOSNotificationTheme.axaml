@@ -1,0 +1,112 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:GOSAvaloniaControls"
+		xmlns:fl="using:FluentAvalonia.UI.Controls">
+	<Design.PreviewWith>
+		<controls:GOSNotification />
+	</Design.PreviewWith>
+
+	<Styles.Resources>
+		<StreamGeometry x:Key="icon_bellfill">M7,16 A2,-2 0 0 0 9,14 L5,14 A2,-2 0 0 0 7,16 z M7.995,1.1 A0.9999,-0.9999 0 1 0 6.005,1.1 A5.002,-5.002 0 0 0 2,6.001 C2,7.098 1.5,12 0,13 L14,13 C12.5,12 12,7.098 12,6.001 C12,3.581 10.28,1.561 7.995,1.1 z</StreamGeometry>
+		<controls:ByteToSeverityConverter x:Key="ByteToSeverityConverter" />
+	</Styles.Resources>
+	<Style Selector=":is(Button).clean">
+		<Setter Property="Background" Value="Transparent"/>
+		<Setter Property="BorderBrush" Value="Transparent"/>
+	</Style>
+	<Style Selector=":is(Button).clean:disabled  /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="Transparent"/>
+		<Setter Property="BorderBrush" Value="Transparent"/>
+	</Style>
+	<Style Selector=":is(Button).clean:disabled /template/ Border#BorderElement">
+		<Setter Property="BorderBrush" Value="Transparent" />
+	</Style>
+	<Style Selector=":is(Button).circle">
+		<Setter Property="CornerRadius" Value="90"/>
+		<Setter Property="Padding" Value="8"/>
+		<Setter Property="Height" Value="35"/>
+		<Setter Property="Width" Value="35"/>
+		<Setter Property="Margin" Value="0"/>
+		<Setter Property="ContentTemplate">
+			<DataTemplate>
+				<Viewbox Child="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}"/>
+			</DataTemplate>
+		</Setter>
+	</Style>
+	<Style Selector="ContentControl.items">
+		<Setter Property="Background" Value="{DynamicResource ExpanderHeaderBackground}" />
+		<Setter Property="BorderBrush" Value="{DynamicResource ExpanderHeaderBorderBrush}" />
+		<Setter Property="BorderThickness" Value="{DynamicResource ExpanderHeaderBorderThickness}" />
+		<Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadius}" />
+		<Setter Property="MinHeight" Value="48" />
+		<Setter Property="Padding" Value="16,0"/>
+		<!--16,8,16,8-->
+		<Setter Property="Template">
+			<ControlTemplate>
+				<Panel>
+					<Border Name="Root"
+							Background="{TemplateBinding Background}"
+							BorderBrush="{TemplateBinding BorderBrush}"
+							MinHeight="{TemplateBinding MinHeight}"
+							MinWidth="{TemplateBinding MinWidth}"
+							MaxWidth="{TemplateBinding MaxWidth}"
+							Width="{TemplateBinding Width}"
+							HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+							BorderThickness="{TemplateBinding BorderThickness}"
+							CornerRadius="{TemplateBinding CornerRadius}">
+						<ContentPresenter Name="ContentPresenter"
+												  Content="{TemplateBinding Content}"
+												  ContentTemplate="{TemplateBinding ContentTemplate}"
+												  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+												  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+												  TextBlock.Foreground="{TemplateBinding Foreground}"
+										  Padding="{TemplateBinding Padding}"/>
+					</Border>
+
+				</Panel>
+			</ControlTemplate>
+		</Setter>
+	</Style>
+
+	<Style Selector="controls|GOSNotification">
+		<!-- Set Defaults -->
+		<!--<Setter Porperty="HorizontalAlignment" Value="Right" />
+		<Setter Porperty="VerticalAlignment" Value="Bottom" />-->
+		<Setter Property="Template">
+			<ControlTemplate>
+				<Grid RowDefinitions="*,Auto" VerticalAlignment="{TemplateBinding VerticalAlignment}" HorizontalAlignment="{TemplateBinding HorizontalAlignment}">
+					<ItemsControl x:Name="PART_ballon" Width="400">
+						<ItemsControl.ItemTemplate>
+							<DataTemplate DataType="controls:BallonItem">
+								<!--Title="Notification"-->
+								<fl:InfoBar IsOpen="True" Severity="{Binding Item.Severity, Converter={StaticResource ByteToSeverityConverter}}" Message="{Binding Item.Message}"/>
+							</DataTemplate>
+						</ItemsControl.ItemTemplate>
+					</ItemsControl>
+					<Button x:Name="PART_buttonBell" Classes="circle clean" Grid.Row="1" ToolTip.Tip="Notification" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+						<Panel>
+							<fl:PathIcon Data="{StaticResource icon_bellfill}"/>
+							<Viewbox Height="10" Width="10" VerticalAlignment="Top" HorizontalAlignment="Right"  Margin="0,0,-5,0">
+								<fl:InfoBadge x:Name="PART_infoBadge" Classes="Attention" IsVisible="False" />
+							</Viewbox>
+						</Panel>
+						<Button.Flyout>
+							<Flyout Placement="TopEdgeAlignedRight">
+								<ItemsControl x:Name="PART_buttonBellFlyout" HorizontalAlignment="Stretch" Width="300">
+									<ItemsControl.ItemTemplate>
+										<DataTemplate DataType="controls:NotificationItem">
+											<!--<ContentControl Classes="items" HorizontalAlignment="Stretch">
+												<fl:InfoBar IsOpen="True" Severity="{Binding Item.Severity, Converter={StaticResource ByteToSeverityConverter}}" Message="{Binding Message}" VerticalAlignment="Center"/>
+											</ContentControl>-->
+											<fl:InfoBar IsOpen="True" Severity="{Binding Severity, Converter={StaticResource ByteToSeverityConverter}}" Message="{Binding Message}" VerticalAlignment="Center" IsClosable="False" MaxHeight="80" />
+										</DataTemplate>
+									</ItemsControl.ItemTemplate>
+								</ItemsControl>
+							</Flyout>
+						</Button.Flyout>
+					</Button>
+				</Grid>
+			</ControlTemplate>
+		</Setter>
+	</Style>
+</Styles>
