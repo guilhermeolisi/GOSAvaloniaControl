@@ -5,6 +5,7 @@
     <RootNamespace>GOSAvaloniaControls</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <Platforms>AnyCPU;x86;x64</Platforms>
   </PropertyGroup>
 
 </Project>
