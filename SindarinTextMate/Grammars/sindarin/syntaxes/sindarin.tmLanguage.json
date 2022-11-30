@@ -193,7 +193,7 @@
     },
     "property-list": {
       "name": "entity.name.variable.property.sin",
-      "match": "(?i)(?:\\b)(cycles|derivationbothside|anomalousscattering|stabilization|rapidyrecalcule|calculeprofileinpeak|resolution|profilesmax|profilexmax|enableintensity|enableshift|cutoff|zero|displacement|monochromator|polarization|variableslit|incidentangle|specimenthickness|absoprtionfunction|scale|shift|multiplicity|z|convolutiontype|shape|direction|width|type)(?:\\b)"
+      "match": "(?i)(?:\\b)(cycles|derivationbothside|anomalousscattering|stabilization|rapidyrecalcule|calculeprofileinpeak|resolution|profilesmax|profilexmax|enableintensity|enableshift|cutoff|zero|displacement|monochromatortwotheta|polarization|variableslit|incidentangle|specimenthickness|absoprtionfunction|scale|shift|multiplicity|z|convolutiontype|shape|direction|width|type)(?:\\b)"
     },
     "enum-list": {
       "name": "entity.name.type.enum.sin",
