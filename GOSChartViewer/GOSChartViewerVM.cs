@@ -20,7 +20,7 @@ public partial class GOSChartViewer
     private PlotModel PlotModel { get; set; } = new();
     private Dispatcher UIDispatcher = Dispatcher.UIThread;
     //[Reactive]
-    ObservableCollection<string> ExperimentalsLabel { get; set; }
+    ObservableCollection<string>? ExperimentalsLabel { get; set; }
     //[Reactive]
     int SelectedIndex { get; set; }
     private void ChangeTheme()
@@ -41,10 +41,10 @@ public partial class GOSChartViewer
             ProcessPoints();
         }
     }
-    bool isChangingData;
-    public void SetData(List<string> experimentals)
+    //bool isChangingData;
+    public void SetData(List<string>? experimentals)
     {
-        isChangingData = true;
+        //isChangingData = true;
         if (experimentals is null || experimentals.Count == 0 || experimentals.Count == 1)
         {
             (ExperimentalsLabel ??= new()).Clear();
@@ -72,14 +72,14 @@ public partial class GOSChartViewer
                 SelectedIndex = 0;
             }
         }
-        isChangingData = false;
+        //isChangingData = false;
         ProcessPoints();
     }
 
-    private List<LineSeries> SerieExp;
+    private List<LineSeries>? SerieExp;
     //private LineSeries[] SerieCalc;
 
-    private ObservableCollection<ObservableCollection<DataPoint>> DataExp;
+    private ObservableCollection<ObservableCollection<DataPoint>>? DataExp;
     OxyColor[] ColorsLight = { OxyColor.FromArgb(255, DiffractogramColorsLigth[0].Red, DiffractogramColorsLigth[0].Green, DiffractogramColorsLigth[0].Blue), OxyColor.FromArgb(255, DiffractogramColorsLigth[2].Red, DiffractogramColorsLigth[2].Green, DiffractogramColorsLigth[2].Blue) };
     OxyColor[] ColorsDark = { OxyColor.FromArgb(255, DiffractogramColorsDark[0].Red, DiffractogramColorsDark[0].Green, DiffractogramColorsDark[0].Blue), OxyColor.FromArgb(255, DiffractogramColorsDark[2].Red, DiffractogramColorsDark[2].Green, DiffractogramColorsDark[2].Blue) };
 
@@ -135,7 +135,7 @@ public partial class GOSChartViewer
             case System.Collections.Specialized.NotifyCollectionChangedAction.Add:
                 if (e.NewItems is not null && e.NewItems.Count == 1)
                 {
-                    if (e.NewStartingIndex == Data.Count - 1)
+                    if (e.NewStartingIndex == Data?.Count - 1)
                     {
                         DataExp[0].Add(new((((double X, double Y))e.NewItems[0]).X, (((double X, double Y))e.NewItems[0]).Y));
                     }

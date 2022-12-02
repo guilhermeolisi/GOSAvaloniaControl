@@ -26,6 +26,7 @@ public partial class GOSImageViewer
         }
         isGettingImage = true;
 
+#pragma warning disable CS0168 // Variable is declared but never used
         try
         {
             await using (var imageStream = File.OpenRead(FilePath))
@@ -38,6 +39,7 @@ public partial class GOSImageViewer
         {
 
         }
+#pragma warning restore CS0168 // Variable is declared but never used
 
         isGettingImage = false;
     }

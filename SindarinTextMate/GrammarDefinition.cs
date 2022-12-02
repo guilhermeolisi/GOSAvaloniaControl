@@ -7,13 +7,13 @@ namespace Nimloth.TextMate.Models
     public class Engines
     {
         [JsonPropertyName("engines")]
-        public string VsCode { get; set; }
+        public string? VsCode { get; set; }
     }
 
     public class Scripts
     {
         [JsonPropertyName("update-grammar")]
-        public string UpdateGrammar { get; set; }
+        public string? UpdateGrammar { get; set; }
     }
 
     public class Language

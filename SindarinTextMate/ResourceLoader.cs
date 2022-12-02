@@ -14,7 +14,7 @@ namespace Nimloth.TextMate.Models
 
         static ResourceLoader()
         {
-            currentDirectory = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+            currentDirectory = Path.GetDirectoryName(Assembly.GetEntryAssembly()?.Location)!;
         }
 
         internal static StreamReader OpenGrammarPackage(string grammarName)
@@ -31,7 +31,7 @@ namespace Nimloth.TextMate.Models
             if (!File.Exists(grammarPackage))
             { }
             var trash = Directory.GetCurrentDirectory();
-            var trash2 = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+            var trash2 = Path.GetDirectoryName(Assembly.GetEntryAssembly()?.Location);
 #endif
 
             var result = new StreamReader(grammarPackage);

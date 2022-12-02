@@ -43,7 +43,7 @@ public class RegistryOptions : IRegistryOptions
         return result;
     }
 
-    public Language GetLanguageByExtension(string extension)
+    public Language? GetLanguageByExtension(string extension)
     {
         foreach (GrammarDefinition definition in _availableGrammars.Values)
         {
@@ -170,7 +170,7 @@ public class RegistryOptions : IRegistryOptions
             using (StreamReader reader = ResourceLoader.OpenGrammarPackage(grammar))
             using (JsonTextReader jsonTextReader = new JsonTextReader(reader))
             {
-                GrammarDefinition definition = serializer.Deserialize<GrammarDefinition>(jsonTextReader);
+                GrammarDefinition definition = serializer?.Deserialize<GrammarDefinition>(jsonTextReader)!;
                 _availableGrammars.Add(grammar, definition);
             }
         }
@@ -203,7 +203,7 @@ public class RegistryOptions : IRegistryOptions
         return null;
     }
 
-    string GetThemeFile(ThemeName name)
+    string? GetThemeFile(ThemeName name)
     {
         switch (name)
         {
