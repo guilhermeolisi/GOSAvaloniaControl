@@ -1,0 +1,51 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:gos="using:GOSAvaloniaControls.NavigationBar"
+		>
+  <Design.PreviewWith>
+	  <gos:GOSNavigationbar />
+  </Design.PreviewWith>
+
+  <Style Selector="gos|GOSNavigationBar">
+    <!-- Set Defaults -->
+    <Setter Property="Template">
+      <ControlTemplate>
+		  <Border x:Name="RootBorder"
+					Background="{TemplateBinding Background}"
+					BorderBrush="{TemplateBinding BorderBrush}"
+					BorderThickness="{TemplateBinding BorderThickness}"
+					CornerRadius="{TemplateBinding CornerRadius}">
+			  <WrapPanel>
+				  <Button x:Name="PART_home" />
+				  <Button x:Name="PART_return" />
+				  <ListBox x:Name="PART_listpath" AutoScrollToSelectedItem="True" SelectionMode="Single" IsVisible="False">
+					  <ListBox.ItemsPanel>
+						  <ItemsPanelTemplate>
+							  <WrapPanel />
+						  </ItemsPanelTemplate>
+					  </ListBox.ItemsPanel>
+					  <!--<ListBox.ItemTemplate>
+						  <DataTemplate>
+							  <TextBlock Text="{ReflectionBinding Title}" />
+						  </DataTemplate>
+					  </ListBox.ItemTemplate>-->
+				  </ListBox>
+				  <TextBlock x:Name="PART_captionchildren"/>
+				  <ListBox x:Name="PART_listchildren" AutoScrollToSelectedItem="True" SelectionMode="Single">
+					  <ListBox.ItemsPanel>
+						  <ItemsPanelTemplate>
+							  <WrapPanel />
+						  </ItemsPanelTemplate>
+					  </ListBox.ItemsPanel>
+					  <!--<ListBox.ItemTemplate>
+						  <DataTemplate>
+							  <TextBlock Text="{ReflectionBinding Title}" />
+						  </DataTemplate>
+					  </ListBox.ItemTemplate>-->
+				  </ListBox>
+			  </WrapPanel>
+		  </Border>
+      </ControlTemplate>
+    </Setter>
+  </Style>
+</Styles>

@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\BaseLibrary\BaseInterfaceInjection\BaseInterfaceInjection.csproj" />
+    <ProjectReference Include="..\..\BaseLibrary\BaseInterfaceInjection\BaseInjectionInterface.csproj" />
     <ProjectReference Include="..\GOS Notification Model\GOS Notification Model.csproj" />
   </ItemGroup>
 
