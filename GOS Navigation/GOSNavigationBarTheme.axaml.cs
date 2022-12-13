@@ -1,7 +1,7 @@
 using Avalonia.Markup.Xaml;
 using AvaloniaStyles = Avalonia.Styling.Styles;
 
-namespace GOSAvaloniaControls.NavigationBar;
+namespace GOSAvaloniaControls;
 
 public class GOSChartViewerTheme : AvaloniaStyles
 {

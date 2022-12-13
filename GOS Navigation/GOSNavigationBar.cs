@@ -11,7 +11,7 @@ using System.Collections.ObjectModel;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace GOSAvaloniaControls.NavigationBar;
+namespace GOSAvaloniaControls;
 
 public /*partial*/ class GOSNavigationBar : TemplatedControl
 {
