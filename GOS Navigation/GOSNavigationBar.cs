@@ -2,18 +2,12 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
-using Avalonia.Markup.Xaml.MarkupExtensions;
-using Avalonia.Media.Immutable;
-using Avalonia.Threading;
 using GOSAvaloniaControls.NavigationBar.Model;
-using System;
 using System.Collections.ObjectModel;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace GOSAvaloniaControls;
 
-public /*partial*/ class GOSNavigationBar : TemplatedControl
+public class GOSNavigationBar : TemplatedControl
 {
     public static readonly StyledProperty<GOSNavigationBarTree?> MainItemProperty = AvaloniaProperty.Register<GOSNavigationBar, GOSNavigationBarTree?>(nameof(MainItem));
     public static readonly StyledProperty<object> SelectedProperty = AvaloniaProperty.Register<GOSNavigationBar, object>(nameof(Selected), false, false, BindingMode.TwoWay);
@@ -33,7 +27,7 @@ public /*partial*/ class GOSNavigationBar : TemplatedControl
 
     List<int> Indexes = new();
     List<GOSNavigationBarTree> PathItems;
-    List<GOSNavigationBarTree> ChildrenItems = new();
+    ObservableCollection<GOSNavigationBarTree> ChildrenItems = new();
     public GOSNavigationBar()
     {
         MainItemProperty.Changed.AddClassHandler<GOSNavigationBar>((x, e) => x.ChangeMainItem());
@@ -61,7 +55,7 @@ public /*partial*/ class GOSNavigationBar : TemplatedControl
         //listChildren.PropertyChanged += ListChildren_PropertyChanged;
         listChildren.GetObservable(ListBox.SelectedIndexProperty)
             .Subscribe(x => ChildSelected(x));
-
+        HomeCommand();
     }
 
     //private void ListChildren_PropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
@@ -71,8 +65,10 @@ public /*partial*/ class GOSNavigationBar : TemplatedControl
 
     private void ChangeMainItem()
     {
+        HomeCommand();
         toolTipHome.Content = $"Go to {MainItem?.Caption}";
     }
+    bool isChangedLevel;
     private void ChildSelected(int index)
     {
         if (index < 0)
@@ -80,20 +76,38 @@ public /*partial*/ class GOSNavigationBar : TemplatedControl
         if (ChildrenItems[index].Children is not null && ChildrenItems[index].Children.Count > 0)
         {
             Indexes.Add(index);
-            ChangeChildren(ChildrenItems[index].Children);
             UpdateChildrenCaption(ChildrenItems[index].CaptionChild);
+            ChangeChildrenItems(ChildrenItems[index].Children);
+            isChangedLevel = true;
         }
-        Selected = ChildrenItems[index].Item;
+        else
+        {
+            if (isChangedLevel)
+            {
+                Indexes.Add(index);
+                isChangedLevel = false;
+            }
+            else
+            {
+                Indexes[Indexes.Count - 1] = index;
+            }
+        }
+        GOSNavigationBarTree temp = GetItemFromIndex();
+        Selected = temp.Item;
         UpdateButtonsVisibility();
     }
-    private void ChangeChildren(List<GOSNavigationBarTree> children)
+    private void ChangeChildrenItems(List<GOSNavigationBarTree> children)
     {
         if (children is null || children.Count == 0)
             return;
         if (!ChildrenItems.Contains(children[0]))
         {
             ChildrenItems.Clear();
-            ChildrenItems.AddRange(children);
+            for (int i = 0; i < children.Count; i++)
+            {
+                ChildrenItems.Add(children[i]);
+            }
+            listChildren.SelectedIndex = -1;
         }
     }
     private void UpdateButtonsVisibility()
@@ -104,13 +118,7 @@ public /*partial*/ class GOSNavigationBar : TemplatedControl
 
         if (Indexes.Count > 1)
         {
-            GOSNavigationBarTree temp = MainItem;
-            for (int i = 0; i < Indexes.Count; i++)
-            {
-                if (temp?.Children is not null)
-                    temp = temp.Children[i];
-            }
-
+            GOSNavigationBarTree temp = GetItemFromIndex();
             toolTipReturn.Content = $"Return to {temp?.Caption}";
         }
     }
@@ -121,26 +129,48 @@ public /*partial*/ class GOSNavigationBar : TemplatedControl
     private void HomeCommand()
     {
         Indexes.Clear();
-        ChangeChildren(MainItem?.Children!);
-        UpdateChildrenCaption(MainItem.CaptionChild);
-        Selected = MainItem.Item;
-        UpdateButtonsVisibility();
+        UpdateButtonsVisibility(); 
+        if (MainItem is null)
+        {
+            //ChangeChildrenItems(null);
+            Selected = null; 
+            ChildrenItems.Clear();
+            captionChildrentb.Text = string.Empty;
+        }
+        else
+        {
+            ChangeChildrenItems(MainItem?.Children!);
+            UpdateChildrenCaption(MainItem?.CaptionChild);
+            Selected = MainItem.Item;
+        }
     }
     private void ReturnCommnad()
     {
         Indexes.RemoveAt(Indexes.Count - 1);
+        UpdateButtonsVisibility();
+        GOSNavigationBarTree temp = GetItemFromIndex();
+        if (temp?.Children?.Count > 0)
+        {
+            ChangeChildrenItems(temp.Children);
+            UpdateChildrenCaption(temp.CaptionChild);
+        }
+        isChangedLevel = true;
+        listChildren.SelectedIndex = -1;
+        Selected = temp?.Item;
+    }
+    private GOSNavigationBarTree GetItemFromIndex()
+    {
         GOSNavigationBarTree temp = MainItem;
         for (int i = 0; i < Indexes.Count; i++)
         {
             if (temp?.Children is not null)
-                temp = temp.Children[i];
+            {
+                if (temp.Children.Count > Indexes[i])
+                    temp = temp.Children[Indexes[i]];
+                else
+                    Indexes.RemoveAt(i);
+            }
         }
-        if (temp?.Children?.Count > 0)
-        {
-            ChangeChildren(temp.Children);
-            UpdateChildrenCaption(temp.CaptionChild);
-        }
-        Selected = temp.Item;
-        UpdateButtonsVisibility();
+        return temp;
     }
 }
