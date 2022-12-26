@@ -26,7 +26,7 @@ public class GOSNavigationBar : TemplatedControl
 
 
     List<int> Indexes = new();
-    List<GOSNavigationBarTree> PathItems;
+    //List<GOSNavigationBarTree> PathItems;
     ObservableCollection<GOSNavigationBarTree> ChildrenItems = new();
     public GOSNavigationBar()
     {
@@ -34,7 +34,7 @@ public class GOSNavigationBar : TemplatedControl
     }
     Button homebt, returnbt;
     TextBlock captionChildrentb;
-    ListBox listPath;
+    //ListBox listPath;
     ListBox listChildren;
     ToolTip toolTipHome = new();
     ToolTip toolTipReturn = new();
@@ -49,7 +49,7 @@ public class GOSNavigationBar : TemplatedControl
         returnbt.Click += (s, e) => ReturnCommnad();
         ToolTip.SetTip(toolTipReturn, returnbt);
         captionChildrentb = e.NameScope.Find<TextBlock>("PART_captionchildren");
-        listPath = e.NameScope.Find<ListBox>("PART_listpath");
+        //listPath = e.NameScope.Find<ListBox>("PART_listpath");
         listChildren = e.NameScope.Find<ListBox>("PART_listchildren");
         listChildren.Items = ChildrenItems;
         //listChildren.PropertyChanged += ListChildren_PropertyChanged;
@@ -69,14 +69,14 @@ public class GOSNavigationBar : TemplatedControl
         toolTipHome.Content = $"Go to {MainItem?.Caption}";
     }
     bool isChangedLevel;
-    private void ChildSelected(int index)
+    protected void ChildSelected(int index)
     {
         if (index < 0)
             return;
         if (ChildrenItems[index].Children is not null && ChildrenItems[index].Children.Count > 0)
         {
             Indexes.Add(index);
-            UpdateChildrenCaption(ChildrenItems[index].CaptionChild);
+            UpdateChildrenCaption(ChildrenItems[index].CaptionChildren);
             ChangeChildrenItems(ChildrenItems[index].Children);
             isChangedLevel = true;
         }
@@ -124,7 +124,7 @@ public class GOSNavigationBar : TemplatedControl
     }
     private void UpdateChildrenCaption(string caption)
     {
-        captionChildrentb.Text = $"[{caption}]";
+        captionChildrentb.Text = caption;//$"[{caption}]";
     }
     private void HomeCommand()
     {
@@ -140,7 +140,7 @@ public class GOSNavigationBar : TemplatedControl
         else
         {
             ChangeChildrenItems(MainItem?.Children!);
-            UpdateChildrenCaption(MainItem?.CaptionChild);
+            UpdateChildrenCaption(MainItem?.CaptionChildren);
             Selected = MainItem.Item;
         }
     }
@@ -152,7 +152,7 @@ public class GOSNavigationBar : TemplatedControl
         if (temp?.Children?.Count > 0)
         {
             ChangeChildrenItems(temp.Children);
-            UpdateChildrenCaption(temp.CaptionChild);
+            UpdateChildrenCaption(temp.CaptionChildren);
         }
         isChangedLevel = true;
         listChildren.SelectedIndex = -1;

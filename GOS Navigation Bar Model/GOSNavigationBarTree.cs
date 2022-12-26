@@ -10,7 +10,7 @@ namespace GOSAvaloniaControls.NavigationBar.Model;
 public class GOSNavigationBarTree
 {
     public string Caption { get; set; }
-    public string CaptionChild { get; set; }
+    public string CaptionChildren { get; set; }
     public List<GOSNavigationBarTree> Children { get; private set; } = new();//List<GOSNavigationBarTree>();
     public Action? Notifier { get; private set; }
     public object Item { get; private set; }
@@ -30,7 +30,7 @@ public class GOSNavigationBarTree
     public void SetActionNotification(Action? notifier) => this.Notifier = notifier;
     public void SetChildren(IEnumerable children, string captionChild)
     {
-        CaptionChild = captionChild;
+        CaptionChildren = captionChild;
         if (Children.Count() > 0)
             Children.Clear();
         foreach (var item in children)

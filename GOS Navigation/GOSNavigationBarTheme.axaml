@@ -1,58 +1,85 @@
-<Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:gos="using:GOSAvaloniaControls"
-		xmlns:fl="using:FluentAvalonia.UI.Controls"
-		>
-	<Design.PreviewWith>
-		<gos:GOSNavigationBar/>
-	</Design.PreviewWith>
-	<Styles.Resources>
-		<StreamGeometry x:Key="icon_home">M0.2522,6.278 L6.278,0.252 C6.614,-0.08402 7.159,-0.08402 7.496,0.252 L13.52,6.278 C13.68,6.44 13.77,6.659 13.77,6.887 L13.77,15.14 C13.77,15.61 13.39,16 12.91,16 L8.609,16 L8.609,9.974 L5.165,9.974 L5.165,16 L0.8609,16 C0.3854,16 -1.502E-007,15.61 -1.502E-007,15.14 L-1.502E-007,6.887 C-1.502E-007,6.659 0.09077,6.44 0.2522,6.278 z</StreamGeometry>
-	</Styles.Resources>
+<Styles
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:gos="using:GOSAvaloniaControls">
+    <Design.PreviewWith>
+        <gos:GOSNavigationBarDesign />
+    </Design.PreviewWith>
+    <Styles.Resources>
+        <Geometry x:Key="icon_home">M0.2522,6.278 L6.278,0.252 C6.614,-0.08402 7.159,-0.08402 7.496,0.252 L13.52,6.278 C13.68,6.44 13.77,6.659 13.77,6.887 L13.77,15.14 C13.77,15.61 13.39,16 12.91,16 L8.609,16 L8.609,9.974 L5.165,9.974 L5.165,16 L0.8609,16 C0.3854,16 -1.502E-007,15.61 -1.502E-007,15.14 L-1.502E-007,6.887 C-1.502E-007,6.659 0.09077,6.44 0.2522,6.278 z</Geometry>
+        <Geometry x:Key="icon_back">M15.12,7.343 L15.12,8.657 C15.12,9.356 14.65,9.972 13.92,9.972 L6.685,9.972 L9.694,12.99 C9.941,13.23 10.08,13.57 10.08,13.92 C10.08,14.26 9.941,14.6 9.694,14.84 L8.924,15.62 C8.688,15.86 8.349,16 8,16 C7.651,16 7.312,15.86 7.065,15.62 L0.38,8.924 C0.1438,8.688 0,8.349 0,8 C0,7.651 0.1438,7.312 0.38,7.065 L7.065,0.3902 C7.312,0.1438 7.651,0 8,0 C8.349,0 8.678,0.1438 8.924,0.3902 L9.694,1.15 C9.941,1.397 10.08,1.736 10.08,2.085 C10.08,2.434 9.941,2.773 9.694,3.019 L6.685,6.028 L13.92,6.028 C14.65,6.028 15.12,6.644 15.12,7.343 z</Geometry>
+        <Geometry x:Key="icon_rigth">M9.852,9.038 L2.288,15.66 C1.396,16.44 5.615E-007,15.8 5.615E-007,14.62 L5.615E-007,1.381 A1.38,-1.38 0 0 1 2.289,0.342 L9.851,6.96 A1.38,-1.38 0 0 1 9.851,9.038 z</Geometry>
+    </Styles.Resources>
 
-	<Style Selector="gos|GOSNavigationBar">
-		<!-- Set Defaults -->
-		<Setter Property="Template">
-			<ControlTemplate>
-				<Border x:Name="RootBorder"
-						  Background="{TemplateBinding Background}"
-						  BorderBrush="{TemplateBinding BorderBrush}"
-						  BorderThickness="{TemplateBinding BorderThickness}"
-						  CornerRadius="{TemplateBinding CornerRadius}"
-						  Margin="{TemplateBinding Margin}">
-					<WrapPanel>
-						<Button x:Name="PART_home" Margin="5,0,0,0">
-							<fl:PathIcon Data="{StaticResource icon_home}" />
-						</Button>
-						<Button x:Name="PART_return"  Margin="5,0,0,0"/>
-						<ListBox x:Name="PART_listpath" AutoScrollToSelectedItem="True" SelectionMode="Single" IsVisible="False" Margin="5,0,0,0">
-							<ListBox.ItemsPanel>
-								<ItemsPanelTemplate>
-									<WrapPanel />
-								</ItemsPanelTemplate>
-							</ListBox.ItemsPanel>
-							<!--<ListBox.ItemTemplate>
-						  <DataTemplate>
-							  <TextBlock Text="{ReflectionBinding Title}" />
-						  </DataTemplate>
-					  </ListBox.ItemTemplate>-->
-						</ListBox>
-						<TextBlock x:Name="PART_captionchildren" VerticalAlignment="Center" Margin="5,0,0,0"/>
-						<ListBox x:Name="PART_listchildren" AutoScrollToSelectedItem="True" SelectionMode="Single" VerticalAlignment="Center" Margin="5,0,0,0">
-							<ListBox.ItemsPanel>
-								<ItemsPanelTemplate>
-									<WrapPanel />
-								</ItemsPanelTemplate>
-							</ListBox.ItemsPanel>
-							<!--<ListBox.ItemTemplate>
-						  <DataTemplate>
-							  <TextBlock Text="{ReflectionBinding Title}" />
-						  </DataTemplate>
-					  </ListBox.ItemTemplate>-->
-						</ListBox>
-					</WrapPanel>
-				</Border>
-			</ControlTemplate>
-		</Setter>
-	</Style>
+    <Style Selector="gos|GOSNavigationBar">
+        <!--  Set Defaults  -->
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Border
+                    x:Name="RootBorder"
+                    Margin="{TemplateBinding Margin}"
+                    Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    CornerRadius="{TemplateBinding CornerRadius}">
+                    <WrapPanel>
+                        <Button
+                            x:Name="PART_home"
+                            Margin="5,0,0,0"
+                            Classes="circle clean">
+                            <Viewbox>
+                                <Path
+                                    Data="{StaticResource icon_home}"
+                                    Fill="{Binding $parent[Button].Foreground}"
+                                    Stretch="UniformToFill" />
+                            </Viewbox>
+                        </Button>
+                        <Button
+                            x:Name="PART_return"
+                            Margin="5,0,0,0"
+                            Classes="circle clean">
+                            <Viewbox>
+                                <Path
+                                    Data="{StaticResource icon_back}"
+                                    Fill="{Binding $parent[Button].Foreground}"
+                                    Stretch="UniformToFill" />
+                            </Viewbox>
+                        </Button>
+                        <Border
+                            Margin="5,0,0,0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            BorderBrush="{DynamicResource ButtonForeground}"
+                            BorderThickness="1"
+                            CornerRadius="10,3,3,10">
+                            <TextBlock
+                                x:Name="PART_captionchildren"
+                                Margin="5,2"
+                                VerticalAlignment="Center" />
+                        </Border>
+                        <ContentControl Margin="0,0,0,0" IsVisible="{Binding #PART_captionchildren.Text.Length}">
+                            <Viewbox Width="17" Height="17">
+                                <Path
+                                    Data="{StaticResource icon_rigth}"
+                                    Fill="{Binding $parent[ContentControl].Foreground}"
+                                    Stretch="UniformToFill" />
+                            </Viewbox>
+                        </ContentControl>
+                        <ListBox
+                            x:Name="PART_listchildren"
+                            Margin="5,0,0,0"
+                            VerticalAlignment="Center"
+                            AutoScrollToSelectedItem="True"
+                            SelectionMode="Single">
+                            <ListBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel />
+                                </ItemsPanelTemplate>
+                            </ListBox.ItemsPanel>
+                        </ListBox>
+                    </WrapPanel>
+                </Border>
+            </ControlTemplate>
+        </Setter>
+    </Style>
 </Styles>
