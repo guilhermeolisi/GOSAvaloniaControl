@@ -8,6 +8,7 @@ using AvaloniaEdit.TextMate;
 using BaseLibrary;
 using Nimloth.TextMate.Models;
 using Splat;
+using static AvaloniaEdit.Document.TextDocumentWeakEventManager;
 
 namespace GOSAvaloniaControls;
 
@@ -24,6 +25,7 @@ public partial class GOSTextEditor : TemplatedControl
     public static readonly StyledProperty<bool> IsWrapProperty = AvaloniaProperty.Register<GOSTextEditor, bool>(nameof(IsWrap), false, false, BindingMode.TwoWay);
     public static readonly StyledProperty<bool> ShowToolBarProperty = AvaloniaProperty.Register<GOSTextEditor, bool>(nameof(ShowToolBar), true, false, BindingMode.OneWay);
     public static readonly StyledProperty<bool> ThemeProperty = AvaloniaProperty.Register<GOSTextEditor, bool>(nameof(Theme), defaultBindingMode: BindingMode.OneWay);
+    public static readonly StyledProperty<string> TextProperty = AvaloniaProperty.Register<GOSTextEditor, string>(nameof(Text), defaultBindingMode: BindingMode.TwoWay);
 
     public string? FilePath
     {
@@ -70,6 +72,11 @@ public partial class GOSTextEditor : TemplatedControl
         get => GetValue(ThemeProperty);
         set => SetValue(ThemeProperty, value);
     }
+    public string Text
+    {
+        get => GetValue(TextProperty);
+        set => SetValue(TextProperty, value);
+    }
     public GOSTextEditor()
     {
         this.fileManager = Locator.Current!.GetService<IFileTXTIO>()!;
@@ -82,6 +89,7 @@ public partial class GOSTextEditor : TemplatedControl
         ExtensionProperty.Changed.AddClassHandler<GOSTextEditor>((x, e) => x.ChangeExtension());
         ThemeProperty.Changed.AddClassHandler<GOSTextEditor>((x, e) => x.ChangeTheme());
         IsEditingProperty.Changed.AddClassHandler<GOSTextEditor>((x, e) => x.IsReadOnly = !x.IsEditing);
+        TextProperty.Changed.AddClassHandler<GOSTextEditor>((x, e) => TextPropertyChanged(x.Text));
     }
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
@@ -109,6 +117,10 @@ public partial class GOSTextEditor : TemplatedControl
         EditorOptions.EnableTextDragDrop = true;
         EditorOptions.HighlightCurrentLine = true;
         EditorOptions.HideCursorWhileTyping = true;
+        if (!string.IsNullOrEmpty(Text))
+        {
+            ReplaceDocument(Text);
+        }
 
         if (!string.IsNullOrWhiteSpace(FilePath))
             ChangeFile();
@@ -146,6 +158,8 @@ public partial class GOSTextEditor : TemplatedControl
             isTextChanged = true;
 
         var text = GetDocumentText();
+        if (Text != text)
+            Text = text;
         await Task.Delay(2000);
 #if DEBUG
         var trash = GetDocumentText();
@@ -217,5 +231,9 @@ public partial class GOSTextEditor : TemplatedControl
         {
             _textMateInstallation.SetTheme(_registryOptions.LoadTheme(ThemeName.LightPlus));
         }
+    }
+    private void TextPropertyChanged(string textChanged)
+    {
+        ReplaceDocument(textChanged);
     }
 }

@@ -130,11 +130,13 @@ public partial class GOSTextEditor : TemplatedControl
     {
         if (Document is null)
             return;
+
         if (length == int.MinValue)
         {
             length = Document.TextLength;
         }
-        if (start == 0 && length == Document.TextLength && text == Document.Text)
+        string docText = GetDocumentText();
+        if (start == 0 && length == docText.Length && text == docText)
             return;
 
 
@@ -154,7 +156,7 @@ public partial class GOSTextEditor : TemplatedControl
         {
             Document.BeginUpdate();
             Document.Remove(start, length);
-            Document.Insert(start, text);
+            Document.Insert(start, text ?? string.Empty);
             Document.EndUpdate();
         }
     }
