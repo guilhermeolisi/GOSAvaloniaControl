@@ -9,6 +9,7 @@ using BaseLibrary;
 using Nimloth.TextMate.Models;
 using Splat;
 using static AvaloniaEdit.Document.TextDocumentWeakEventManager;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace GOSAvaloniaControls;
 
@@ -146,7 +147,7 @@ public partial class GOSTextEditor : TemplatedControl
         }
         if (temp is null)
             return;
-        await Application.Current.Clipboard.SetTextAsync(temp);
+        await Avalonia.Application.Current.Clipboard.SetTextAsync(temp);
     }
 
     private async void Document_Changed(object? sender, DocumentChangeEventArgs e)
@@ -158,8 +159,12 @@ public partial class GOSTextEditor : TemplatedControl
             isTextChanged = true;
 
         var text = GetDocumentText();
-        if (Text != text)
+        if (!changingFile && string.IsNullOrWhiteSpace(FilePath) && Text != text)
+        {
+            isChangingText = true;
             Text = text;
+            isChangingText = false;
+        }
         await Task.Delay(2000);
 #if DEBUG
         var trash = GetDocumentText();
@@ -232,8 +237,11 @@ public partial class GOSTextEditor : TemplatedControl
             _textMateInstallation.SetTheme(_registryOptions.LoadTheme(ThemeName.LightPlus));
         }
     }
+    bool isChangingText;
     private void TextPropertyChanged(string textChanged)
     {
+        if (changingFile || !string.IsNullOrWhiteSpace(FilePath) || isChangingText)
+            return;
         ReplaceDocument(textChanged);
     }
 }

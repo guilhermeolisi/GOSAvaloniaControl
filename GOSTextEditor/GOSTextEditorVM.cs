@@ -105,6 +105,8 @@ public partial class GOSTextEditor : TemplatedControl
     }
     private string GetDocumentText()
     {
+        if (Document is null)
+            return null;
 
         if (UIDispatcher.CheckAccess())
         {
@@ -139,7 +141,7 @@ public partial class GOSTextEditor : TemplatedControl
         if (start == 0 && length == docText.Length && text == docText)
             return;
 
-
+        isChangingText = true;
         if (UIDispatcher.CheckAccess())
         {
             ReplaceAction(text, start, length);
@@ -159,6 +161,7 @@ public partial class GOSTextEditor : TemplatedControl
             Document.Insert(start, text ?? string.Empty);
             Document.EndUpdate();
         }
+        isChangingText = false;
     }
 
 }
