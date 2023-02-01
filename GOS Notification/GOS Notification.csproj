@@ -19,11 +19,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="GOSNotification.cs">
+    <Compile Update="GOSNotificationControl.cs">
       <DependentUpon>%(Filename)</DependentUpon>
     </Compile>
-    <Compile Update="GOSNotificationTheme.axaml.cs">
-      <DependentUpon>GOSNotificationTheme.axaml</DependentUpon>
+    <Compile Update="GOSNotificationControlTheme.axaml.cs">
+      <DependentUpon>GOSNotificationControlTheme.axaml</DependentUpon>
     </Compile>
   </ItemGroup>
 

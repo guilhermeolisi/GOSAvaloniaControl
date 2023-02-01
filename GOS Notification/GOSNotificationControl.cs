@@ -9,7 +9,7 @@ using System.Collections.ObjectModel;
 
 namespace GOSAvaloniaControls;
 
-public class GOSNotification : TemplatedControl, INotification
+public class GOSNotificationControl : TemplatedControl, INotification
 {
     private DispatcherTimer timerBallon = new();
     private Button buttonBell;
@@ -17,7 +17,7 @@ public class GOSNotification : TemplatedControl, INotification
     private Flyout flyout;
     FluentAvalonia.UI.Controls.InfoBadge infoBadge;
 
-    public static readonly StyledProperty<ObservableCollection<NotificationItem>> ItemsProperty = AvaloniaProperty.Register<GOSNotification, ObservableCollection<NotificationItem>>(nameof(Items), new ObservableCollection<NotificationItem>(), defaultBindingMode: BindingMode.TwoWay);
+    public static readonly StyledProperty<ObservableCollection<NotificationItem>> ItemsProperty = AvaloniaProperty.Register<GOSNotificationControl, ObservableCollection<NotificationItem>>(nameof(Items), new ObservableCollection<NotificationItem>(), defaultBindingMode: BindingMode.TwoWay);
 
     public ObservableCollection<NotificationItem> Items
     {
@@ -27,11 +27,11 @@ public class GOSNotification : TemplatedControl, INotification
 
     ObservableCollection<BallonItem> ItemsBallon = new();
 
-    public GOSNotification()
+    public GOSNotificationControl()
     {
         timerBallon.Interval = TimeSpan.FromSeconds(1);
         timerBallon.Tick += TimerBallonTick;
-        ItemsProperty.Changed.AddClassHandler<GOSNotification>((x, e) => x.ItemsPropertyChanged());
+        ItemsProperty.Changed.AddClassHandler<GOSNotificationControl>((x, e) => x.ItemsPropertyChanged());
 
     }
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)

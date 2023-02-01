@@ -3,7 +3,7 @@
         xmlns:controls="using:GOSAvaloniaControls"
 		xmlns:fl="using:FluentAvalonia.UI.Controls">
 	<Design.PreviewWith>
-		<controls:GOSNotification />
+		<controls:GOSNotificationControl />
 	</Design.PreviewWith>
 
 	<Styles.Resources>
@@ -68,7 +68,7 @@
 		</Setter>
 	</Style>
 
-	<Style Selector="controls|GOSNotification">
+	<Style Selector="controls|GOSNotificationControl">
 		<!-- Set Defaults -->
 		<!--<Setter Porperty="HorizontalAlignment" Value="Right" />
 		<Setter Porperty="VerticalAlignment" Value="Bottom" />-->
