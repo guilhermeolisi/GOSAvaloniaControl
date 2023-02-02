@@ -28,7 +28,7 @@
 						BorderThickness="{TemplateBinding BorderThickness}"
 						CornerRadius="{TemplateBinding CornerRadius}">
 					<Grid RowDefinitions="Auto, *">
-						<DockPanel HorizontalAlignment="Stretch" Margin="0,5">
+						<DockPanel x:Name="PART_dockToolBar" HorizontalAlignment="Stretch" Margin="0,5">
 							<DockPanel.Styles>
 								<Style Selector=":is(Button)">
 									<Setter Property="Width" Value="{StaticResource button_size}"/>

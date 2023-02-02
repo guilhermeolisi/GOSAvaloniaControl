@@ -96,6 +96,8 @@ public partial class GOSTextEditor : TemplatedControl
     {
         base.OnApplyTemplate(e);
 
+        var toolBar = e.NameScope.Find<DockPanel>("PART_dockToolBar");
+        toolBar.IsVisible = ShowToolBar;
         //var wrap = e.NameScope.Find<ToggleButton>("PART_WrapCheck");
         //var edit = e.NameScope.Find<ToggleSwitch>("PART_EditCheck");
         var clip = e.NameScope.Find<Button>("PART_CopyClipBoard");
