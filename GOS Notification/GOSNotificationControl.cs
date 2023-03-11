@@ -2,9 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
-using Avalonia.Media.Immutable;
 using Avalonia.Threading;
-using BaseLibrary;
 using System.Collections.ObjectModel;
 
 namespace GOSAvaloniaControls;
