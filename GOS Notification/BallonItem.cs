@@ -4,18 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GOSAvaloniaControls
+namespace GOSAvaloniaControls;
+
+internal class BallonItem
 {
-    internal class BallonItem
+    public BallonItem(NotificationItem item, DateTime time)
     {
-        public BallonItem(NotificationItem item, DateTime time)
-        {
-            Item = item;
-            Time = time;
-        }
-
-        public NotificationItem Item { get; set; }
-        public DateTime Time { get; set; }
-
+        Item = item;
+        Time = time;
     }
+
+    public NotificationItem Item { get; set; }
+    public DateTime Time { get; set; }
+
 }

@@ -1,9 +1,12 @@
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:controls="using:GOSAvaloniaControls"
+		xmlns:col="using:System.Collections.ObjectModel"
 		xmlns:fl="using:FluentAvalonia.UI.Controls">
 	<Design.PreviewWith>
-		<controls:GOSNotificationControl />
+		<Grid Width="200" Height="200">
+			<controls:GOSNotificationControl/>
+		</Grid>
 	</Design.PreviewWith>
 
 	<Styles.Resources>
@@ -98,7 +101,9 @@
 											<!--<ContentControl Classes="items" HorizontalAlignment="Stretch">
 												<fl:InfoBar IsOpen="True" Severity="{Binding Item.Severity, Converter={StaticResource ByteToSeverityConverter}}" Message="{Binding Message}" VerticalAlignment="Center"/>
 											</ContentControl>-->
+											<!--PointerPressed="{x:Static controls:GOSNotificationControl.Notification_PointerPressed}"-->
 											<fl:InfoBar IsOpen="True" Severity="{Binding Severity, Converter={StaticResource ByteToSeverityConverter}}" Message="{Binding Message}" VerticalAlignment="Center" IsClosable="False" MaxHeight="80" />
+												
 										</DataTemplate>
 									</ItemsControl.ItemTemplate>
 								</ItemsControl>

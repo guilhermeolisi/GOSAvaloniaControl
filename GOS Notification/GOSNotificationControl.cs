@@ -2,7 +2,9 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
+using Avalonia.LogicalTree;
 using Avalonia.Threading;
+using Avalonia.VisualTree;
 using System.Collections.ObjectModel;
 
 namespace GOSAvaloniaControls;
@@ -61,6 +63,8 @@ public class GOSNotificationControl : TemplatedControl, INotification
                 showNotifications.Items = Items;
             }
         }
+        showNotifications.PointerPressed += Notification_PointerPressed;
+
 
         //https://github.com/AvaloniaUI/Avalonia/issues/4616
         //http://reference.avaloniaui.net/api/Avalonia.Controls/ResourceDictionary/50FEA02D
@@ -169,5 +173,27 @@ public class GOSNotificationControl : TemplatedControl, INotification
         if (showNotifications.Items is null || showNotifications.Items != Items)
             showNotifications.Items = Items;
         Items.Add(new NotificationItem(severity, message, showBallon));
+    }
+
+    public static void Notification_PointerPressed(object? sender, Avalonia.Input.PointerPressedEventArgs e)
+    {
+
+        IVisual? visual = e.Source as IVisual;
+        if (visual is null)
+            return;
+
+        FluentAvalonia.UI.Controls.InfoBar? info = visual.FindAncestorOfType<FluentAvalonia.UI.Controls.InfoBar>();
+
+        if (info is null)
+            return;
+
+        if (info.MaxHeight != 80)
+        {
+            info.MaxHeight = 80;
+        }
+        else
+        {
+            info.MaxHeight = double.PositiveInfinity;
+        }
     }
 }
