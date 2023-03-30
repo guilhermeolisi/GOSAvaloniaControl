@@ -1,6 +1,6 @@
 ﻿namespace GOSAvaloniaControls;
 
-public interface INotification
+public interface IGOSNotification
 {
     void AddNotification(byte severity, string message, bool showBallon);
 }

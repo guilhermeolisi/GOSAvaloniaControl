@@ -9,20 +9,27 @@ using System.Collections.ObjectModel;
 
 namespace GOSAvaloniaControls;
 
-public class GOSNotificationControl : TemplatedControl, INotification
+public class GOSNotificationControl : TemplatedControl, IGOSNotification
 {
     private DispatcherTimer timerBallon = new();
     private Button buttonBell;
     private ItemsControl showNotifications;
     private Flyout flyout;
+    private FlyoutBase flyoutBallon;
     FluentAvalonia.UI.Controls.InfoBadge infoBadge;
 
     public static readonly StyledProperty<ObservableCollection<NotificationItem>> ItemsProperty = AvaloniaProperty.Register<GOSNotificationControl, ObservableCollection<NotificationItem>>(nameof(Items), new ObservableCollection<NotificationItem>(), defaultBindingMode: BindingMode.TwoWay);
+    public static readonly StyledProperty<double> SizeBellProperty = AvaloniaProperty.Register<GOSNotificationControl, double>(nameof(Items), 30, defaultBindingMode: BindingMode.OneWay);
 
     public ObservableCollection<NotificationItem> Items
     {
         get => GetValue(ItemsProperty);
         set => SetValue(ItemsProperty, value);
+    }
+    public double SizeBell
+    {
+        get => GetValue(SizeBellProperty);
+        set => SetValue(SizeBellProperty, value);
     }
 
     ObservableCollection<BallonItem> ItemsBallon = new();
@@ -32,7 +39,7 @@ public class GOSNotificationControl : TemplatedControl, INotification
         timerBallon.Interval = TimeSpan.FromSeconds(1);
         timerBallon.Tick += TimerBallonTick;
         ItemsProperty.Changed.AddClassHandler<GOSNotificationControl>((x, e) => x.ItemsPropertyChanged());
-
+        SizeBellProperty.Changed.AddClassHandler<GOSNotificationControl>((x, e) => x.SizeBellPropertyChanged(x.SizeBell));
     }
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
@@ -47,13 +54,21 @@ public class GOSNotificationControl : TemplatedControl, INotification
 
         buttonBell = e.NameScope.Find<Button>("PART_buttonBell");
         flyout = buttonBell.Flyout as Flyout;
+        flyoutBallon = FlyoutBase.GetAttachedFlyout(buttonBell);//.At//e.NameScope.Find<Flyout>("PART_flyoutBallon");
+        flyoutBallon.ShowMode = FlyoutShowMode.Transient;
+        flyout.ShowMode = FlyoutShowMode.TransientWithDismissOnPointerMoveAway;
+
         buttonBell.IsEnabled = Items is not null ? Items.Count > 0 : false;
         buttonBell.Click += (_, _) =>
         {
             infoBadge.IsVisible = false;
             countNotification = 0;
         };
-
+        if (SizeBell != 0)
+        {
+            buttonBell.Height = SizeBell;
+            buttonBell.Width = SizeBell;
+        }
         showNotifications = e.NameScope.Find<ItemsControl>("PART_buttonBellFlyout");
         if (Items is not null)
         {
@@ -65,7 +80,7 @@ public class GOSNotificationControl : TemplatedControl, INotification
         }
         showNotifications.PointerPressed += Notification_PointerPressed;
 
-
+        
         //https://github.com/AvaloniaUI/Avalonia/issues/4616
         //http://reference.avaloniaui.net/api/Avalonia.Controls/ResourceDictionary/50FEA02D
         //if (Application.Current.TryFindResource(""))
@@ -73,7 +88,13 @@ public class GOSNotificationControl : TemplatedControl, INotification
         //    wrap[ForegroundProperty] = new DynamicResourceExtension("MyResource");
         //}
     }
-
+    void SizeBellPropertyChanged(double newSize)
+    {
+        if (buttonBell is null)
+            return;
+        buttonBell.Height = newSize;
+        buttonBell.Width = newSize;
+    }
     void ItemsPropertyChanged()
     {
         if (Items is null)
@@ -112,6 +133,14 @@ public class GOSNotificationControl : TemplatedControl, INotification
 
             timerBallon.Interval = TimeSpan.FromMilliseconds(intervalMiliseconds - (DateTime.Now - ItemsBallon[0].Time).TotalMilliseconds);
             timerBallon.Start();
+            if (!flyoutBallon.IsOpen)
+            {
+                flyoutBallon.ShowAt(buttonBell);
+            }
+        }
+        else
+        {
+            flyoutBallon.Hide();
         }
     }
     int countNotification = 0;
@@ -154,7 +183,11 @@ public class GOSNotificationControl : TemplatedControl, INotification
                 }
             }
         }
-
+        if (ItemsBallon.Count > 0 )
+        {
+            //FlyoutBase.ShowAttachedFlyout(buttonBell);
+            flyoutBallon.ShowAt(buttonBell);
+        }
         if (Items?.Count > 0 && !buttonBell.IsEnabled)
             buttonBell.IsEnabled = true;
         else if (Items?.Count == 0 && buttonBell.IsEnabled)

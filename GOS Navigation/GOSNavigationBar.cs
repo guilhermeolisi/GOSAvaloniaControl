@@ -68,7 +68,7 @@ public class GOSNavigationBar : TemplatedControl
         HomeCommand();
         toolTipHome.Content = $"Go to {MainItem?.Caption}";
     }
-    bool isChangedLevel;
+    bool changedLevel;
     protected void ChildSelected(int index)
     {
         if (index < 0)
@@ -78,18 +78,21 @@ public class GOSNavigationBar : TemplatedControl
             Indexes.Add(index);
             UpdateChildrenCaption(ChildrenItems[index].CaptionChildren);
             ChangeChildrenItems(ChildrenItems[index].Children);
-            isChangedLevel = true;
+            changedLevel = true;
         }
         else
         {
-            if (isChangedLevel)
+            if (changedLevel)
             {
                 Indexes.Add(index);
-                isChangedLevel = false;
+                changedLevel = false;
             }
             else
             {
-                Indexes[Indexes.Count - 1] = index;
+                if (Indexes.Count == 0)
+                    Indexes.Add(index);
+                else
+                    Indexes[Indexes.Count - 1] = index;
             }
         }
         GOSNavigationBarTree temp = GetItemFromIndex();
@@ -129,11 +132,11 @@ public class GOSNavigationBar : TemplatedControl
     private void HomeCommand()
     {
         Indexes.Clear();
-        UpdateButtonsVisibility(); 
+        UpdateButtonsVisibility();
         if (MainItem is null)
         {
             //ChangeChildrenItems(null);
-            Selected = null; 
+            Selected = null;
             ChildrenItems.Clear();
             captionChildrentb.Text = string.Empty;
         }
@@ -141,6 +144,7 @@ public class GOSNavigationBar : TemplatedControl
         {
             ChangeChildrenItems(MainItem?.Children!);
             UpdateChildrenCaption(MainItem?.CaptionChildren);
+            listChildren.SelectedIndex = -1;
             Selected = MainItem.Item;
         }
     }
@@ -154,7 +158,7 @@ public class GOSNavigationBar : TemplatedControl
             ChangeChildrenItems(temp.Children);
             UpdateChildrenCaption(temp.CaptionChildren);
         }
-        isChangedLevel = true;
+        changedLevel = true;
         listChildren.SelectedIndex = -1;
         Selected = temp?.Item;
     }
