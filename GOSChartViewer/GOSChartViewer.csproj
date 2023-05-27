@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="0.10.18" />
+    <PackageReference Include="Avalonia" Version="0.10.21" />
     <PackageReference Include="OxyPlot.Avalonia" Version="2.1.0" />
     <PackageReference Include="SkiaSharp" Version="2.88.3" />
   </ItemGroup>
