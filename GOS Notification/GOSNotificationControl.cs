@@ -2,7 +2,6 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
-using Avalonia.LogicalTree;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 using System.Collections.ObjectModel;
@@ -11,6 +10,9 @@ namespace GOSAvaloniaControls;
 
 public class GOSNotificationControl : TemplatedControl, IGOSNotification
 {
+    private Thread mainThread = Thread.CurrentThread;
+    SynchronizationContext? UIContext = SynchronizationContext.Current; //Do AvaloniaEditDocumentBusiness.cs
+
     private DispatcherTimer timerBallon = new();
     private Button buttonBell;
     private ItemsControl showNotifications;
@@ -80,7 +82,7 @@ public class GOSNotificationControl : TemplatedControl, IGOSNotification
         }
         showNotifications.PointerPressed += Notification_PointerPressed;
 
-        
+
         //https://github.com/AvaloniaUI/Avalonia/issues/4616
         //http://reference.avaloniaui.net/api/Avalonia.Controls/ResourceDictionary/50FEA02D
         //if (Application.Current.TryFindResource(""))
@@ -183,7 +185,7 @@ public class GOSNotificationControl : TemplatedControl, IGOSNotification
                 }
             }
         }
-        if (ItemsBallon.Count > 0 )
+        if (ItemsBallon.Count > 0)
         {
             //FlyoutBase.ShowAttachedFlyout(buttonBell);
             flyoutBallon.ShowAt(buttonBell);
@@ -199,15 +201,38 @@ public class GOSNotificationControl : TemplatedControl, IGOSNotification
 
     public void AddNotification(byte severity, string message, bool showBallon)
     {
-        if (Items is null)
-        {
-            Items = new();
-        }
-        if (showNotifications.Items is null || showNotifications.Items != Items)
-            showNotifications.Items = Items;
-        Items.Add(new NotificationItem(severity, message, showBallon));
-    }
 
+        if (Thread.CurrentThread == mainThread)
+        {
+            localMethod(severity, message, showBallon);
+        }
+        else
+        {
+            UIContext?.Post(_ =>
+            {
+                localMethod(severity, message, showBallon);
+            }, null);
+        }
+        void localMethod(byte severity, string message, bool showBallon)
+        {
+            if (Items is null)
+            {
+                Items = new();
+            }
+            if (showNotifications.Items is null || showNotifications.Items != Items)
+                showNotifications.Items = Items;
+            Items.Add(new NotificationItem(severity, message, showBallon));
+        }
+        //if (Items is null)
+        //{
+        //    Items = new();
+        //}
+        //if (showNotifications.Items is null || showNotifications.Items != Items)
+        //    showNotifications.Items = Items;
+        //Items.Add(new NotificationItem(severity, message, showBallon));
+    }
+    public bool UIContextIsNull => UIContext is null;
+    public void SetUIContext(SynchronizationContext? uiContext) => UIContext = uiContext;
     public static void Notification_PointerPressed(object? sender, Avalonia.Input.PointerPressedEventArgs e)
     {
 
