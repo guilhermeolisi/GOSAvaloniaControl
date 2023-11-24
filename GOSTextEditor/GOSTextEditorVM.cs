@@ -1,15 +1,8 @@
-﻿using Avalonia.Controls;
-using Avalonia.Controls.Primitives;
+﻿using Avalonia.Controls.Primitives;
 using Avalonia.Threading;
 using AvaloniaEdit;
 using AvaloniaEdit.Document;
 using BaseLibrary;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GOSAvaloniaControls;
 
@@ -31,6 +24,7 @@ public partial class GOSTextEditor : TemplatedControl
     {
         if (!isTextChanged)
             return;
+
         isSavingTextSync = true;
         FileSave(GetDocumentText(), false);
     }
@@ -39,41 +33,47 @@ public partial class GOSTextEditor : TemplatedControl
     bool isTextChanged = false;
     private async void FileSave(string text, bool isAsync)
     {
-        if (string.IsNullOrWhiteSpace(FilePath))
-            return;
-
-        if (textTemp is not null)
-            textTemp = null;
-
-        if (text is not null)
+        try
         {
-            textTemp = text;
-        }
-        else
-        {
-            return;
-        }
+            if (string.IsNullOrWhiteSpace(FilePath) || !File.Exists(FilePath))
+                return;
 
-        if (saveTask is null || saveTask.IsCompleted)
-        {
-            string temp = null;
-            while (isTextChanged)
+            if (textTemp is not null)
+                textTemp = null;
+
+            if (text is not null)
             {
-                isTextChanged = false;
-                if (temp is not null && temp.CompareTo(textTemp) == 0)
-                    return;
-                temp = textTemp.Substring(0);
-                saveTask = new Task(() => fileManager.WriteTXT(textTemp));
-                saveTask.Start();
-                if (isAsync)
-                    await saveTask;
-                else
-                    saveTask.Wait();
+                textTemp = text;
+            }
+            else
+            {
+                return;
+            }
 
+            if (saveTask is null || saveTask.IsCompleted)
+            {
+                string temp = null;
+                while (isTextChanged)
+                {
+                    isTextChanged = false;
+                    if (temp is not null && temp.CompareTo(textTemp) == 0)
+                        return;
+                    temp = textTemp.Substring(0);
+                    saveTask = new Task(() => fileManager.WriteTXT(textTemp));
+                    saveTask.Start();
+                    if (isAsync)
+                        await saveTask;
+                    else
+                        saveTask.Wait();
+
+                }
             }
         }
-        if (isSavingTextSync)
-            isSavingTextSync = false;
+        finally
+        {
+            if (isSavingTextSync)
+                isSavingTextSync = false;
+        }
     }
     public async Task SetNewFile()
     {
