@@ -26,7 +26,6 @@ public class GOSNavigationBar : TemplatedControl
 
 
     List<int> Indexes = new();
-    //List<GOSNavigationBarTree> PathItems;
     ObservableCollection<GOSNavigationBarTree> ChildrenItems = new();
     public GOSNavigationBar()
     {
@@ -34,7 +33,6 @@ public class GOSNavigationBar : TemplatedControl
     }
     Button homebt, returnbt;
     TextBlock captionChildrentb;
-    //ListBox listPath;
     ListBox listChildren;
     ToolTip toolTipHome = new();
     ToolTip toolTipReturn = new();
@@ -49,12 +47,10 @@ public class GOSNavigationBar : TemplatedControl
         returnbt.Click += (s, e) => ReturnCommnad();
         ToolTip.SetTip(toolTipReturn, returnbt);
         captionChildrentb = e.NameScope.Find<TextBlock>("PART_captionchildren");
-        //listPath = e.NameScope.Find<ListBox>("PART_listpath");
         listChildren = e.NameScope.Find<ListBox>("PART_listchildren");
-        listChildren.Items = ChildrenItems;
-        //listChildren.PropertyChanged += ListChildren_PropertyChanged;
-        listChildren.GetObservable(ListBox.SelectedIndexProperty)
-            .Subscribe(x => ChildSelected(x));
+        listChildren.ItemsSource = ChildrenItems;
+        listChildren.SelectionChanged += (s, e) => ChildSelected(listChildren.SelectedIndex);
+            
         HomeCommand();
     }
 
@@ -105,18 +101,19 @@ public class GOSNavigationBar : TemplatedControl
             return;
         if (!ChildrenItems.Contains(children[0]))
         {
+            listChildren.SelectedIndex = -1;
             ChildrenItems.Clear();
             for (int i = 0; i < children.Count; i++)
             {
                 ChildrenItems.Add(children[i]);
             }
-            listChildren.SelectedIndex = -1;
+            
         }
     }
     private void UpdateButtonsVisibility()
     {
-        homebt.IsVisible = Indexes.Count > 0;
-        returnbt.IsVisible = Indexes.Count > 1;
+        homebt.IsEnabled = Indexes.Count > 1;
+        returnbt.IsEnabled = Indexes.Count > 0;
 
 
         if (Indexes.Count > 1)

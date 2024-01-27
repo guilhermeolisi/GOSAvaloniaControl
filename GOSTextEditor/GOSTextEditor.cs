@@ -149,7 +149,10 @@ public partial class GOSTextEditor : TemplatedControl
         }
         if (temp is null)
             return;
-        await Avalonia.Application.Current.Clipboard.SetTextAsync(temp);
+        var topLevel = TopLevel.GetTopLevel(this);
+        if (topLevel is null)
+            return;
+        await topLevel.Clipboard!.SetTextAsync(temp);
     }
 
     private async void Document_Changed(object? sender, DocumentChangeEventArgs e)

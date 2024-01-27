@@ -48,7 +48,8 @@ public class GOSNotificationControl : TemplatedControl, IGOSNotification
         base.OnApplyTemplate(e);
 
         var ballons = e.NameScope.Find<ItemsControl>("PART_ballon");
-        ballons.Items = ItemsBallon;
+        //ballons.Items = ItemsBallon;
+        ballons.ItemsSource = ItemsBallon;
 
         infoBadge = e.NameScope.Find<FluentAvalonia.UI.Controls.InfoBadge>("PART_infoBadge");
         //flyout = e.NameScope.Find<Flyout>("PART_flyout");
@@ -57,7 +58,7 @@ public class GOSNotificationControl : TemplatedControl, IGOSNotification
         buttonBell = e.NameScope.Find<Button>("PART_buttonBell");
         flyout = buttonBell.Flyout as Flyout;
         flyoutBallon = FlyoutBase.GetAttachedFlyout(buttonBell);//.At//e.NameScope.Find<Flyout>("PART_flyoutBallon");
-        flyoutBallon.ShowMode = FlyoutShowMode.Transient;
+        //flyoutBallon.ShowMode = FlyoutShowMode.Transient;
         flyout.ShowMode = FlyoutShowMode.TransientWithDismissOnPointerMoveAway;
 
         buttonBell.IsEnabled = Items is not null ? Items.Count > 0 : false;
@@ -75,9 +76,13 @@ public class GOSNotificationControl : TemplatedControl, IGOSNotification
         if (Items is not null)
         {
             Items.CollectionChanged += Items_CollectionChanged;
-            if (showNotifications.Items != Items)
+            //if (showNotifications.Items != Items)
+            //{
+            //    showNotifications.Items = Items;
+            //}
+            if (showNotifications.ItemsSource != Items)
             {
-                showNotifications.Items = Items;
+                showNotifications.ItemsSource = Items;
             }
         }
         showNotifications.PointerPressed += Notification_PointerPressed;
@@ -219,8 +224,12 @@ public class GOSNotificationControl : TemplatedControl, IGOSNotification
             {
                 Items = new();
             }
-            if (showNotifications.Items is null || showNotifications.Items != Items)
-                showNotifications.Items = Items;
+            //if (showNotifications.Items is null || showNotifications.Items != Items)
+            //    showNotifications.Items = Items;
+            if (showNotifications.ItemsSource is null || showNotifications.ItemsSource != Items)
+            {
+                showNotifications.ItemsSource = Items;
+            }
             Items.Add(new NotificationItem(severity, message, showBallon));
         }
         //if (Items is null)
@@ -236,7 +245,7 @@ public class GOSNotificationControl : TemplatedControl, IGOSNotification
     public static void Notification_PointerPressed(object? sender, Avalonia.Input.PointerPressedEventArgs e)
     {
 
-        IVisual? visual = e.Source as IVisual;
+        Visual? visual = e.Source as Visual;
         if (visual is null)
             return;
 

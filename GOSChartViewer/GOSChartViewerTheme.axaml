@@ -1,25 +1,28 @@
-<Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:gos="using:GOSAvaloniaControls"
-		xmlns:oxy="clr-namespace:OxyPlot.Avalonia;assembly=OxyPlot.Avalonia">
-  <Design.PreviewWith>
-	  <gos:GOSChartViewer />
-  </Design.PreviewWith>
+<Styles
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:gos="using:GOSAvaloniaControls"
+    xmlns:oxy="http://oxyplot.org/avalonia">
+    <!--  xmlns:oxy="clr-namespace:OxyPlot.Avalonia;assembly=OxyPlot.Avalonia"  -->
+    <Design.PreviewWith>
+        <gos:GOSChartViewer />
+    </Design.PreviewWith>
 
-  <Style Selector="gos|GOSChartViewer">
-    <!-- Set Defaults -->
-    <Setter Property="Template">
-      <ControlTemplate>
-		  <Border x:Name="RootBorder"
-					Background="{TemplateBinding Background}"
-					BorderBrush="{TemplateBinding BorderBrush}"
-					BorderThickness="{TemplateBinding BorderThickness}"
-					CornerRadius="{TemplateBinding CornerRadius}">
-			  <Grid RowDefinitions="*,Auto">
-				  <oxy:PlotView x:Name="PART_plotView" />
-			  </Grid>
-		  </Border>
-      </ControlTemplate>
-    </Setter>
-  </Style>
+    <Style Selector="gos|GOSChartViewer">
+        <!--  Set Defaults  -->
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Border
+                    x:Name="RootBorder"
+                    Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    CornerRadius="{TemplateBinding CornerRadius}">
+                    <Grid RowDefinitions="*,Auto">
+                        <oxy:PlotView x:Name="PART_plotView" />
+                    </Grid>
+                </Border>
+            </ControlTemplate>
+        </Setter>
+    </Style>
 </Styles>

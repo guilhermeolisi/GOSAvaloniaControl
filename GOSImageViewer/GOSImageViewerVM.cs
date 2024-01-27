@@ -62,6 +62,6 @@ public partial class GOSImageViewer
         UIDispatcher.Post(() =>
         {
             _imageControl.Source = ImageToView;
-        }, DispatcherPriority.Layout);
+        }, DispatcherPriority.ApplicationIdle);
     }
 }

@@ -14,10 +14,10 @@
         <StreamGeometry x:Key="icon_bellfill">M7,16 A2,-2 0 0 0 9,14 L5,14 A2,-2 0 0 0 7,16 z M7.995,1.1 A0.9999,-0.9999 0 1 0 6.005,1.1 A5.002,-5.002 0 0 0 2,6.001 C2,7.098 1.5,12 0,13 L14,13 C12.5,12 12,7.098 12,6.001 C12,3.581 10.28,1.561 7.995,1.1 z</StreamGeometry>
         <controls:ByteToSeverityConverter x:Key="ByteToSeverityConverter" />
     </Styles.Resources>
-    <Style Selector=":is(Button).clean">
+    <!--<Style Selector=":is(Button).clean">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="Transparent" />
-		<Setter Property="CornerRadius" Value="0" />
+        <Setter Property="CornerRadius" Value="0" />
     </Style>
     <Style Selector=":is(Button).clean:disabled  /template/ ContentPresenter#PART_ContentPresenter">
         <Setter Property="Background" Value="Transparent" />
@@ -25,8 +25,8 @@
     </Style>
     <Style Selector=":is(Button).clean:disabled /template/ Border#BorderElement">
         <Setter Property="BorderBrush" Value="Transparent" />
-    </Style>
-    <Style Selector=":is(Button).circle">
+    </Style>-->
+    <!--<Style Selector=":is(Button).circle">
         <Setter Property="CornerRadius" Value="90" />
         <Setter Property="Padding" Value="4" />
         <Setter Property="Height" Value="30" />
@@ -42,7 +42,7 @@
                     Child="{TemplateBinding Content}" />
             </DataTemplate>
         </Setter>
-    </Style>
+    </Style>-->
     <Style Selector="ContentControl.items">
         <Setter Property="Background" Value="{DynamicResource ExpanderHeaderBackground}" />
         <Setter Property="BorderBrush" Value="{DynamicResource ExpanderHeaderBorderBrush}" />
@@ -79,17 +79,18 @@
             </ControlTemplate>
         </Setter>
     </Style>
-	<Style Selector="FlyoutPresenter.transparent">
-		<Setter Property="Background" Value="Transparent" />
-		<Setter Property="BorderBrush" Value="Transparent" />
-		<Setter Property="BorderThickness" Value="0" />
-		<Setter Property="CornerRadius" Value="0" />
-	</Style>
+    <Style Selector="FlyoutPresenter.transparent">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="CornerRadius" Value="0" />
+    </Style>
 
     <Style Selector="controls|GOSNotificationControl">
         <!--  Set Defaults  -->
         <!--<Setter Porperty="HorizontalAlignment" Value="Right" />
 		<Setter Porperty="VerticalAlignment" Value="Bottom" />-->
+		<Setter Property="Margin" Value="2"/>
         <Setter Property="Template">
             <ControlTemplate>
                 <Grid
@@ -99,13 +100,35 @@
                     <Button
                         x:Name="PART_buttonBell"
                         Grid.Row="1"
-                        Padding="4"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Bottom"
                         Classes="clean"
                         ToolTip.Tip="Notification">
                         <Panel>
-                            <fl:PathIcon Data="{StaticResource icon_bellfill}" />
+							<PathIcon Data="{StaticResource icon_bellfill}" Width="14" Height="14"/>
+							<Viewbox
+                                Width="9"
+                                Height="9"
+                                Margin="0,-5,-7,0"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Top">
+								<fl:InfoBadge
+                                    x:Name="PART_infoBadge"
+                                    Classes="Attention"
+                                    IsVisible="False" />
+							</Viewbox>
+							<!--<fl:InfoBadge
+								x:Name="PART_infoBadge"
+								Classes="Attention"
+								IsVisible="False" 
+								Width="10"
+                                Height="10"
+                                Margin="0,0,-5,0"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Top"/>-->
+							<!--<Viewbox HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <PathIcon Data="{StaticResource icon_bellfill}" />
+                            </Viewbox>
                             <Viewbox
                                 Width="10"
                                 Height="10"
@@ -116,7 +139,7 @@
                                     x:Name="PART_infoBadge"
                                     Classes="Attention"
                                     IsVisible="False" />
-                            </Viewbox>
+                            </Viewbox>-->
                         </Panel>
                         <Button.Flyout>
                             <Flyout Placement="TopEdgeAlignedRight">
@@ -144,7 +167,7 @@
                             </Flyout>
                         </Button.Flyout>
                         <FlyoutBase.AttachedFlyout>
-                            <Flyout Placement="TopEdgeAlignedRight" FlyoutPresenterClasses="transparent">
+                            <Flyout FlyoutPresenterClasses="transparent" Placement="TopEdgeAlignedRight">
                                 <ItemsControl x:Name="PART_ballon" Width="400">
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate DataType="controls:BallonItem">
