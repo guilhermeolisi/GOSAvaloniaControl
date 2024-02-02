@@ -1,16 +1,29 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
+using Avalonia.Input;
+using Avalonia.LogicalTree;
 using GOSAvaloniaControls.NavigationBar.Model;
 using System.Collections.ObjectModel;
+using System.Globalization;
 
 namespace GOSAvaloniaControls;
-
+[TemplatePart(PART_ElementReturnButton, typeof(Button))]
+[TemplatePart(PART_ElementHomeButton, typeof(Button))]
+[TemplatePart(PART_ElementCaptionChildren, typeof(TextBlock))]
+[TemplatePart(PART_ElementListChildren, typeof(ListBox))]
 public class GOSNavigationBar : TemplatedControl
 {
-    public static readonly StyledProperty<GOSNavigationBarTree?> MainItemProperty = AvaloniaProperty.Register<GOSNavigationBar, GOSNavigationBarTree?>(nameof(MainItem));
-    public static readonly StyledProperty<object> SelectedProperty = AvaloniaProperty.Register<GOSNavigationBar, object>(nameof(Selected), false, false, BindingMode.TwoWay);
+    private const string PART_ElementReturnButton = "PART_ReturnButton";
+    private const string PART_ElementHomeButton = "PART_HomeButton";
+    private const string PART_ElementCaptionChildren = "PART_CaptionChildren";
+    private const string PART_ElementListChildren = "PART_ListChildren";
+
+
+    public static readonly StyledProperty<GOSNavigationBarTree?> MainItemProperty = AvaloniaProperty.Register<GOSNavigationBar, GOSNavigationBarTree?>(nameof(MainItem), defaultBindingMode: BindingMode.OneWay);
+    public static readonly StyledProperty<object?> SelectedProperty = AvaloniaProperty.Register<GOSNavigationBar, object?>(nameof(Selected), null, false, BindingMode.TwoWay);
 
 
     public GOSNavigationBarTree? MainItem
@@ -18,7 +31,7 @@ public class GOSNavigationBar : TemplatedControl
         get => GetValue(MainItemProperty);
         set => SetValue(MainItemProperty, value);
     }
-    public object Selected
+    public object? Selected
     {
         get => GetValue(SelectedProperty);
         set => SetValue(SelectedProperty, value);
@@ -29,42 +42,141 @@ public class GOSNavigationBar : TemplatedControl
     ObservableCollection<GOSNavigationBarTree> ChildrenItems = new();
     public GOSNavigationBar()
     {
-        MainItemProperty.Changed.AddClassHandler<GOSNavigationBar>((x, e) => x.ChangeMainItem());
+        MainItemProperty.Changed.AddClassHandler<GOSNavigationBar>((x, e) => x.ChangeMainItem(e));
     }
-    Button homebt, returnbt;
-    TextBlock captionChildrentb;
-    ListBox listChildren;
+    internal Button? _homeButton, _returnButton;
+    private ListBox? _listChildren;
+    internal TextBlock? CaptionChildrentb { get; set; }
+    internal ListBox? ListChildren
+    {
+        get => _listChildren;
+        private set
+        {
+            if (_listChildren != null)
+            {
+                _listChildren.ItemsSource = null;
+                _listChildren.SelectionChanged -= ListChildren_SelectionChanged;
+            }
+
+            _listChildren = value;
+
+            if (_listChildren != null)
+            {
+                _listChildren.ItemsSource = ChildrenItems;
+                _listChildren.SelectionChanged += ListChildren_SelectionChanged;
+            }
+        }
+    }
+
+    private void ListChildren_SelectionChanged(object? sender, SelectionChangedEventArgs e)
+    {
+        ChildSelected(ListChildren.SelectedIndex);
+    }
+
     ToolTip toolTipHome = new();
     ToolTip toolTipReturn = new();
+
+    internal Button? HomeButton
+    {
+        get => _homeButton;
+        private set
+        {
+            if (_homeButton != null)
+                _homeButton.Click -= Homebt_Click;
+
+            _homeButton = value;
+
+            if (_homeButton != null)
+            {
+                _homeButton.Click += Homebt_Click;
+                ToolTip.SetTip(_homeButton, toolTipHome);
+            }
+#if DEBUG
+            else
+            {
+
+            }
+#endif
+
+        }
+    }
+
+    private void Homebt_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        HomeCommand(null);
+    }
+
+    internal Button? ReturnButton
+    {
+        get => _returnButton;
+        private set
+        {
+            if (_returnButton != null)
+                _returnButton.Click -= ReturnButton_Click;
+
+            _returnButton = value;
+
+            if (_returnButton != null)
+            {
+                _returnButton.Click += ReturnButton_Click;
+                ToolTip.SetTip(_returnButton, toolTipReturn);
+            }
+#if DEBUG
+            else
+            {
+
+            }
+#endif
+        }
+    }
+
+    private void ReturnButton_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        ReturnCommnad();
+    }
+
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
         base.OnApplyTemplate(e);
 
-        homebt = e.NameScope.Find<Button>("PART_home");
-        homebt.Click += (s, e) => HomeCommand();
-        ToolTip.SetTip(toolTipHome, homebt);
-        returnbt = e.NameScope.Find<Button>("PART_return");
-        returnbt.Click += (s, e) => ReturnCommnad();
-        ToolTip.SetTip(toolTipReturn, returnbt);
-        captionChildrentb = e.NameScope.Find<TextBlock>("PART_captionchildren");
-        listChildren = e.NameScope.Find<ListBox>("PART_listchildren");
-        listChildren.ItemsSource = ChildrenItems;
-        listChildren.SelectionChanged += (s, e) => ChildSelected(listChildren.SelectedIndex);
-            
-        HomeCommand();
-    }
+        HomeButton = e.NameScope.Find<Button>(PART_ElementHomeButton);
+        ReturnButton = e.NameScope.Find<Button>(PART_ElementReturnButton);
 
-    //private void ListChildren_PropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
+        CaptionChildrentb = e.NameScope.Find<TextBlock>(PART_ElementCaptionChildren);
+        ListChildren = e.NameScope.Find<ListBox>(PART_ElementListChildren);
+
+        HomeCommand(null);
+    }
+    //object? _selected;
+    //protected override void OnAttachedToLogicalTree(LogicalTreeAttachmentEventArgs e)
     //{
-    //    if ()
+    //    base.OnAttachedToLogicalTree(e);
+    //    if (_selected is not null)
+    //    {
+    //        Selected = _selected;
+    //    }
+
     //}
 
-    private void ChangeMainItem()
+    ///// <inheritdoc/>
+    //protected override void OnDetachedFromLogicalTree(LogicalTreeAttachmentEventArgs e)
+    //{
+
+    //    if (Selected is not null)
+    //    {
+    //        _selected = Selected;
+    //        SetCurrentValue(SelectedProperty, null);
+    //    }
+
+    //    base.OnDetachedFromLogicalTree(e);
+    //}
+    private void ChangeMainItem(AvaloniaPropertyChangedEventArgs e)
     {
-        HomeCommand();
-        toolTipHome.Content = $"Go to {MainItem?.Caption}";
+        HomeCommand(e);
+        toolTipHome.Content = MainItem is null ? string.Empty : $"Go to {MainItem.Caption}";
     }
     bool changedLevel;
+
     protected void ChildSelected(int index)
     {
         if (index < 0)
@@ -99,35 +211,45 @@ public class GOSNavigationBar : TemplatedControl
     {
         if (children is null || children.Count == 0)
             return;
+        if (ListChildren is null)
+            return;
         if (!ChildrenItems.Contains(children[0]))
         {
-            listChildren.SelectedIndex = -1;
+            ListChildren.SelectedIndex = -1;
             ChildrenItems.Clear();
             for (int i = 0; i < children.Count; i++)
             {
                 ChildrenItems.Add(children[i]);
             }
-            
+
         }
     }
     private void UpdateButtonsVisibility()
     {
-        homebt.IsEnabled = Indexes.Count > 1;
-        returnbt.IsEnabled = Indexes.Count > 0;
+
+        if (_homeButton is null || _returnButton is null)
+            return;
+
+        _homeButton.IsEnabled = Indexes.Count > 0;
+        _returnButton.IsEnabled = Indexes.Count > 1;
 
 
         if (Indexes.Count > 1)
         {
-            GOSNavigationBarTree temp = GetItemFromIndex();
-            toolTipReturn.Content = $"Return to {temp?.Caption}";
+            GOSNavigationBarTree temp = GetItemFromIndexLevel(Indexes.Count - 2); // -1 pelo indice ser 0 based e -1 para retornar um nivel
+            toolTipReturn.Content = temp is null ? string.Empty : $"Return to {temp.Caption}";
         }
     }
     private void UpdateChildrenCaption(string caption)
     {
-        captionChildrentb.Text = caption;//$"[{caption}]";
+        if (CaptionChildrentb is null)
+            return;
+        CaptionChildrentb.Text = caption;//$"[{caption}]";
     }
-    private void HomeCommand()
+    private void HomeCommand(AvaloniaPropertyChangedEventArgs? e)
     {
+        if (ListChildren is null)
+            return;
         Indexes.Clear();
         UpdateButtonsVisibility();
         if (MainItem is null)
@@ -135,13 +257,19 @@ public class GOSNavigationBar : TemplatedControl
             //ChangeChildrenItems(null);
             Selected = null;
             ChildrenItems.Clear();
-            captionChildrentb.Text = string.Empty;
+            CaptionChildrentb.Text = string.Empty;
         }
         else
         {
             ChangeChildrenItems(MainItem?.Children!);
             UpdateChildrenCaption(MainItem?.CaptionChildren);
-            listChildren.SelectedIndex = -1;
+            ListChildren.SelectedIndex = -1;
+#if DEBUG
+            if (MainItem.Item == Selected)
+            { }
+#endif
+            if (Selected is not null)
+                Selected = null;
             Selected = MainItem.Item;
         }
     }
@@ -156,13 +284,30 @@ public class GOSNavigationBar : TemplatedControl
             UpdateChildrenCaption(temp.CaptionChildren);
         }
         changedLevel = true;
-        listChildren.SelectedIndex = -1;
+        ListChildren.SelectedIndex = -1;
         Selected = temp?.Item;
     }
     private GOSNavigationBarTree GetItemFromIndex()
     {
         GOSNavigationBarTree temp = MainItem;
         for (int i = 0; i < Indexes.Count; i++)
+        {
+            if (temp?.Children is not null)
+            {
+                if (temp.Children.Count > Indexes[i])
+                    temp = temp.Children[Indexes[i]];
+                else
+                    Indexes.RemoveAt(i);
+            }
+        }
+        return temp;
+    }
+    private GOSNavigationBarTree GetItemFromIndexLevel(int level)
+    {
+        if (level > Indexes.Count - 1)
+            return null;
+        GOSNavigationBarTree temp = MainItem;
+        for (int i = 0; i <= level; i++)
         {
             if (temp?.Children is not null)
             {

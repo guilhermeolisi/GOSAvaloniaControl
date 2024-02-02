@@ -26,7 +26,7 @@
                         </WrapPanel.Resources>
 
                         <Button
-                            x:Name="PART_home"
+                            x:Name="PART_HomeButton"
                             Width="35"
                             Height="35"
                             Margin="5,0,0,0"
@@ -36,7 +36,7 @@
                             </Viewbox>
                         </Button>
                         <Button
-                            x:Name="PART_return"
+                            x:Name="PART_ReturnButton"
                             Width="35"
                             Height="35"
                             Margin="5,0,0,0"
@@ -53,7 +53,7 @@
                             BorderThickness="1"
                             CornerRadius="10,3,3,10">
                             <TextBlock
-                                x:Name="PART_captionchildren"
+                                x:Name="PART_CaptionChildren"
                                 Margin="5,2"
                                 VerticalAlignment="Center" />
                         </Border>
@@ -66,7 +66,7 @@
                             </Viewbox>
                         </ContentControl>
                         <ListBox
-                            x:Name="PART_listchildren"
+                            x:Name="PART_ListChildren"
                             Margin="5,0,0,0"
                             VerticalAlignment="Center"
                             AutoScrollToSelectedItem="True"
