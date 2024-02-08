@@ -189,7 +189,7 @@
     },
     "class-list": {
       "name": "storage.type.sin",
-      "match": "(?i)(?:\\b)(computer|penality|convolution|experimental|capillary|excluderegion|chebyshev|cosinefourier|debyelike|function|interpolation|inverse|polynomial|polynomialclassic|scatteringfactor|phase|peakxi|marchdollase|march|cell|reflectionhkl|radiation|profilefunction|profilefunctionft|gauss|lorentz|psvoigt|split|voigt|gausswavelength|lorentzwavelength|voigtwavelength|psvoigtwavelength|voigtiansize|voigtianstrain|inverseprofile|box|exponential|axialdivergence|defocusing|equatorialdivergence|receivingslitwidth|targetwidth|tilt|transparency|sizedistribution|simulation|interval|data|datasimulation|reflectionxi|backgroundfile)(?:\\b)"
+      "match": "(?i)(?:\\b)(calculation|penality|convolution|experimental|capillary|excluderegion|chebyshev|cosinefourier|debyelike|function|interpolation|inverse|polynomial|polynomialclassic|scatteringfactor|phase|peakxi|marchdollase|march|cell|reflectionhkl|radiation|profilefunction|profilefunctionft|gauss|lorentz|psvoigt|split|voigt|gausswavelength|lorentzwavelength|voigtwavelength|psvoigtwavelength|voigtiansize|voigtianstrain|inverseprofile|box|exponential|axialdivergence|defocusing|equatorialdivergence|receivingslitwidth|targetwidth|tilt|transparency|sizedistribution|simulation|interval|data|datasimulation|reflectionxi|backgroundfile)(?:\\b)"
     },
     "property-list": {
       "name": "entity.name.variable.property.sin",
