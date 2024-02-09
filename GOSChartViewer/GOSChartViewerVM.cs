@@ -1,14 +1,12 @@
 ﻿using Avalonia.Threading;
-using OxyPlot;
-using OxyPlot.Axes;
-using OxyPlot.Series;
+using LiveChartsCore;
+using LiveChartsCore.Defaults;
+using LiveChartsCore.Drawing;
+using LiveChartsCore.Measure;
+using LiveChartsCore.SkiaSharpView;
+using LiveChartsCore.SkiaSharpView.Painting;
 using SkiaSharp;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GOSAvaloniaControls;
 
@@ -17,28 +15,81 @@ public partial class GOSChartViewer
     static SKColor[] DiffractogramColorsLigth = { new(100, 100, 100), new(80, 161, 79), new(228, 86, 74), new(193, 132, 3), new(0, 132, 188), new(166, 38, 164), new(8, 151, 179) };
     static SKColor[] DiffractogramColorsDark = { new(154, 154, 154), new(152, 195, 121), new(224, 108, 117), new(229, 192, 123), new(97, 175, 240), new(198, 120, 221), new(86, 182, 194) };
 
-    private PlotModel PlotModel { get; set; } = new();
     private Dispatcher UIDispatcher = Dispatcher.UIThread;
-    //[Reactive]
-    ObservableCollection<string>? ExperimentalsLabel { get; set; }
-    //[Reactive]
+
+    private ObservableCollection<string>? ExperimentalsLabel { get; set; }
+    private ObservableCollection<ObservablePoint?> DataPoints = new();
+
     int SelectedIndex { get; set; }
+
+    private readonly DrawMarginFrame DrawMarginFrame = new() { Fill = null };
+
+    private readonly ObservableCollection<ISeries> Series = new()
+    {
+        new LineSeries<ObservablePoint>
+        {
+            Name = "Experimental",
+            GeometryFill = null,
+            GeometryStroke = null,
+            Fill = null,
+            LineSmoothness = 0,
+            //TooltipLabelFormatter = (chartPoint) => $"{chartPoint.Context.Series.Name}: {chartPoint.PrimaryValue}, {chartPoint.SecondaryValue:F4}"
+            DataPadding = new LvcPoint(0.01, 0.01),
+        },
+    };
+    private Axis[][] Axes =
+    [
+        [
+            new Axis
+            {
+                Position = AxisPosition.Start,
+                Name = "X",
+                LabelsPaint = null,
+            },
+        ],
+        [
+            new Axis
+            {
+                Position = AxisPosition.Start,
+                Name = "Y",
+                LabelsPaint = null,
+            },
+        ]
+    ];
     private void ChangeTheme()
     {
-
-        if (Theme)
+        DrawMarginFrame.Stroke = new SolidColorPaint { Color = IsDarkTheme ? SKColors.White : SKColors.Black };
+        for (int i = 0; i < Axes.Length; i++)
         {
-            PlotModel.TextColor = OxyColors.White;
-            PlotModel.PlotAreaBorderColor = OxyColors.White;
-            SerieExp = null;
-            ProcessPoints();
+            for (int j = 0; j < Axes[i].Length; j++)
+            {
+                Axes[i][j].NamePaint = new SolidColorPaint { Color = IsDarkTheme ? SKColors.White : SKColors.Black };
+                Axes[i][j].LabelsPaint = new SolidColorPaint { Color = IsDarkTheme ? SKColors.White : SKColors.Black };
+                Axes[i][j].SeparatorsPaint = new SolidColorPaint { Color = IsDarkTheme ? new SKColor(100, 100, 100, 255) /*SKColors.DarkGray*/ : new SKColor(210, 210, 210, 255) /*SKColors.LightGray*/ };
+            }
         }
-        else
+
+        if (Series is null)
+            return;
+        int indSeries = 0;
+        int k = 0;
+        foreach (var item in Series)
         {
-            PlotModel.TextColor = OxyColors.Black;
-            PlotModel.PlotAreaBorderColor = OxyColors.Black;
-            SerieExp = null;
-            ProcessPoints();
+            if (k >= DiffractogramColorsDark.Length)
+            {
+                k = 0;
+            }
+            if (item is ScatterSeries<ObservablePoint> scat2)
+            {
+                scat2.Stroke = new SolidColorPaint(IsDarkTheme ? DiffractogramColorsDark[k] : DiffractogramColorsLigth[k]) { StrokeThickness = 0 };
+            }
+            else if (item is LineSeries<ObservablePoint> line2)
+            {
+                line2.Stroke = new SolidColorPaint(IsDarkTheme ? DiffractogramColorsDark[k] : DiffractogramColorsLigth[k]) { StrokeThickness = 2 };
+            }
+
+            k++;
+            indSeries++;
         }
     }
     //bool isChangingData;
@@ -75,58 +126,28 @@ public partial class GOSChartViewer
         //isChangingData = false;
         ProcessPoints();
     }
-
-    private List<LineSeries>? SerieExp;
-    //private LineSeries[] SerieCalc;
-
-    private ObservableCollection<ObservableCollection<DataPoint>>? DataExp;
-    OxyColor[] ColorsLight = { OxyColor.FromArgb(255, DiffractogramColorsLigth[0].Red, DiffractogramColorsLigth[0].Green, DiffractogramColorsLigth[0].Blue), OxyColor.FromArgb(255, DiffractogramColorsLigth[2].Red, DiffractogramColorsLigth[2].Green, DiffractogramColorsLigth[2].Blue) };
-    OxyColor[] ColorsDark = { OxyColor.FromArgb(255, DiffractogramColorsDark[0].Red, DiffractogramColorsDark[0].Green, DiffractogramColorsDark[0].Blue), OxyColor.FromArgb(255, DiffractogramColorsDark[2].Red, DiffractogramColorsDark[2].Green, DiffractogramColorsDark[2].Blue) };
-
     private void ProcessPoints()
     {
+        //1 Verifica os dados
         if (Data is null || Data.Count == 0)
         {
             ClearDatas();
             return;
         }
-        else
-        {
-            int expIndex = ExperimentalsLabel is null || ExperimentalsLabel.Count == 0 || ExperimentalsLabel.Count == 1 ? 0 : SelectedIndex >= 0 ? SelectedIndex : 0;
 
-            if (SerieExp is null || SerieExp.Count != 1 || DataExp is null || DataExp.Count != 1)
-            {
-                ClearSeries();
-                SerieExp = new()
-                {
-                    new()
-                };
-                DataExp = new()
-                {
-                    new()
-                };
-                for (int i = 0; i < SerieExp.Count; i++)
-                {
+        int expIndex = ExperimentalsLabel is null || ExperimentalsLabel.Count == 0 || ExperimentalsLabel.Count == 1 ? 0 : SelectedIndex >= 0 ? SelectedIndex : 0;
 
-                    SerieExp[i] = new()
-                    {
-                        Color = Theme ? ColorsDark[0] : ColorsLight[0],
-                        StrokeThickness = 2,
-                    };
-                    SerieExp[i].ItemsSource = DataExp[i];
-                }
-            }
+        ChangeDataToObservableCollection(Data, DataPoints);
 
-            AddFromArray(SerieExp[0], Data, DataExp[0]);
-            //PlotModel.Series.Add(SerieExp[0]);
-            if (PlotModel.Series.Count == 0)
-                PlotModel.Series.Add(SerieExp[0]);
-            else if (PlotModel.Series[0] != SerieExp[0])
-                PlotModel.Series[0] = SerieExp[0];
-
-        }
-
-        UpdateChart();
+        if (IsZooming) //Se for full o limite é definido pelo zoom
+            ResetZoom();
+    }
+    protected void ResetZoom()
+    {
+        if (Axes is null || Axes.Length == 0)
+            return;
+        Axes[0][0].MinLimit = null;
+        Axes[0][0].MaxLimit = null;
     }
     private void Data_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
     {
@@ -137,11 +158,11 @@ public partial class GOSChartViewer
                 {
                     if (e.NewStartingIndex == Data?.Count - 1)
                     {
-                        DataExp[0].Add(new((((double X, double Y))e.NewItems[0]).X, (((double X, double Y))e.NewItems[0]).Y));
+                        DataPoints.Add(new ObservablePoint((((double X, double Y))e.NewItems[0]).X, (((double X, double Y))e.NewItems[0]).Y));
                     }
                     else
                     {
-                        DataExp[0].Insert(e.NewStartingIndex, new((((double X, double Y))e.NewItems[0]).X, (((double X, double Y))e.NewItems[0]).Y));
+                        DataPoints.Insert(e.NewStartingIndex, new((((double X, double Y))e.NewItems[0]).X, (((double X, double Y))e.NewItems[0]).Y));
                     }
                 }
                 else
@@ -150,7 +171,7 @@ public partial class GOSChartViewer
                 }
                 break;
             case System.Collections.Specialized.NotifyCollectionChangedAction.Remove:
-                DataExp.RemoveAt(e.OldStartingIndex);
+                DataPoints.RemoveAt(e.OldStartingIndex);
                 break;
             case System.Collections.Specialized.NotifyCollectionChangedAction.Reset:
                 break;
@@ -160,62 +181,29 @@ public partial class GOSChartViewer
                 break;
 
         }
-        UpdateChart();
-
     }
-    private void UpdateChart()
-    {
 
-        if (PlotModel.DefaultYAxis is not null && (double.IsNaN(PlotModel.DefaultYAxis.FontSize) || PlotModel.DefaultYAxis.FontSize != 0))
-            PlotModel.DefaultYAxis.FontSize = 0;
-        if (PlotModel.DefaultYAxis is not null && PlotModel.DefaultYAxis.TickStyle != TickStyle.None)
-        {
-            PlotModel.DefaultYAxis.TickStyle = TickStyle.None;
-            PlotModel.DefaultYAxis.MinorTickSize = 0;
-            PlotModel.DefaultYAxis.MinorTickSize = 0;
-        }
-        if (PlotModel.DefaultYAxis is not null && ((Theme && PlotModel.DefaultYAxis.TicklineColor != OxyColors.White) || (!Theme && PlotModel.DefaultYAxis.TicklineColor != OxyColors.Black)))
-            PlotModel.DefaultYAxis.TicklineColor = Theme ? OxyColors.White : OxyColors.Black;
-        if (PlotModel.DefaultXAxis is not null && ((Theme && PlotModel.DefaultXAxis.TicklineColor != OxyColors.White) || (!Theme && PlotModel.DefaultXAxis.TicklineColor != OxyColors.Black)))
-            PlotModel.DefaultXAxis.TicklineColor = Theme ? OxyColors.White : OxyColors.Black;
-        UIDispatcher.Post(() =>
-        {
-            PlotModel.InvalidatePlot(true);
-        });
-    }
-    private static void AddFromArray(XYAxisSeries serie, ObservableCollection<(double X, double Y)> data, ObservableCollection<DataPoint> dataOxy)
+    private void ChangeDataToObservableCollection(ObservableCollection<(double X, double Y)> data, ObservableCollection<ObservablePoint> obs)
     {
-        if (data is null)
-            return;
-
+        obs.Clear();
+        int indPlus = 0;
         for (int i = 0; i < data.Count; i++)
         {
-            if (dataOxy.Count - 1 < i)
-                dataOxy.Add(new(data[i].X, data[i].Y));
-            else
-            {
-                dataOxy[i] = new(data[i].X, data[i].Y);
-            }
-        }
-        while (dataOxy.Count > data.Count)
-            dataOxy.RemoveAt(dataOxy.Count - 1);
+            obs.Add(new ObservablePoint(data[i].X, data[i].Y));
 
-        if (serie.ItemsSource != dataOxy)
-            serie.ItemsSource = dataOxy;
+        }
+#if DEBUG
+        if (obs == Series[0].Values)
+        {
+
+        }
+#endif
     }
     private void ClearDatas()
     {
-
-        if (PlotModel.Series is not null && PlotModel.Series.Count > 0)
+        for (int i = 0; i < Series?.Count; i++)
         {
-            PlotModel.Series.Clear();
-        }
-    }
-    private void ClearSeries()
-    {
-        for (int i = 0; i < SerieExp?.Count; i++)
-        {
-            PlotModel.Series.Remove(SerieExp[i]);
+            (Series[i].Values as ObservableCollection<ObservablePoint>).Clear();
         }
     }
 }

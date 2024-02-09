@@ -2,21 +2,20 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
-using Avalonia.Markup.Xaml.MarkupExtensions;
-using Avalonia.Media.Immutable;
-using Avalonia.Threading;
-using OxyPlot;
-using OxyPlot.Avalonia;
+using LiveChartsCore.Measure;
+using LiveChartsCore.SkiaSharpView.Avalonia;
 using System.Collections.ObjectModel;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace GOSAvaloniaControls;
 
 public partial class GOSChartViewer : TemplatedControl
 {
-    public static readonly StyledProperty<ObservableCollection<(double X, double Y)>?> DataProperty = AvaloniaProperty.Register<GOSChartViewer, ObservableCollection<(double X, double Y)>?>(nameof(Theme), defaultBindingMode: BindingMode.OneWay);
-    public static readonly StyledProperty<bool> ThemeProperty = AvaloniaProperty.Register<GOSChartViewer, bool>(nameof(Theme), true, false, BindingMode.OneWay);
+    public static readonly StyledProperty<ObservableCollection<(double X, double Y)>?> DataProperty = AvaloniaProperty.Register<GOSChartViewer, ObservableCollection<(double X, double Y)>?>(nameof(IsDarkTheme), defaultBindingMode: BindingMode.OneWay);
+    public static readonly StyledProperty<bool> IsDarkThemeProperty = AvaloniaProperty.Register<GOSChartViewer, bool>(nameof(IsDarkTheme), true, false, BindingMode.OneWay);
+    public static readonly StyledProperty<bool> IsZoomingProperty = AvaloniaProperty.Register<GOSChartViewer, bool>(nameof(IsZooming), false, false, BindingMode.OneWay);
+    public static readonly StyledProperty<string> XlabelProperty = AvaloniaProperty.Register<GOSChartViewer, string>(nameof(XLabel), "X", false, BindingMode.OneWay);
+    public static readonly StyledProperty<string> YlabelProperty = AvaloniaProperty.Register<GOSChartViewer, string>(nameof(YLabel), "Y", false, BindingMode.OneWay);
+
 
     public ObservableCollection<(double X, double Y)>? Data
     {
@@ -26,26 +25,50 @@ public partial class GOSChartViewer : TemplatedControl
     /// <summary>
     /// True = Dark; False = Ligth
     /// </summary>
-    public bool Theme
+    public bool IsDarkTheme
     {
-        get => GetValue(ThemeProperty);
-        set => SetValue(ThemeProperty, value);
+        get => GetValue(IsDarkThemeProperty);
+        set => SetValue(IsDarkThemeProperty, value);
     }
+    public bool IsZooming
+    {
+        get => GetValue(IsZoomingProperty);
+        set => SetValue(IsZoomingProperty, value);
+    }
+    public string XLabel
+    {
+        get => GetValue(XlabelProperty);
+        set => SetValue(XlabelProperty, value);
+    }
+    public string YLabel
+    {
+        get => GetValue(YlabelProperty);
+        set => SetValue(YlabelProperty, value);
+    }
+
     public GOSChartViewer()
     {
 
-        ThemeProperty.Changed.AddClassHandler<GOSChartViewer>((x, e) => x.ChangeTheme());
+        IsDarkThemeProperty.Changed.AddClassHandler<GOSChartViewer>((x, e) => x.ChangeTheme());
         DataProperty.Changed.AddClassHandler<GOSChartViewer>((x, e) => x.ChangeData());
+        IsZoomingProperty.Changed.AddClassHandler<GOSChartViewer>((x, e) => x.ChangeZoom());
+        XlabelProperty.Changed.AddClassHandler<GOSChartViewer>((x, e) => x.ChangeXLabel());
+        YlabelProperty.Changed.AddClassHandler<GOSChartViewer>((x, e) => x.ChangeYLabel());
+
+        Series[0].Values = DataPoints;
+
     }
+    CartesianChart _chart;
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
         base.OnApplyTemplate(e);
 
-        var _plot = e.NameScope.Find<PlotView>("PART_plotView");
-        _plot.Model = PlotModel;
-        _plot.Controller = new PlotController();
-        _plot.Controller.UnbindAll();
-        _plot.Background = new ImmutableSolidColorBrush(Avalonia.Media.Colors.Transparent);
+        _chart = e.NameScope.Find<CartesianChart>("PART_Chart");
+        _chart.Series = Series;
+        _chart.XAxes = Axes[0];
+        _chart.YAxes = Axes[1];
+        _chart.DrawMarginFrame = DrawMarginFrame;
+
         //ChangeData();
         //var wrap = e.NameScope.Find<ToggleButton>("PART_WrapCheck");
         //var edit = e.NameScope.Find<ToggleButton>("PART_EditCheck");
@@ -58,6 +81,11 @@ public partial class GOSChartViewer : TemplatedControl
         //}
 
         ChangeTheme();
+        ChangeXLabel();
+        ChangeYLabel();
+        ChangeData();
+        ChangeZoom();
+
     }
     private void ChangeData()
     {
@@ -68,5 +96,24 @@ public partial class GOSChartViewer : TemplatedControl
         }
         SetData(null);
         Data.CollectionChanged += Data_CollectionChanged;
+    }
+    private void ChangeZoom()
+    {
+        if (_chart is null)
+            return;
+        _chart.ZoomMode = IsZooming ? ZoomAndPanMode.X : ZoomAndPanMode.None;
+        ResetZoom();
+    }
+    private void ChangeXLabel()
+    {
+        if (_chart is null)
+            return;
+        _chart.XAxes.First().Name = XLabel;
+    }
+    private void ChangeYLabel()
+    {
+        if (_chart is null)
+            return;
+        _chart.YAxes.First().Name = YLabel;
     }
 }

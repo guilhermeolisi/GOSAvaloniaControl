@@ -2,7 +2,8 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:gos="using:GOSAvaloniaControls"
-    xmlns:oxy="http://oxyplot.org/avalonia">
+    xmlns:lvc="using:LiveChartsCore.SkiaSharpView.Avalonia">
+    <!--  xmlns:oxy="http://oxyplot.org/avalonia"  -->
     <!--  xmlns:oxy="clr-namespace:OxyPlot.Avalonia;assembly=OxyPlot.Avalonia"  -->
     <Design.PreviewWith>
         <gos:GOSChartViewer />
@@ -19,7 +20,18 @@
                     BorderThickness="{TemplateBinding BorderThickness}"
                     CornerRadius="{TemplateBinding CornerRadius}">
                     <Grid RowDefinitions="*,Auto">
-                        <oxy:PlotView x:Name="PART_plotView" />
+                        <!--<oxy:PlotView x:Name="PART_plotView" />-->
+						<!--Series="{Binding Series}"-->
+						<!--DrawMarginFrame="{Binding DrawMarginFrame}"-->
+						<!--XAxes="{Binding Axes[0], Mode=OneTime}"-->
+						<!--YAxes="{Binding Axes[1], Mode=OneTime}"-->
+						<lvc:CartesianChart
+                            x:Name="PART_Chart"
+                            AnimationsSpeed="0"
+                            EasingFunction="{x:Null}"
+                            LegendPosition="Hidden"
+                            TooltipPosition="Hidden"
+                            ZoomMode="None" />
                     </Grid>
                 </Border>
             </ControlTemplate>

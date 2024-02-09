@@ -10,7 +10,7 @@
 
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="11.0.7" />
-    <PackageReference Include="OxyPlot.Avalonia" Version="2.1.0" />
+    <PackageReference Include="LiveChartsCore.SkiaSharpView.Avalonia" Version="2.0.0-rc2" />
     <PackageReference Include="SkiaSharp" Version="2.88.7" />
   </ItemGroup>
 
