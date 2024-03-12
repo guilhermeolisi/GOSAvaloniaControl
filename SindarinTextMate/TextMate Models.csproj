@@ -137,7 +137,7 @@
 	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	</None>
 	<None Update="Grammars\sindarin\syntaxes\sindarin.tmLanguage.json">
-	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	</None>
 	<None Update="Grammars\sql\cgmanifest.json">
 	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

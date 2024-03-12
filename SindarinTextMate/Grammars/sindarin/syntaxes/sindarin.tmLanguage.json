@@ -189,11 +189,11 @@
     },
     "class-list": {
       "name": "storage.type.sin",
-      "match": "(?i)(?:\\b)(calculation|penality|convolution|experimental|capillary|excluderegion|chebyshev|cosinefourier|debyelike|function|interpolation|inverse|polynomial|polynomialclassic|scatteringfactor|phase|peakxi|marchdollase|march|cell|reflectionhkl|radiation|profilefunction|profilefunctionft|gauss|lorentz|psvoigt|split|voigt|gausswavelength|lorentzwavelength|voigtwavelength|psvoigtwavelength|voigtiansize|voigtianstrain|inverseprofile|box|exponential|axialdivergence|defocusing|equatorialdivergence|receivingslitwidth|targetwidth|tilt|transparency|sizedistribution|simulation|interval|data|datasimulation|reflectionxi|backgroundfile)(?:\\b)"
+      "match": "(?i)(?:\\b)(calculation|penality|experimental|capillary|excluderegion|chebyshev|cosinefourier|debyelike|function|interpolation|inverse|polynomial|polynomialclassic|scatteringfactor|phase|peakxi|marchdollase|cell|reflectionhkl|radiation|profilefunction|profilefunctionft|gauss|lorentz|psvoigt|split|voigt|gausswavelength|lorentzwavelength|voigtwavelength|psvoigtwavelength|voigtiansize|voigtianstrain|inverseprofile|box|exponential|axialdivergence|defocusing|equatorialdivergence|receivingslitwidth|targetwidth|tilt|transparency|sizedistribution|simulation|interval|data|datasimulation|reflectionxi|backgroundfile)(?:\\b)"
     },
     "property-list": {
       "name": "entity.name.variable.property.sin",
-      "match": "(?i)(?:\\b)(cycles|derivationbothside|anomalousscattering|stabilization|rapidyrecalcule|calculeprofileinpeak|resolution|profilesmax|profilexmax|enableintensity|enableshift|cutoff|zero|displacement|monochromatortwotheta|polarization|variableslit|incidentangle|specimenthickness|absoprtionfunction|scale|shift|multiplicity|z|convolutiontype|shape|direction|width|type)(?:\\b)"
+      "match": "(?i)(?:\\b)(cycles|derivationbothside|anomalousscattering|stabilization|rapidyrecalcule|calculeprofileinpeak|enableintensity|enableshift|fftresolution|profilesmax|profilexmax|cutoff|zero|displacement|monochromatortwotheta|polarization|variableslit|incidentangle|specimenthickness|absoprtionfunction|scale|shift|multiplicity|z|convolutiontype|shape|direction|width|type|ispolynomial)(?:\\b)"
     },
     "enum-list": {
       "name": "entity.name.type.enum.sin",
