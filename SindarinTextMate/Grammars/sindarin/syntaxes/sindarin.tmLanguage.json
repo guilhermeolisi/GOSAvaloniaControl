@@ -197,7 +197,7 @@
     },
     "enum-list": {
       "name": "entity.name.type.enum.sin",
-      "match": "(?i)(?:\\b)(null|none|marquardt|dumping|fft|numerical|sphere|marchdollase|cylinder|cube|tetrahedron|octahedron|lognormal|gamma|york|unit|inversey|inversee|weight)(?:\\b)"
+      "match": "(?i)(?:\\b)(null|none|marquardt|dumping|fft|numerical|sphere|marchdollase|march|cylinder|cube|tetrahedron|octahedron|lognormal|gamma|york|unit|inversey|inversee|weight)(?:\\b)"
     },
     "function": {
       "begin": "(?i)(?:\\b)([a-z_][a-z0-9_]*)(?=\\()",
