@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 
 namespace GOSAvaloniaControls;
@@ -46,6 +47,14 @@ public class TextBoxNumber : TextBox
             DataValidationErrors.SetError(this, error);
         }
     }
+    protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
+    {
+        base.OnApplyTemplate(e);
+        if (string.IsNullOrEmpty(Text))
+        {
+            Text = 0.ToString();
+        }
+    }
     private void TextBoxNumber_PropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
     {
         //Se o texto for um numero atualiza o valor
@@ -53,8 +62,18 @@ public class TextBoxNumber : TextBox
         {
             if (string.IsNullOrEmpty(Text) || Text == "-" || Text == "+")
             {
-                if (Value != 0)
-                    Value = 0;
+                isSetValueToZeroFromText = true;
+                if (IsInteger)
+                {
+                    if (ValueInt != 0)
+                        ValueInt = 0;
+                }
+                else
+                {
+                    if (Value != 0)
+                        Value = 0;
+                }
+                isSetValueToZeroFromText = false;
                 return;
             }
             if (IsInteger)
@@ -89,13 +108,13 @@ public class TextBoxNumber : TextBox
         //    e.Handled = true;
         //}
     }
-
+    bool isSetValueToZeroFromText = false;
     private void ChangeValue()
     {
         string temp = Value.ToString();
         if (Text != temp)
         {
-            if (string.IsNullOrWhiteSpace(Text) && Value == 0)
+            if (string.IsNullOrWhiteSpace(Text) && Value == 0 && isSetValueToZeroFromText)
             {
                 return;
             }
@@ -113,7 +132,7 @@ public class TextBoxNumber : TextBox
         string temp = ValueInt.ToString();
         if (Text != temp)
         {
-            if (string.IsNullOrWhiteSpace(Text) && ValueInt == 0)
+            if (string.IsNullOrWhiteSpace(Text) && ValueInt == 0 && isSetValueToZeroFromText)
             {
                 return;
             }
