@@ -1,5 +1,4 @@
-﻿using Avalonia.Threading;
-using LiveChartsCore;
+﻿using LiveChartsCore;
 using LiveChartsCore.Defaults;
 using LiveChartsCore.Drawing;
 using LiveChartsCore.Measure;
@@ -10,12 +9,10 @@ using System.Collections.ObjectModel;
 
 namespace GOSAvaloniaControls;
 
-public partial class GOSChartViewer
+public partial class GOSCartesian
 {
-    static SKColor[] DiffractogramColorsLigth = { new(100, 100, 100), new(80, 161, 79), new(228, 86, 74), new(193, 132, 3), new(0, 132, 188), new(166, 38, 164), new(8, 151, 179) };
-    static SKColor[] DiffractogramColorsDark = { new(154, 154, 154), new(152, 195, 121), new(224, 108, 117), new(229, 192, 123), new(97, 175, 240), new(198, 120, 221), new(86, 182, 194) };
-
-    private Dispatcher UIDispatcher = Dispatcher.UIThread;
+    static SKColor[] ChartColorsLigth = [new(80, 161, 79), new(228, 86, 74), new(193, 132, 3), new(0, 132, 188), new(166, 38, 164), new(8, 151, 179)];
+    static SKColor[] ChartColorsDark = [new(152, 195, 121), new(224, 108, 117), new(229, 192, 123), new(97, 175, 240), new(198, 120, 221), new(86, 182, 194)];
 
     private ObservableCollection<string>? ExperimentalsLabel { get; set; }
     private ObservableCollection<ObservablePoint?> DataPoints = new();
@@ -75,22 +72,24 @@ public partial class GOSChartViewer
         int k = 0;
         foreach (var item in Series)
         {
-            if (k >= DiffractogramColorsDark.Length)
+            if (k >= ChartColorsDark.Length)
             {
                 k = 0;
             }
             if (item is ScatterSeries<ObservablePoint> scat2)
             {
-                scat2.Stroke = new SolidColorPaint(IsDarkTheme ? DiffractogramColorsDark[k] : DiffractogramColorsLigth[k]) { StrokeThickness = 0 };
+                scat2.Stroke = new SolidColorPaint(IsDarkTheme ? ChartColorsDark[k] : ChartColorsLigth[k]) { StrokeThickness = 0 };
             }
             else if (item is LineSeries<ObservablePoint> line2)
             {
-                line2.Stroke = new SolidColorPaint(IsDarkTheme ? DiffractogramColorsDark[k] : DiffractogramColorsLigth[k]) { StrokeThickness = 2 };
+                line2.Stroke = new SolidColorPaint(IsDarkTheme ? ChartColorsDark[k] : ChartColorsLigth[k]) { StrokeThickness = 2 };
             }
 
             k++;
             indSeries++;
         }
+
+        _chart.Legend = IsDarkTheme ? new LiveLegendDark() : new LiveLegendLigth();
     }
     //bool isChangingData;
     public void SetData(List<string>? experimentals)
@@ -203,7 +202,7 @@ public partial class GOSChartViewer
     {
         for (int i = 0; i < Series?.Count; i++)
         {
-            (Series[i].Values as ObservableCollection<ObservablePoint>).Clear();
+            (Series[i].Values as ObservableCollection<ObservablePoint>)?.Clear();
         }
     }
 }

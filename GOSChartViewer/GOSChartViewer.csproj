@@ -17,7 +17,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="GOSChartViewer.cs">
+    <Compile Update="GOSPieChart.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>%(Filename)</DependentUpon>
+    </Compile>
+    <Compile Update="GOSCartesian.cs">
       <SubType>Code</SubType>
       <DependentUpon>%(Filename)</DependentUpon>
     </Compile>

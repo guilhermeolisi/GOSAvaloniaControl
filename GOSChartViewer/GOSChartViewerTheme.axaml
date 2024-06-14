@@ -5,36 +5,50 @@
     xmlns:lvc="using:LiveChartsCore.SkiaSharpView.Avalonia">
     <!--  xmlns:oxy="http://oxyplot.org/avalonia"  -->
     <!--  xmlns:oxy="clr-namespace:OxyPlot.Avalonia;assembly=OxyPlot.Avalonia"  -->
-    <Design.PreviewWith>
-        <gos:GOSChartViewer />
-    </Design.PreviewWith>
+    <!--<Design.PreviewWith>
+        <gos:GOSCartesian />
+    </Design.PreviewWith>-->
+    <Styles.Resources>
+        <ControlTheme x:Key="{x:Type gos:GOSCartesian}" TargetType="gos:GOSCartesian">
+            <!--  Set Defaults  -->
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border
+                        x:Name="RootBorder"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="{TemplateBinding CornerRadius}">
+                        <Grid RowDefinitions="*,Auto">
+                            <lvc:CartesianChart
+                                x:Name="PART_Chart"
+                                AnimationsSpeed="0"
+                                EasingFunction="{x:Null}"
+                                LegendPosition="Hidden"
+                                TooltipPosition="Hidden"
+                                ZoomMode="None" />
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+        </ControlTheme>
 
-    <Style Selector="gos|GOSChartViewer">
-        <!--  Set Defaults  -->
-        <Setter Property="Template">
-            <ControlTemplate>
-                <Border
-                    x:Name="RootBorder"
-                    Background="{TemplateBinding Background}"
-                    BorderBrush="{TemplateBinding BorderBrush}"
-                    BorderThickness="{TemplateBinding BorderThickness}"
-                    CornerRadius="{TemplateBinding CornerRadius}">
-                    <Grid RowDefinitions="*,Auto">
-                        <!--<oxy:PlotView x:Name="PART_plotView" />-->
-						<!--Series="{Binding Series}"-->
-						<!--DrawMarginFrame="{Binding DrawMarginFrame}"-->
-						<!--XAxes="{Binding Axes[0], Mode=OneTime}"-->
-						<!--YAxes="{Binding Axes[1], Mode=OneTime}"-->
-						<lvc:CartesianChart
-                            x:Name="PART_Chart"
-                            AnimationsSpeed="0"
-                            EasingFunction="{x:Null}"
-                            LegendPosition="Hidden"
-                            TooltipPosition="Hidden"
-                            ZoomMode="None" />
-                    </Grid>
-                </Border>
-            </ControlTemplate>
-        </Setter>
-    </Style>
+        <ControlTheme x:Key="{x:Type gos:GOSPieChart}" TargetType="gos:GOSPieChart">
+              <!--Set Defaults-->  
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border
+                        x:Name="RootBorder"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="{TemplateBinding CornerRadius}">
+                        <Grid RowDefinitions="*,Auto">
+                            <lvc:PieChart x:Name="PART_Chart" />
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+        </ControlTheme>
+    </Styles.Resources>
 </Styles>

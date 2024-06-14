@@ -8,13 +8,13 @@ using System.Collections.ObjectModel;
 
 namespace GOSAvaloniaControls;
 
-public partial class GOSChartViewer : TemplatedControl
+public partial class GOSCartesian : TemplatedControl
 {
-    public static readonly StyledProperty<ObservableCollection<(double X, double Y)>?> DataProperty = AvaloniaProperty.Register<GOSChartViewer, ObservableCollection<(double X, double Y)>?>(nameof(IsDarkTheme), defaultBindingMode: BindingMode.OneWay);
-    public static readonly StyledProperty<bool> IsDarkThemeProperty = AvaloniaProperty.Register<GOSChartViewer, bool>(nameof(IsDarkTheme), true, false, BindingMode.OneWay);
-    public static readonly StyledProperty<bool> IsZoomingProperty = AvaloniaProperty.Register<GOSChartViewer, bool>(nameof(IsZooming), false, false, BindingMode.OneWay);
-    public static readonly StyledProperty<string> XlabelProperty = AvaloniaProperty.Register<GOSChartViewer, string>(nameof(XLabel), "X", false, BindingMode.OneWay);
-    public static readonly StyledProperty<string> YlabelProperty = AvaloniaProperty.Register<GOSChartViewer, string>(nameof(YLabel), "Y", false, BindingMode.OneWay);
+    public static readonly StyledProperty<ObservableCollection<(double X, double Y)>?> DataProperty = AvaloniaProperty.Register<GOSCartesian, ObservableCollection<(double X, double Y)>?>(nameof(IsDarkTheme), defaultBindingMode: BindingMode.OneWay);
+    public static readonly StyledProperty<bool> IsDarkThemeProperty = AvaloniaProperty.Register<GOSCartesian, bool>(nameof(IsDarkTheme), true, false, BindingMode.OneWay);
+    public static readonly StyledProperty<bool> IsZoomingProperty = AvaloniaProperty.Register<GOSCartesian, bool>(nameof(IsZooming), false, false, BindingMode.OneWay);
+    public static readonly StyledProperty<string> XlabelProperty = AvaloniaProperty.Register<GOSCartesian, string>(nameof(XLabel), "X", false, BindingMode.OneWay);
+    public static readonly StyledProperty<string> YlabelProperty = AvaloniaProperty.Register<GOSCartesian, string>(nameof(YLabel), "Y", false, BindingMode.OneWay);
 
 
     public ObservableCollection<(double X, double Y)>? Data
@@ -46,14 +46,14 @@ public partial class GOSChartViewer : TemplatedControl
         set => SetValue(YlabelProperty, value);
     }
 
-    public GOSChartViewer()
+    public GOSCartesian()
     {
 
-        IsDarkThemeProperty.Changed.AddClassHandler<GOSChartViewer>((x, e) => x.ChangeTheme());
-        DataProperty.Changed.AddClassHandler<GOSChartViewer>((x, e) => x.ChangeData());
-        IsZoomingProperty.Changed.AddClassHandler<GOSChartViewer>((x, e) => x.ChangeZoom());
-        XlabelProperty.Changed.AddClassHandler<GOSChartViewer>((x, e) => x.ChangeXLabel());
-        YlabelProperty.Changed.AddClassHandler<GOSChartViewer>((x, e) => x.ChangeYLabel());
+        IsDarkThemeProperty.Changed.AddClassHandler<GOSCartesian>((x, e) => x.ChangeTheme());
+        DataProperty.Changed.AddClassHandler<GOSCartesian>((x, e) => x.ChangeData());
+        IsZoomingProperty.Changed.AddClassHandler<GOSCartesian>((x, e) => x.ChangeZoom());
+        XlabelProperty.Changed.AddClassHandler<GOSCartesian>((x, e) => x.ChangeXLabel());
+        YlabelProperty.Changed.AddClassHandler<GOSCartesian>((x, e) => x.ChangeYLabel());
 
         Series[0].Values = DataPoints;
 
