@@ -89,7 +89,8 @@ public partial class GOSCartesian
             indSeries++;
         }
 
-        _chart.Legend = IsDarkTheme ? new LiveLegendDark() : new LiveLegendLigth();
+        if (_chart is not null)
+            _chart.Legend = IsDarkTheme ? new LiveLegendDark() : new LiveLegendLigth();
     }
     //bool isChangingData;
     public void SetData(List<string>? experimentals)
