@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-
-//using AvaloniaEdit.TextMate.Resources;
+﻿//using AvaloniaEdit.TextMate.Resources;
 
 using Newtonsoft.Json;
 
@@ -233,6 +229,10 @@ public class RegistryOptions : IRegistryOptions
                 return "solarized-light-color-theme.json";
             case ThemeName.TomorrowNightBlue:
                 return "tomorrow-night-blue-color-theme.json";
+            case ThemeName.HighContrastLight:
+                return "hc_light.json";
+            case ThemeName.HighContrastDark:
+                return "hc_black.json";
         }
 
         return null;
