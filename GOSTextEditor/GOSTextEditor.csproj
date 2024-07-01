@@ -12,7 +12,7 @@
     <PackageReference Include="Avalonia" Version="11.0.11" />
     <PackageReference Include="Avalonia.AvaloniaEdit" Version="11.0.6" />
     <PackageReference Include="AvaloniaEdit.TextMate" Version="11.0.6" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="TextMateSharp" Version="1.0.56" />
   </ItemGroup>
 
   <ItemGroup>

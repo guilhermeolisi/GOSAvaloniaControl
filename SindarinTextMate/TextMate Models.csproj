@@ -11,7 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-	<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+	<PackageReference Include="System.Text.Json" Version="8.0.3" />
 	<PackageReference Include="TextMateSharp" Version="1.0.56" />
   </ItemGroup>
 
@@ -32,9 +32,6 @@
 	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	</None>
 	<None Update="Grammars\bat\syntaxes\batchfile.tmLanguage.json">
-	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	</None>
-	<None Update="Grammars\html\build\update-grammar.js">
 	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	</None>
 	<None Update="Grammars\html\cgmanifest.json">
@@ -106,6 +103,9 @@
 	<None Update="Grammars\powershell\snippets\powershell.code-snippets">
 	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	</None>
+	<None Update="Grammars\powershell\syntaxes\powershell.tmLanguage.json">
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</None>
 	<None Update="Grammars\shellscript\cgmanifest.json">
 	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	</None>
@@ -125,16 +125,16 @@
 	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	</None>
 	<None Update="Grammars\sindarin\language-configuration.json">
-	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	</None>
 	<None Update="Grammars\sindarin\package.json">
-	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	</None>
 	<None Update="Grammars\sindarin\package.nls.json">
 	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	</None>
 	<None Update="Grammars\sindarin\snippets\sindarin.code-snippets">
-	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	</None>
 	<None Update="Grammars\sindarin\syntaxes\sindarin.tmLanguage.json">
 	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

@@ -6,10 +6,8 @@ using AvaloniaEdit;
 using AvaloniaEdit.Document;
 using AvaloniaEdit.TextMate;
 using BaseLibrary;
-using Nimloth.TextMate.Models;
 using Splat;
-using static AvaloniaEdit.Document.TextDocumentWeakEventManager;
-using static System.Net.Mime.MediaTypeNames;
+using TextMate.Models;
 
 namespace GOSAvaloniaControls;
 
@@ -190,7 +188,7 @@ public partial class GOSTextEditor : TemplatedControl
     readonly RegistryOptions _registryOptions;
     private TextEditor _editor;
     private AvaloniaEdit.TextMate.TextMate.Installation _textMateInstallation;
-    private async void ChangeExtension()
+    private void ChangeExtension()
     {
         if (_textMateInstallation is null)
         {
@@ -212,9 +210,14 @@ public partial class GOSTextEditor : TemplatedControl
         }
         else
         {
-            if (Extension == ".SIN" || Extension == ".DAT")
+            if (Extension.ToUpper() == ".SIN" || Extension.ToUpper() == ".DAT")
             {
                 _textMateInstallation.SetGrammar(_registryOptions.GetScopeByLanguageId(_sindarinLanguage.Id));
+            }
+            if (Extension.ToUpper() == ".SVG")
+            {
+
+                _textMateInstallation.SetGrammar(_registryOptions.GetScopeByExtension(".xml"));
             }
             else
             {

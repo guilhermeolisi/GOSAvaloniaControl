@@ -1,19 +1,18 @@
-﻿using System.Collections.Generic;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 //using Newtonsoft.Json;
 
-namespace Nimloth.TextMate.Models
+namespace TextMate.Models
 {
     public class Engines
     {
         [JsonPropertyName("engines")]
-        public string? VsCode { get; set; }
+        public string VsCode { get; set; }
     }
 
     public class Scripts
     {
         [JsonPropertyName("update-grammar")]
-        public string? UpdateGrammar { get; set; }
+        public string UpdateGrammar { get; set; }
     }
 
     public class Language
@@ -24,8 +23,11 @@ namespace Nimloth.TextMate.Models
         public List<string> Extensions { get; set; }
         [JsonPropertyName("aliases")]
         public List<string> Aliases { get; set; }
+        //[JsonPropertyName("configuration")]
+        //public string Configuration { get; set; }
         [JsonPropertyName("configuration")]
-        public string Configuration { get; set; }
+        public string ConfigurationFile { get; set; }
+        public LanguageConfiguration? Configuration { get; set; }
 
         public override string ToString()
         {
@@ -94,5 +96,6 @@ namespace Nimloth.TextMate.Models
         public Contributes Contributes { get; set; }
         [JsonPropertyName("repository")]
         public Repository Repository { get; set; }
+        public LanguageSnippets LanguageSnippets { get; set; }
     }
 }
