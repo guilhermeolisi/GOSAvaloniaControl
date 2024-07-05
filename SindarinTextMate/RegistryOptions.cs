@@ -223,18 +223,20 @@ public class RegistryOptions : IRegistryOptions
             {
                 GrammarDefinition definition = JsonSerializer.Deserialize(stream, JsonSerializationContext.Default.GrammarDefinition);
 
-                foreach (var language in definition.Contributes.Languages)
-                {
-                    language.Configuration = LanguageConfiguration.Load(grammar, language.ConfigurationFile);
-#if DEBUG
-                    if (language.Configuration is null)
-                    {
-                        Debug.WriteLine($"Configuration for {language.Id} is null");
-                    }
-#endif
-                }
+                //Acredito que carregar os arquivos de configuração e snippets não seja necessário para o uso que faço, só serviria para aumentar o tempo de carregamento
 
-                definition.LanguageSnippets = LanguageSnippets.Load(grammar, definition.Contributes);
+                //                foreach (var language in definition.Contributes.Languages)
+                //                {
+                //                    language.Configuration = LanguageConfiguration.Load(grammar, language.ConfigurationFile);
+                //#if DEBUG
+                //                    if (language.Configuration is null)
+                //                    {
+                //                        Debug.WriteLine($"Configuration for {language.Id} is null");
+                //                    }
+                //#endif
+                //                }
+
+                //                definition.LanguageSnippets = LanguageSnippets.Load(grammar, definition.Contributes);
 
                 _availableGrammars.Add(grammar, definition);
             }
