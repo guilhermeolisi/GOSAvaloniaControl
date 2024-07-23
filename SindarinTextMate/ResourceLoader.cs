@@ -15,8 +15,8 @@ internal class ResourceLoader
     }
     internal static Stream OpenGrammarPackageStream(string grammarName)
 
-    // este é no original o internal static Stream OpenGrammarPackage
     {
+        // este é no original o internal static Stream OpenGrammarPackage
         //string grammarPackage = GrammarPrefix + grammarName.ToLowerInvariant() + "." + "package.json";
 
         //var result = typeof(ResourceLoader).GetTypeInfo().Assembly.GetManifestResourceStream(
@@ -24,7 +24,7 @@ internal class ResourceLoader
 
         string grammarPackage = Path.Combine(currentDirectory, GrammarPrefix, grammarName.ToLower(), "package.json");
 
-        var result = new FileStream(grammarPackage, FileMode.Open);
+        var result = new FileStream(grammarPackage, FileMode.Open, FileAccess.Read); //Tenho que usar FileAccess.Read para não dar erro de permissão para abrir o arquivo que está no diretório de instalação do app do Windows Store 
 
         if (result == null)
             throw new FileNotFoundException("The grammar package '" + grammarPackage + "' was not found.");
@@ -116,7 +116,7 @@ internal class ResourceLoader
         configurationFileName = configurationFileName.TrimStart('.').Replace('/', Path.DirectorySeparatorChar).TrimStart(Path.DirectorySeparatorChar);
         string grammarPackage = Path.Combine(currentDirectory, GrammarPrefix, grammarName.ToLowerInvariant(), configurationFileName);
 
-        var result = new FileStream(grammarPackage, FileMode.Open);
+        var result = new FileStream(grammarPackage, FileMode.Open, FileAccess.Read); //Tenho que usar FileAccess.Read para não dar erro de permissão para abrir o arquivo que está no diretório de instalação do app do Windows Store
 
         return result;
     }
@@ -130,7 +130,7 @@ internal class ResourceLoader
         //var result = typeof(ResourceLoader).GetTypeInfo().Assembly.GetManifestResourceStream(
         //    snippetPackage);
 
-        var result = new FileStream(snippetPackage, FileMode.Open);
+        var result = new FileStream(snippetPackage, FileMode.Open, FileAccess.Read); //Tenho que usar FileAccess.Read para não dar erro de permissão para abrir o arquivo que está no diretório de instalação do app do Windows Store
 
         //Pode ser que não exista o arquivo, então não é um erro fatal
         //if (result is null)

@@ -219,9 +219,10 @@ public class RegistryOptions : IRegistryOptions
         //Sem carregar os arquivos de configuração e Snippets 34, 56, 44ms
         foreach (string grammar in GrammarNames.SupportedGrammars)
         {
+
             using (Stream stream = ResourceLoader.OpenGrammarPackageStream(grammar))
             {
-                GrammarDefinition definition = JsonSerializer.Deserialize(stream, JsonSerializationContext.Default.GrammarDefinition);
+                GrammarDefinition definition = JsonSerializer.Deserialize(stream, JsonSerializationContext.Default.GrammarDefinition)!;
 
                 //Acredito que carregar os arquivos de configuração e snippets não seja necessário para o uso que faço, só serviria para aumentar o tempo de carregamento
 
