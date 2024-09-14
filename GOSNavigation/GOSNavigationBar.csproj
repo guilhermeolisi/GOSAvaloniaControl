@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GOS Navigation Bar Model\GOS Navigation Bar Model.csproj" />
+    <ProjectReference Include="..\GOSNavigationBarModel\GOSNavigationBarModel.csproj" />
   </ItemGroup>
 
   <ItemGroup>

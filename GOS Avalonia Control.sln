@@ -5,19 +5,19 @@ VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GOSTextEditor", "GOSTextEditor\GOSTextEditor.csproj", "{EAF0DD86-C236-4CB9-9430-8A461A54086B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TextMate Models", "SindarinTextMate\TextMate Models.csproj", "{80547C5A-FC32-4F85-BDC6-B10ADAAE96A8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TextMate Models", "SindarinTextMate\TextMateModels.csproj", "{80547C5A-FC32-4F85-BDC6-B10ADAAE96A8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GOSImageViewer", "GOSImageViewer\GOSImageViewer.csproj", "{71148992-41F7-4397-9963-FCFBF0DEFC4B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GOSChartViewer", "GOSChartViewer\GOSChartViewer.csproj", "{0BFC4C08-AA97-40B2-834E-679343739C84}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GOS Notification", "GOS Notification\GOS Notification.csproj", "{FAFB81AA-E00B-444A-AF6D-1F7B698CFD81}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GOSNotification", "GOSNotification\GOSNotification.csproj", "{FAFB81AA-E00B-444A-AF6D-1F7B698CFD81}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GOS Notification Model", "GOS Notification Model\GOS Notification Model.csproj", "{E999F09E-6E5B-4C44-B749-0ADE6A3E432D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GOSNotificationModel", "GOSNotificationModel\GOSNotificationModel.csproj", "{E999F09E-6E5B-4C44-B749-0ADE6A3E432D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GOS Navigation Bar", "GOS Navigation\GOS Navigation Bar.csproj", "{F968FF90-C378-47C1-9607-71F9FE073904}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GOSNavigationBar", "GOSNavigation\GOSNavigationBar.csproj", "{F968FF90-C378-47C1-9607-71F9FE073904}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GOS Navigation Bar Model", "GOS Navigation Bar Model\GOS Navigation Bar Model.csproj", "{7F812E75-F564-457D-B56B-F05C177E4FC1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GOSNavigationBarModel", "GOSNavigationBarModel\GOSNavigationBarModel.csproj", "{7F812E75-F564-457D-B56B-F05C177E4FC1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

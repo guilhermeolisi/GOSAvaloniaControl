@@ -14,8 +14,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GOS Notification Interface\GOS Notification Interface.csproj" />
-    <ProjectReference Include="..\GOS Notification Model\GOS Notification Model.csproj" />
+    <ProjectReference Include="..\GOSNotificationInterface\GOSNotificationInterface.csproj" />
+    <ProjectReference Include="..\GOSNotificationModel\GOSNotificationModel.csproj" />
   </ItemGroup>
 
   <ItemGroup>

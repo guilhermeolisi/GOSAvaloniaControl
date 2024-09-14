@@ -17,7 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\BaseLibrary\BaseLibraryFile\BaseLibrary.File.csproj" />
-    <ProjectReference Include="..\SindarinTextMate\TextMate Models.csproj" />
+    <ProjectReference Include="..\SindarinTextMate\TextMateModels.csproj" />
   </ItemGroup>
 
   <ItemGroup>
