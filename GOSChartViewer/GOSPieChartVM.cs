@@ -65,11 +65,11 @@ public partial class GOSPieChart
                 {
                     if (e.NewStartingIndex == Data?.Count - 1)
                     {
-                        DataToShow.Add(new PieSeries<double>() { Values = [(double)e.NewItems[0]] });
+                        DataToShow.Add(new PieSeries<double>() { Values = new Collection<double>() { (double)e.NewItems[0] } });
                     }
                     else
                     {
-                        DataToShow.Insert(e.NewStartingIndex, new() { Values = [(double)e.NewItems[0]] });
+                        DataToShow.Insert(e.NewStartingIndex, new() { Values = new Collection<double>() { (double)e.NewItems[0] } });
                     }
                 }
                 else
@@ -102,7 +102,7 @@ public partial class GOSPieChart
         {
             obs.Add(new PieSeries<double>()
             {
-                Values = [data[i]],
+                Values = new Collection<double>() { data[i] },
                 Name = Labels is null || i >= Labels.Count ? string.Empty : Labels[i],
                 ToolTipLabelFormatter =
                     point =>
