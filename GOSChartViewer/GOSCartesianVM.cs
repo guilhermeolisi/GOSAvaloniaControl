@@ -1,10 +1,13 @@
-﻿using LiveChartsCore;
+﻿using BaseLibrary.Collections;
+using GOSChartServices;
+using LiveChartsCore;
 using LiveChartsCore.Defaults;
 using LiveChartsCore.Drawing;
 using LiveChartsCore.Measure;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
 using SkiaSharp;
+using System.Collections;
 using System.Collections.ObjectModel;
 
 namespace GOSAvaloniaControls;
@@ -13,6 +16,8 @@ public partial class GOSCartesian
 {
     static SKColor[] ChartColorsLigth = [new(80, 161, 79), new(228, 86, 74), new(193, 132, 3), new(0, 132, 188), new(166, 38, 164), new(8, 151, 179)];
     static SKColor[] ChartColorsDark = [new(152, 195, 121), new(224, 108, 117), new(229, 192, 123), new(97, 175, 240), new(198, 120, 221), new(86, 182, 194)];
+
+    IChartServices chartServices = new ChartServices();
 
     private ObservableCollection<string>? ExperimentalsLabel { get; set; }
     private ObservableCollection<ObservablePoint?> DataPoints = new();
@@ -129,11 +134,12 @@ public partial class GOSCartesian
     private void ProcessPoints()
     {
         //1 Verifica os dados
-        if (Data is null || Data.Count == 0)
+        if (Data is null || Data.Count() == 0)
         {
             ClearDatas();
             return;
         }
+
 
         int expIndex = ExperimentalsLabel is null || ExperimentalsLabel.Count == 0 || ExperimentalsLabel.Count == 1 ? 0 : SelectedIndex >= 0 ? SelectedIndex : 0;
 
@@ -156,9 +162,20 @@ public partial class GOSCartesian
             case System.Collections.Specialized.NotifyCollectionChangedAction.Add:
                 if (e.NewItems is not null && e.NewItems.Count == 1)
                 {
-                    if (e.NewStartingIndex == Data?.Count - 1)
+                    if (e.NewStartingIndex == Data?.Count() - 1)
                     {
-                        DataPoints.Add(new ObservablePoint((((double X, double Y))e.NewItems[0]).X, (((double X, double Y))e.NewItems[0]).Y));
+                        if (IsVerticalLine)
+                        {
+                            ObservablePoint[] temp = chartServices.VerticalLine((((double X, double Y))e.NewItems[0]).X, (((double X, double Y))e.NewItems[0]).Y);
+                            for (int i = 0; i < temp.Length; i++)
+                            {
+                                DataPoints.Add(temp[i]);
+                            }
+                        }
+                        else
+                        {
+                            DataPoints.Add(new ObservablePoint((((double X, double Y))e.NewItems[0]).X, (((double X, double Y))e.NewItems[0]).Y));
+                        }
                     }
                     else
                     {
@@ -187,10 +204,75 @@ public partial class GOSCartesian
     {
         obs.Clear();
         int indPlus = 0;
-        for (int i = 0; i < data.Count; i++)
+        if (IsVerticalLine)
         {
-            obs.Add(new ObservablePoint(data[i].X, data[i].Y));
+            for (int i = 0; i < data.Count; i++)
+            {
+                ObservablePoint[] temp = chartServices.VerticalLine(data[i].X, data[i].Y);
+                for (int j = 0; j < temp.Length; j++)
+                {
+                    obs.Add(temp[j]);
+                }
+            }
+        }
+        else
+        {
+            for (int i = 0; i < data.Count; i++)
+            {
+                obs.Add(new ObservablePoint(data[i].X, data[i].Y));
+            }
+        }
+#if DEBUG
+        if (obs == Series[0].Values)
+        {
 
+        }
+#endif
+    }
+    private void ChangeDataToObservableCollection(IEnumerable data, ObservableCollection<ObservablePoint> obs)
+    {
+        obs.Clear();
+        //int count = data.Count();
+        if (data is IList list)
+        {
+            for (int i = 0; i < list.Count; i++)
+            {
+#if DEBUG
+                var trash = list[i].GetType();
+#endif
+                if (list[i] is ValueTuple<double, double> xy)
+                {
+                    AddToObs(xy.Item1, xy.Item2);
+                }
+            }
+
+        }
+        else if (data is IEnumerable enumerable)
+        {
+            foreach (var item in enumerable)
+            {
+                if (item is ValueTuple<double, double> xy)
+                {
+                    AddToObs(xy.Item1, xy.Item2);
+                }
+            }
+
+        }
+
+        void AddToObs(double x, double y)
+        {
+            if (IsVerticalLine)
+            {
+                ObservablePoint[] temp = chartServices.VerticalLine(x, y);
+                for (int j = 0; j < temp.Length; j++)
+                {
+                    obs.Add(temp[j]);
+                }
+            }
+            else
+            {
+                obs.Add(new ObservablePoint(x, y));
+            }
         }
 #if DEBUG
         if (obs == Series[0].Values)

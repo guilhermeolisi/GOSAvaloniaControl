@@ -14,6 +14,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\BaseLibrary\BaseLibrary.Collections\BaseLibrary.Collections.csproj" />
+    <ProjectReference Include="..\..\GOSAvaloniaServices\GOSChartServices\GOSChartServices.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Update="GOSPieChart.cs">
       <SubType>Code</SubType>
       <DependentUpon>%(Filename)</DependentUpon>
