@@ -63,7 +63,7 @@ public partial class GOSCartesian : TemplatedControl
     {
 
         IsDarkThemeProperty.Changed.AddClassHandler<GOSCartesian>((x, e) => x.ChangeTheme());
-        DataProperty.Changed.AddClassHandler<GOSCartesian>((x, e) => x.ChangeData());
+        DataProperty.Changed.AddClassHandler<GOSCartesian>((x, e) => x.ChangeData(e));
         IsZoomingProperty.Changed.AddClassHandler<GOSCartesian>((x, e) => x.ChangeZoom());
         XlabelProperty.Changed.AddClassHandler<GOSCartesian>((x, e) => x.ChangeXLabel());
         YlabelProperty.Changed.AddClassHandler<GOSCartesian>((x, e) => x.ChangeYLabel());
@@ -96,11 +96,11 @@ public partial class GOSCartesian : TemplatedControl
         ChangeTheme();
         ChangeXLabel();
         ChangeYLabel();
-        ChangeData();
+        ChangeData(null);
         ChangeZoom();
 
     }
-    private void ChangeData()
+    private void ChangeData(AvaloniaPropertyChangedEventArgs? e)
     {
         if (Data is null)
         {
@@ -110,12 +110,16 @@ public partial class GOSCartesian : TemplatedControl
         //Data.CollectionChanged -= Data_CollectionChanged;
         //SetData(null);
         //Data.CollectionChanged += Data_CollectionChanged;
-
-        if (Data is INotifyCollectionChanged notifyCollectionChanged)
+        if (e is not null && e.OldValue is INotifyCollectionChanged old)
         {
-            //notifyCollectionChanged.CollectionChanged -= Data_CollectionChanged;
+            old.CollectionChanged -= Data_CollectionChanged;
+        }
+        INotifyCollectionChanged? data = e is null || e.NewValue is null ? Data as INotifyCollectionChanged : e.NewValue as INotifyCollectionChanged;
+        if (data is not null)
+        {
+            data.CollectionChanged -= Data_CollectionChanged;
             SetData(null);
-            notifyCollectionChanged.CollectionChanged += Data_CollectionChanged;
+            data.CollectionChanged += Data_CollectionChanged;
         }
     }
     private void ChangeZoom()

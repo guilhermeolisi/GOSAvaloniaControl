@@ -162,11 +162,12 @@ public partial class GOSCartesian
             case System.Collections.Specialized.NotifyCollectionChangedAction.Add:
                 if (e.NewItems is not null && e.NewItems.Count == 1)
                 {
+                    (double X, double Y) = (((double X, double Y))e.NewItems[0]);
                     if (e.NewStartingIndex == Data?.Count() - 1)
                     {
                         if (IsVerticalLine)
                         {
-                            ObservablePoint[] temp = chartServices.VerticalLine((((double X, double Y))e.NewItems[0]).X, (((double X, double Y))e.NewItems[0]).Y);
+                            ObservablePoint[] temp = chartServices.VerticalLine(X, Y);
                             for (int i = 0; i < temp.Length; i++)
                             {
                                 DataPoints.Add(temp[i]);
@@ -174,12 +175,24 @@ public partial class GOSCartesian
                         }
                         else
                         {
-                            DataPoints.Add(new ObservablePoint((((double X, double Y))e.NewItems[0]).X, (((double X, double Y))e.NewItems[0]).Y));
+
+                            DataPoints.Add(new ObservablePoint(X, Y));
                         }
                     }
                     else
                     {
-                        DataPoints.Insert(e.NewStartingIndex, new((((double X, double Y))e.NewItems[0]).X, (((double X, double Y))e.NewItems[0]).Y));
+                        if (IsVerticalLine)
+                        {
+                            ObservablePoint[] temp = chartServices.VerticalLine(X, Y);
+                            for (int i = 0; i < temp.Length; i++)
+                            {
+                                DataPoints.Insert(e.NewStartingIndex * temp.Length + i, temp[i]);
+                            }
+                        }
+                        else
+                        {
+                            DataPoints.Insert(e.NewStartingIndex, new(X, Y));
+                        }
                     }
                 }
                 else
@@ -188,13 +201,47 @@ public partial class GOSCartesian
                 }
                 break;
             case System.Collections.Specialized.NotifyCollectionChangedAction.Remove:
-                DataPoints.RemoveAt(e.OldStartingIndex);
+                if (e.OldItems is not null && e.OldItems.Count == 1)
+                {
+                    (double X, double Y) = (((double X, double Y))e.OldItems[0]);
+                    if (IsVerticalLine)
+                    {
+                        ObservablePoint[] temp = chartServices.VerticalLine(X, Y);
+                        for (int i = 0; i < temp.Length; i++)
+                        {
+                            DataPoints.RemoveAt(e.OldStartingIndex * temp.Length);
+                        }
+                    }
+                    else
+                    {
+                        DataPoints.RemoveAt(e.OldStartingIndex);
+                    }
+                }
+                else
+                {
+                }
                 break;
             case System.Collections.Specialized.NotifyCollectionChangedAction.Reset:
+                DataPoints.Clear();
                 break;
             case System.Collections.Specialized.NotifyCollectionChangedAction.Move:
                 break;
             case System.Collections.Specialized.NotifyCollectionChangedAction.Replace:
+                {
+                    (double X, double Y) = (((double X, double Y))e.NewItems[0]);
+                    if (IsVerticalLine)
+                    {
+                        ObservablePoint[] temp = chartServices.VerticalLine(X, Y);
+                        for (int i = 0; i < temp.Length; i++)
+                        {
+                            DataPoints[e.NewStartingIndex * temp.Length + i] = temp[i];
+                        }
+                    }
+                    else
+                    {
+                        DataPoints[e.NewStartingIndex] = new(X, Y);
+                    }
+                }
                 break;
 
         }
