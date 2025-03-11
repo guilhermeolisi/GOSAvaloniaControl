@@ -10,12 +10,13 @@
 
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="11.2.5" />
-    <PackageReference Include="LiveChartsCore.SkiaSharpView.Avalonia" Version="2.0.0-rc4.5" />
+    <PackageReference Include="LiveChartsCore.SkiaSharpView.Avalonia" Version="2.0.0-rc5.4" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\BaseLibrary\BaseLibrary.Collections\BaseLibrary.Collections.csproj" />
     <ProjectReference Include="..\..\GOSAvaloniaServices\GOSChartServices\GOSChartServices.csproj" />
+    <ProjectReference Include="..\GOSChartModel\GOSChartModel.csproj" />
   </ItemGroup>
 
   <ItemGroup>

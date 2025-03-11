@@ -1,7 +1,6 @@
 ﻿using LiveChartsCore;
 using LiveChartsCore.Defaults;
 using LiveChartsCore.Drawing;
-using LiveChartsCore.Kernel.Events;
 using LiveChartsCore.Kernel.Sketches;
 using LiveChartsCore.Measure;
 using LiveChartsCore.SkiaSharpView;
@@ -14,7 +13,7 @@ using SkiaSharp;
 
 namespace GOSAvaloniaControls;
 
-internal class LiveLegendBase : IChartLegend<SkiaSharpDrawingContext>//, IImageControl
+internal class LiveLegendBaseBak : IChartLegend
 {
     protected static readonly int s_zIndex = 10050;
     private readonly StackPanel<RoundedRectangleGeometry, SkiaSharpDrawingContext> _stackPanel = new();
@@ -24,7 +23,7 @@ internal class LiveLegendBase : IChartLegend<SkiaSharpDrawingContext>//, IImageC
         ZIndex = s_zIndex + 1
     };
 
-    public void Draw(Chart<SkiaSharpDrawingContext> chart)
+    public void Draw(Chart chart)
     {
         var legendPosition = chart.GetLegendPosition();
 
@@ -35,7 +34,16 @@ internal class LiveLegendBase : IChartLegend<SkiaSharpDrawingContext>//, IImageC
         if (chart.LegendPosition == LegendPosition.Hidden) chart.RemoveVisual(_stackPanel);
     }
 
-    public LvcSize Measure(Chart<SkiaSharpDrawingContext> chart)
+    public void Hide(Chart chart)
+    {
+        //if (_drawnTask is not null)
+        //{
+        //    chart.Canvas.RemovePaintTask(_drawnTask);
+        //    _drawnTask = null;
+        //}
+    }
+
+    public LvcSize Measure(Chart chart)
     {
         //_stackPanel.Orientation = ContainerOrientation.Horizontal;
         _stackPanel.Orientation = chart.LegendPosition switch
@@ -60,7 +68,8 @@ internal class LiveLegendBase : IChartLegend<SkiaSharpDrawingContext>//, IImageC
         }
 
 
-        var theme = LiveChartsCore.LiveCharts.DefaultSettings.GetTheme<SkiaSharpDrawingContext>();
+        //var theme = LiveCharts.DefaultSettings.GetTheme<SkiaSharpDrawingContext>();
+        var theme = LiveCharts.DefaultSettings.GetTheme();
 
         foreach (var series in chart.Series.Where(x => x.IsVisibleAtLegend))
         {
@@ -122,19 +131,18 @@ internal class LiveLegendBase : IChartLegend<SkiaSharpDrawingContext>//, IImageC
                 }
             };
 
-            panel.PointerDown += GetPointerDownHandler(series);
+            //panel.PointerDown += GetPointerDownHandler(series);
             _stackPanel.Children.Add(panel);
         }
 
         return _stackPanel.Measure(chart);
     }
 
-    private static VisualElementHandler<SkiaSharpDrawingContext> GetPointerDownHandler(
-        IChartSeries<SkiaSharpDrawingContext> series)
-    {
-        return (visual, args) =>
-        {
-            series.IsVisible = !series.IsVisible;
-        };
-    }
+    //private static VisualElementHandler GetPointerDownHandler(IChartSeries series)
+    //{
+    //    return (visual, args) =>
+    //    {
+    //        series.IsVisible = !series.IsVisible;
+    //    };
+    //}
 }
