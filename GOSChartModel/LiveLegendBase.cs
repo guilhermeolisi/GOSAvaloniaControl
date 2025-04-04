@@ -51,14 +51,14 @@ internal class LegendItem : StackLayout
         if (miniature is BoundedDrawnGeometry bounded)
         {
             //bounded.Height = 40;
-            if (miniature.Stroke.StrokeThickness < 2)
+            if (miniature.Stroke?.StrokeThickness < 2)
             {
                 miniature.Stroke.StrokeThickness = 2;
             }
         }
         else
         {
-            if (miniature.Stroke.StrokeThickness < 4)
+            if (miniature.Stroke?.StrokeThickness < 4)
             {
                 miniature.Stroke.StrokeThickness = 4;
             }
