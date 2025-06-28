@@ -192,6 +192,8 @@ public partial class GOSPieChart : TemplatedControl
             return;
         }
 
+        _chart.Legend = IsDarkTheme ? new LiveLegendDark(true) : new LiveLegendLigth(true);
+
         _chart.LegendPosition = ShowLegend switch
         {
             0 => LegendPosition.Hidden,

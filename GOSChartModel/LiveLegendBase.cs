@@ -12,6 +12,8 @@ namespace GOSAvaloniaControls;
 
 public class LiveLegendBase : SKDefaultLegend
 {
+    
+
     //protected virtual SolidColorPaint _fontPaint => new(SKColors.White)
     //{
     //    //SKTypeface = SKTypeface.FromFamilyName("Arial", SKFontStyle.Bold),
@@ -19,6 +21,17 @@ public class LiveLegendBase : SKDefaultLegend
     //};
     protected virtual SKColor _fontPaint => SKColors.White;
     public bool IsVertical { get; set; } = false;
+
+    public LiveLegendBase()
+    {
+    }
+
+    public LiveLegendBase(bool isVertical)
+    {
+        IsVertical = isVertical;
+    }
+
+
     protected override Layout<SkiaSharpDrawingContext> GetLayout(Chart chart)
     {
         var stackLayout = new StackLayout
