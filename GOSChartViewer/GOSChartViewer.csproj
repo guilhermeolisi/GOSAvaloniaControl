@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\BaseLibrary\BaseLibrary.Collections\BaseLibrary.Collections.csproj" />
+    <ProjectReference Include="..\..\BaseLibrary\src\BaseLibrary.Collections\BaseLibrary.Collections.csproj" />
     <ProjectReference Include="..\..\GOSAvaloniaServices\GOSChartServices\GOSChartServices.csproj" />
     <ProjectReference Include="..\GOSChartModel\GOSChartModel.csproj" />
   </ItemGroup>
