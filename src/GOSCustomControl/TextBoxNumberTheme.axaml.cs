@@ -3,7 +3,7 @@ using AvaloniaStyles = Avalonia.Styling.Styles;
 
 namespace GOSAvaloniaControls;
 
-public class TextBoxNumberTheme : AvaloniaStyles
+public class TextBoxNumber2Theme : AvaloniaStyles
 {
-    public TextBoxNumberTheme() => AvaloniaXamlLoader.Load(this);
+    public TextBoxNumber2Theme() => AvaloniaXamlLoader.Load(this);
 }
