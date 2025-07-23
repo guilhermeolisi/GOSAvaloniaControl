@@ -6,7 +6,7 @@ using AvaloniaEdit;
 using AvaloniaEdit.Document;
 using AvaloniaEdit.TextMate;
 using BaseLibrary;
-using Splat;
+using GOSAvaloniaServices;
 using TextMate.Models;
 
 namespace GOSAvaloniaControls;
@@ -78,7 +78,7 @@ public partial class GOSTextEditor : TemplatedControl
     }
     public GOSTextEditor()
     {
-        this.fileManager = Locator.Current!.GetService<IFileTXTIO>()!;
+        this.fileManager = ContainersDIServices.Resolve<IFileTXTIO>()!;
         fileManager.SetStayBak(true);
 
         _registryOptions = new RegistryOptions(ThemeName.Dark);
