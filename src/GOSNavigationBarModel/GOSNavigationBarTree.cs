@@ -6,7 +6,7 @@ public class GOSNavigationBarTree
 {
     public string? Caption { get; set; }
     public string? CaptionChildren { get; set; }
-    public List<GOSNavigationBarTree> Children { get; private set; } = new();//List<GOSNavigationBarTree>();
+    public List<GOSNavigationBarTree> Children { get; private set; } = new();
     public Action? Notifier { get; private set; }
     public object Item { get; private set; }
 
@@ -14,15 +14,19 @@ public class GOSNavigationBarTree
     {
 
     }
-    public GOSNavigationBarTree(object item, string? caption, Action? notifier = null/*, IEnumerable? children = null, string? captionChild = null*/)
+    public GOSNavigationBarTree(object item, string? caption, Action? notifier = null)
     {
         Item = item;
         Caption = caption;
         Notifier = notifier;
-        //if (children != null)
-        //    SetChildren(children, captionChild);
     }
     public void SetActionNotification(Action? notifier) => this.Notifier = notifier;
+    public void SetItem(object? item, string? caption, Action? notifier = null)
+    {
+        Item = item;
+        Caption = caption;
+        Notifier = notifier;
+    }
     public void SetChildren(IEnumerable? children, string? captionChild)
     {
         CaptionChildren = captionChild;
@@ -34,6 +38,15 @@ public class GOSNavigationBarTree
         {
             Children.Add(new GOSNavigationBarTree(item, captionChild));
         }
+    }
+    private Action? notiferChanged;
+    public void SetNotifierTreeChanged(Action? notifier)
+    {
+        notiferChanged = notifier;
+    }
+    public void NotifyTreeChanged()
+    {
+        notiferChanged?.Invoke();
     }
     public override string? ToString()
     {

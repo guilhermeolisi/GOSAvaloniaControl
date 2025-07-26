@@ -3,11 +3,9 @@ using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
-using Avalonia.Input;
-using Avalonia.LogicalTree;
 using GOSAvaloniaControls.NavigationBar.Model;
+using GOSNavigationBar;
 using System.Collections.ObjectModel;
-using System.Globalization;
 
 namespace GOSAvaloniaControls;
 [TemplatePart(PART_ElementReturnButton, typeof(Button))]
@@ -103,7 +101,7 @@ public class GOSNavigationBar : TemplatedControl
 
     private void Homebt_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
-        HomeCommand(null);
+        HomeCommand();
     }
 
     internal Button? ReturnButton
@@ -145,35 +143,30 @@ public class GOSNavigationBar : TemplatedControl
         CaptionChildrentb = e.NameScope.Find<TextBlock>(PART_ElementCaptionChildren);
         ListChildren = e.NameScope.Find<ListBox>(PART_ElementListChildren);
 
-        HomeCommand(null);
+        //HomeCommand();
     }
-    //object? _selected;
-    //protected override void OnAttachedToLogicalTree(LogicalTreeAttachmentEventArgs e)
-    //{
-    //    base.OnAttachedToLogicalTree(e);
-    //    if (_selected is not null)
-    //    {
-    //        Selected = _selected;
-    //    }
-
-    //}
-
-    ///// <inheritdoc/>
-    //protected override void OnDetachedFromLogicalTree(LogicalTreeAttachmentEventArgs e)
-    //{
-
-    //    if (Selected is not null)
-    //    {
-    //        _selected = Selected;
-    //        SetCurrentValue(SelectedProperty, null);
-    //    }
-
-    //    base.OnDetachedFromLogicalTree(e);
-    //}
+    TreeCaption treeCaption = new TreeCaption(null);
+    private void notifyTreeChanged()
+    {
+        if (!treeCaption.IsEquivalent(MainItem))
+        {
+            HomeCommand();
+            treeCaption.UpdateTreeCaption(MainItem);
+        }
+        else
+        {
+            // Para forçar atualização da UI
+            GOSNavigationBarTree temp = GetItemFromIndex();
+            Selected = temp.Item;
+        }
+    }
     private void ChangeMainItem(AvaloniaPropertyChangedEventArgs e)
     {
-        HomeCommand(e);
+        var newValue = e.GetNewValue<GOSNavigationBarTree?>();
+        newValue?.SetNotifierTreeChanged(notifyTreeChanged);
+        //HomeCommand();
         toolTipHome.Content = MainItem is null ? string.Empty : $"Go to {MainItem.Caption}";
+        treeCaption.UpdateTreeCaption(newValue);
     }
     bool changedLevel;
 
@@ -246,10 +239,11 @@ public class GOSNavigationBar : TemplatedControl
             return;
         CaptionChildrentb.Text = caption;//$"[{caption}]";
     }
-    private void HomeCommand(AvaloniaPropertyChangedEventArgs? e)
+    private void HomeCommand()
     {
         if (ListChildren is null)
             return;
+
         Indexes.Clear();
         UpdateButtonsVisibility();
         if (MainItem is null)
@@ -261,8 +255,8 @@ public class GOSNavigationBar : TemplatedControl
         }
         else
         {
-            ChangeChildrenItems(MainItem?.Children!);
-            UpdateChildrenCaption(MainItem?.CaptionChildren);
+            ChangeChildrenItems(MainItem.Children!);
+            UpdateChildrenCaption(MainItem.CaptionChildren);
             ListChildren.SelectedIndex = -1;
 #if DEBUG
             if (MainItem.Item == Selected)
@@ -287,6 +281,7 @@ public class GOSNavigationBar : TemplatedControl
         ListChildren.SelectedIndex = -1;
         Selected = temp?.Item;
     }
+
     private GOSNavigationBarTree GetItemFromIndex()
     {
         GOSNavigationBarTree temp = MainItem;
