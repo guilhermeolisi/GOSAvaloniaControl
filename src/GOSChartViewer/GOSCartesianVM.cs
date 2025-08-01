@@ -167,11 +167,12 @@ public partial class GOSCartesian
                     {
                         if (IsVerticalLine)
                         {
-                            ObservablePoint[] temp = chartServices.VerticalLine(X, Y);
-                            for (int i = 0; i < temp.Length; i++)
-                            {
-                                DataPoints.Add(temp[i]);
-                            }
+                            chartServices.VerticalLine(DataPoints, X, Y);
+                            //ObservablePoint[] temp = chartServices.VerticalLine(X, Y);
+                            //for (int i = 0; i < temp.Length; i++)
+                            //{
+                            //    DataPoints.Add(temp[i]);
+                            //}
                         }
                         else
                         {

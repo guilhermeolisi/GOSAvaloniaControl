@@ -12,7 +12,7 @@ namespace GOSAvaloniaControls;
 
 public class LiveLegendBase : SKDefaultLegend
 {
-    
+
 
     //protected virtual SolidColorPaint _fontPaint => new(SKColors.White)
     //{
@@ -40,7 +40,19 @@ public class LiveLegendBase : SKDefaultLegend
             Padding = new Padding(15, 4),
             HorizontalAlignment = Align.Start,
             VerticalAlignment = Align.Middle,
+
         };
+        //Peguei isso do próprio SKDefaultLegend
+        if (stackLayout.Orientation == ContainerOrientation.Horizontal)
+        {
+            stackLayout.MaxWidth = chart.ControlSize.Width;
+            stackLayout.MaxHeight = double.MaxValue;
+        }
+        else
+        {
+            stackLayout.MaxWidth = double.MaxValue;
+            stackLayout.MaxHeight = chart.ControlSize.Height;
+        }
 
         foreach (var series in chart.Series.Where(x => x.IsVisibleAtLegend))
         {
