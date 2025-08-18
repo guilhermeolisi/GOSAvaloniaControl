@@ -6,11 +6,8 @@ public class GOSNavigationBarTree
 {
     private TreeCaption? _treeCaption;
     private bool isSelected;
-    public string? Caption
-    { get; set; }
-    public string? CaptionChildren { get; set; }
+    public string? Caption { get; set; }
     public List<GOSNavigationBarTree> Children { get; private set; } = new();
-    public Action? Notifier { get; private set; }
     public object Item { get; private set; }
     public int TotalLevel => Children.Count == 0 ? 1 : 1 + Children.Max(c => c.TotalLevel);
 
@@ -18,22 +15,30 @@ public class GOSNavigationBarTree
     {
 
     }
-    public GOSNavigationBarTree(object item, string? caption, Action? notifier = null)
+    public GOSNavigationBarTree(object item, string? caption)
     {
         Item = item;
         Caption = caption;
-        Notifier = notifier;
     }
-    public void SetActionNotification(Action? notifier) => this.Notifier = notifier;
-    public void SetItem(object? item, string? caption, Action? notifier = null)
+    public void SetItem(object? item, string? caption)
     {
         Item = item;
         Caption = caption;
-        Notifier = notifier;
+
+    }
+    public void ClearTree()
+    {
+        Item = null!;
+        Caption = null;
+        Children.Clear();
+        _treeCaption = null;
+        isSelected = false;
+
+        notiferTreeChanged?.Invoke(new GOSNavigationBarTree(true, null));
+        notiferTreeChanged = null;
     }
     public void SetChildren(IEnumerable? children, string? captionChild)
     {
-        CaptionChildren = captionChild;
         if (Children.Count() > 0)
             Children.Clear();
         if (children is null)
@@ -138,18 +143,18 @@ public class GOSNavigationBarTree
                 }
             }
         }
-        notiferChanged?.Invoke(GetSelectedTree());
+        notiferTreeChanged?.Invoke(GetSelectedTree());
         return result;
     }
-    private Action<GOSNavigationBarTree?>? notiferChanged;
+    private Action<GOSNavigationBarTree?>? notiferTreeChanged;
     public void SetNotifierTreeChanged(Action<GOSNavigationBarTree?>? notifier)
     {
-        if (notiferChanged != notifier)
-            notiferChanged = notifier;
+        if (notiferTreeChanged != notifier)
+            notiferTreeChanged = notifier;
     }
     public void NotifyTreeChanged()
     {
-        notiferChanged?.Invoke(GetSelectedTree());
+        notiferTreeChanged?.Invoke(GetSelectedTree());
     }
     public override string? ToString()
     {

@@ -14,6 +14,8 @@ namespace GOSAvaloniaControls;
 [TemplatePart(PART_ElementListChildren, typeof(ListBox))]
 public class GOSNavigationBar : TemplatedControl
 {
+
+
     private const string PART_ElementReturnButton = "PART_ReturnButton";
     private const string PART_ElementHomeButton = "PART_HomeButton";
     private const string PART_ElementCaptionChildren = "PART_CaptionChildren";
@@ -168,6 +170,11 @@ public class GOSNavigationBar : TemplatedControl
     //}
     private void notifyChangedFromTree(GOSNavigationBarTree? selected)
     {
+        if (selected?.Item is bool)
+        {
+            ChangeSelectedFromTree(null);
+            return;
+        }
         ChangeSelectedFromTree(selected ?? RootItem!);
     }
     private void ChangeRootItem(AvaloniaPropertyChangedEventArgs e)
@@ -222,15 +229,14 @@ public class GOSNavigationBar : TemplatedControl
         //Selected = temp.Item;
         //UpdateButtonsVisibility();
     }
-    private void ChangeSelectedFromTree(GOSNavigationBarTree selected)
+    private void ChangeSelectedFromTree(GOSNavigationBarTree? selected)
     {
         if (selected is null)
         {
             UpdateChildrenCaption(null);
             ChangeChildrenItems(null);
-            return;
         }
-        if (selected.Children?.Count > 0)
+        else if (selected.Children?.Count > 0)
         {
             UpdateChildrenCaption(selected!.Children[0].Caption);
             ChangeChildrenItems(selected.Children);
@@ -269,7 +275,7 @@ public class GOSNavigationBar : TemplatedControl
             //    }
             //}
         }
-        Selected = selected.Item;
+        Selected = selected?.Item;
         UpdateButtonsVisibility();
     }
     private void ChangeChildrenItems(List<GOSNavigationBarTree>? children)
@@ -301,8 +307,8 @@ public class GOSNavigationBar : TemplatedControl
         if (_homeButton is null || _returnButton is null)
             return;
 
-        _homeButton.IsEnabled = RootItem is not null && Selected != RootItem.Item;
-        _returnButton.IsEnabled = RootItem is not null && Selected != RootItem.Item;
+        _homeButton.IsEnabled = RootItem is not null && Selected is not null && Selected != RootItem.Item;
+        _returnButton.IsEnabled = RootItem is not null && Selected is not null && Selected != RootItem.Item;
         GOSNavigationBarTree? temp = RootItem?.GetSelectedTree();
         toolTipReturn.Content = temp is null ? string.Empty : $"Return to {temp.Caption}";
 
