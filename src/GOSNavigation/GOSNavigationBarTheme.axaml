@@ -10,7 +10,6 @@
         <!--  Set Defaults  -->
         <Setter Property="Template">
             <ControlTemplate>
-
                 <Border
                     x:Name="RootBorder"
                     Margin="{TemplateBinding Margin}"

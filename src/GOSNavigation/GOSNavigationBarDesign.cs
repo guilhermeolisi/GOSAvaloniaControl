@@ -32,7 +32,7 @@ public class GOSNavigationBarDesign : GOSNavigationBar
         Items = item;
         //MainItem = item;
         this.DataContext = this;
-        this.Bind(GOSNavigationBar.MainItemProperty, new Binding("Items"));
+        this.Bind(GOSNavigationBar.RootItemProperty, new Binding("Items"));
         //ChildSelected(1);
         //ChildSelected(1);
     }

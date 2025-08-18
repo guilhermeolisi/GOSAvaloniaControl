@@ -1,6 +1,6 @@
-﻿using GOSAvaloniaControls.NavigationBar.Model;
+﻿
 
-namespace GOSNavigationBar;
+namespace GOSAvaloniaControls.NavigationBar.Model;
 
 internal class TreeCaption
 {
