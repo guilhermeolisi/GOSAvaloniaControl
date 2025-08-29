@@ -231,6 +231,8 @@ public class GOSNavigationBar : TemplatedControl
     }
     private void ChangeSelectedFromTree(GOSNavigationBarTree? selected)
     {
+        if (ListChildrenlb is null)
+            return;
         if (selected is null)
         {
             UpdateChildrenCaption(null);
