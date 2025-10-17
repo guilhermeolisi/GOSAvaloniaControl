@@ -206,6 +206,8 @@ public class GOSNotificationControl : TemplatedControl, IGOSNotification
 
     public void AddNotification(byte severity, string message, bool showBallon)
     {
+        if (showNotifications is null)
+            return;
 
         if (Thread.CurrentThread == mainThread)
         {
