@@ -1,14 +1,18 @@
 ﻿using Avalonia.Controls;
-using Avalonia.Controls.Primitives;
+using Avalonia.Controls.PanAndZoom;
+using Avalonia.Media;
 using Avalonia.Media.Imaging;
+using Avalonia.Svg.Skia;
 using Avalonia.Threading;
 
 namespace GOSAvaloniaControls;
 
 public partial class GOSImageViewer
 {
-    private Bitmap? ImageToView;
+    //private Bitmap? ImageToView;
+    private IImage? ImageToView;
     private Image _imageControl;
+    private ZoomBorder? _zoomBorder;
     private Dispatcher UIDispatcher = Dispatcher.UIThread;
     private async void ChangeFile()
     {
@@ -26,21 +30,35 @@ public partial class GOSImageViewer
         }
         isGettingImage = true;
 
-#pragma warning disable CS0168 // Variable is declared but never used
-        try
+        bool isSVG = Path.GetExtension(FilePath).Equals(".svg", StringComparison.OrdinalIgnoreCase);
+        if (isSVG)
         {
             await using (var imageStream = File.OpenRead(FilePath))
             {
-                //ImageToView = await Task.Run(() => Bitmap.DecodeToWidth(imageStream, 400));
-                ImageToView = await Task.Run(() => new Bitmap(imageStream));
+                //SvgSource svgSource = SvgSource.Load(FilePath);
+                SvgSource svgSource = await Task.Run(() => SvgSource.LoadFromStream(imageStream));
+                var svgImage = new SvgImage
+                {
+                    Source = svgSource
+                };
+                ImageToView = svgImage;
             }
         }
-        catch (Exception e)
+        else
         {
+            try
+            {
+                await using (var imageStream = File.OpenRead(FilePath))
+                {
+                    //ImageToView = await Task.Run(() => Bitmap.DecodeToWidth(imageStream, 400));
+                    ImageToView = await Task.Run(() => new Bitmap(imageStream));
+                }
+            }
+            catch (Exception e)
+            {
 
+            }
         }
-#pragma warning restore CS0168 // Variable is declared but never used
-
         isGettingImage = false;
     }
     bool isImageControlNull = false;

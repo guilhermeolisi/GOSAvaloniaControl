@@ -1,6 +1,7 @@
 <Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:controls="using:GOSAvaloniaControls">
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:controls="using:GOSAvaloniaControls"
+		xmlns:paz="using:Avalonia.Controls.PanAndZoom">
 	<Design.PreviewWith>
 		<controls:GOSImageViewer/>
 	</Design.PreviewWith>
@@ -9,15 +10,21 @@
 		<!-- Set Defaults -->
 		<Setter Property="Template">
 			<ControlTemplate>
-				<Border x:Name="RootBorder"
-						Background="{TemplateBinding Background}"
-						BorderBrush="{TemplateBinding BorderBrush}"
-						BorderThickness="{TemplateBinding BorderThickness}"
-						CornerRadius="{TemplateBinding CornerRadius}">
-					<Grid>
-						<Image x:Name="PART_Image"/>
-					</Grid>
-				</Border>
+				<!--<ScrollViewer VerticalScrollBarVisibility="Auto"
+							  HorizontalScrollBarVisibility="Auto">-->
+					<paz:ZoomBorder x:Name="PART_ZoomBorder" Stretch="None" ZoomSpeed="1.2"
+									Background="SlateBlue" ClipToBounds="True" Focusable="True"
+									VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+									EnablePan="True" EnableZoom="True" MinZoomX="0.2" MinZoomY="0.2">
+						<Border x:Name="RootBorder"
+								Background="{TemplateBinding Background}"
+								BorderBrush="{TemplateBinding BorderBrush}"
+								BorderThickness="{TemplateBinding BorderThickness}"
+								CornerRadius="{TemplateBinding CornerRadius}">
+								<Image x:Name="PART_Image"/>
+						</Border>
+					</paz:ZoomBorder>
+				<!--</ScrollViewer>-->
 			</ControlTemplate>
 		</Setter>
 	</Style>

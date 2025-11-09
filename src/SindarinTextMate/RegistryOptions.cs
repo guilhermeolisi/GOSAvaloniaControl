@@ -136,21 +136,23 @@ public class RegistryOptions : IRegistryOptions
 
     public IRawTheme GetTheme(string scopeName)
     {
-        using StreamReader reader = ResourceLoader.OpenThemeStream(scopeName);
+        using (StreamReader reader = ResourceLoader.OpenThemeStream(scopeName))
+        {
 #if DEBUG
-        try
-        {
-            var theme = ThemeReader.ReadThemeSync(reader);
-            return theme;
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine($"Erro no {nameof(GetTheme)}: " + ex.Message);
-            throw;
-            //return null;
-        }
+            try
+            {
+                var theme = ThemeReader.ReadThemeSync(reader);
+                return theme;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Erro no {nameof(GetTheme)}: " + ex.Message);
+                throw;
+                //return null;
+            }
 #endif
-        return ThemeReader.ReadThemeSync(reader);
+            return ThemeReader.ReadThemeSync(reader);
+        }
     }
 
     //public IRawGrammar GetGrammar(string scopeName)
