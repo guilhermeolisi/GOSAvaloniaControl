@@ -177,7 +177,7 @@ public class RegistryOptions : IRegistryOptions
         {
 #if DEBUG
             var grammar = GrammarReader.ReadGrammarSync(reader);
-            var grammar2 = GrammarReader.ReadGrammarSync(reader);
+            //var grammar2 = GrammarReader.ReadGrammarSync(reader);
             return grammar; //Se eu tentar usar novamente o reader, ele vai dar erro
 #endif
 
