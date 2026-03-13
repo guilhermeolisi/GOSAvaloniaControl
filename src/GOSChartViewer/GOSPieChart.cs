@@ -64,15 +64,17 @@ public partial class GOSPieChart : TemplatedControl
     }
 
 
-    public GOSPieChart()
+    static GOSPieChart()
     {
-
         IsDarkThemeProperty.Changed.AddClassHandler<GOSPieChart>((x, e) => x.ChangeTheme());
         ShowValueToolTipProperty.Changed.AddClassHandler<GOSPieChart>((x, e) => x.SetData());
         ShowPercentToolTipProperty.Changed.AddClassHandler<GOSPieChart>((x, e) => x.SetData());
         DataProperty.Changed.AddClassHandler<GOSPieChart>((x, e) => x.ChangeData());
         LabelsProperty.Changed.AddClassHandler<GOSPieChart>((x, e) => x.ChangeLabels());
         ShowLegendProperty.Changed.AddClassHandler<GOSPieChart>((x, e) => x.ChangeShowLegend());
+    }
+    public GOSPieChart()
+    {
     }
     PieChart _chart;
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
@@ -177,7 +179,7 @@ public partial class GOSPieChart : TemplatedControl
             DataToShow[i].Name = Labels[i];
         }
 
-        //Forçar o Update
+        //Forï¿½ar o Update
         _chart.CoreChart.Update(new LiveChartsCore.Kernel.ChartUpdateParams { IsAutomaticUpdate = false, Throttling = false });
         //ChangeDataToObservableCollection(Data, DataToShow);
         ChangeShowLegend();

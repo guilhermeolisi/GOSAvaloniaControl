@@ -76,6 +76,14 @@ public partial class GOSTextEditor : TemplatedControl
         get => GetValue(TextProperty);
         set => SetValue(TextProperty, value);
     }
+    static GOSTextEditor()
+    {
+        FilePathProperty.Changed.AddClassHandler<GOSTextEditor>((x, e) => x.ChangeFile());
+        ExtensionProperty.Changed.AddClassHandler<GOSTextEditor>((x, e) => x.ChangeExtension());
+        ThemeProperty.Changed.AddClassHandler<GOSTextEditor>((x, e) => x.ChangeTheme());
+        IsEditingProperty.Changed.AddClassHandler<GOSTextEditor>((x, e) => x.IsReadOnly = !x.IsEditing);
+        TextProperty.Changed.AddClassHandler<GOSTextEditor>((x, e) => x.TextPropertyChanged(x.Text));
+    }
     public GOSTextEditor()
     {
         this.fileManager = ContainersDIServices.Resolve<IFileTXTIO>()!;
@@ -83,12 +91,6 @@ public partial class GOSTextEditor : TemplatedControl
 
         _registryOptions = new RegistryOptions(ThemeName.Dark);
         _sindarinLanguage = _registryOptions.GetLanguageByExtension(".sin");
-
-        FilePathProperty.Changed.AddClassHandler<GOSTextEditor>((x, e) => x.ChangeFile());
-        ExtensionProperty.Changed.AddClassHandler<GOSTextEditor>((x, e) => x.ChangeExtension());
-        ThemeProperty.Changed.AddClassHandler<GOSTextEditor>((x, e) => x.ChangeTheme());
-        IsEditingProperty.Changed.AddClassHandler<GOSTextEditor>((x, e) => x.IsReadOnly = !x.IsEditing);
-        TextProperty.Changed.AddClassHandler<GOSTextEditor>((x, e) => TextPropertyChanged(x.Text));
     }
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
