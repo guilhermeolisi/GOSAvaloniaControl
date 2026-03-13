@@ -59,17 +59,17 @@ public partial class GOSCartesian : TemplatedControl
         set => SetValue(YlabelProperty, value);
     }
 
-    public GOSCartesian()
+    static GOSCartesian()
     {
-
         IsDarkThemeProperty.Changed.AddClassHandler<GOSCartesian>((x, e) => x.ChangeTheme());
         DataProperty.Changed.AddClassHandler<GOSCartesian>((x, e) => x.ChangeData(e));
         IsZoomingProperty.Changed.AddClassHandler<GOSCartesian>((x, e) => x.ChangeZoom());
         XlabelProperty.Changed.AddClassHandler<GOSCartesian>((x, e) => x.ChangeXLabel());
         YlabelProperty.Changed.AddClassHandler<GOSCartesian>((x, e) => x.ChangeYLabel());
-
+    }
+    public GOSCartesian()
+    {
         Series[0].Values = DataPoints;
-
     }
     CartesianChart _chart;
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)

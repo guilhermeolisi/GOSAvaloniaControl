@@ -40,9 +40,12 @@ public class GOSNavigationBar : TemplatedControl
 
     //List<int> Indexes = new();
     ObservableCollection<GOSNavigationBarTree> ChildrenItems = new();
-    public GOSNavigationBar()
+    static GOSNavigationBar()
     {
         RootItemProperty.Changed.AddClassHandler<GOSNavigationBar>((x, e) => x.ChangeRootItem(e));
+    }
+    public GOSNavigationBar()
+    {
     }
     internal Button? _homeButton, _returnButton;
     private ListBox? _listChildren;
@@ -247,7 +250,7 @@ public class GOSNavigationBar : TemplatedControl
         }
         else
         {
-            // tem que verificar se está com os filhos e captions adequados. Isso é necessário por causa do momento em que o controle é criado novamente na View com um viewmodel com um caminho estabelecido.
+            // tem que verificar se estï¿½ com os filhos e captions adequados. Isso ï¿½ necessï¿½rio por causa do momento em que o controle ï¿½ criado novamente na View com um viewmodel com um caminho estabelecido.
             if (ChildrenItems is null || ChildrenItems.Count == 0)
             {
                 GOSNavigationBarTree? temp = RootItem?.GetParentOfSelected();
