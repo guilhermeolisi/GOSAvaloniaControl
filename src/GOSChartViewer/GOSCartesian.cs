@@ -2,6 +2,8 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
+using LiveChartsCore;
+using LiveChartsCore.Kernel.Sketches;
 using LiveChartsCore.Measure;
 using LiveChartsCore.SkiaSharpView.Avalonia;
 using System.Collections;
@@ -9,35 +11,23 @@ using System.Collections.Specialized;
 
 namespace GOSAvaloniaControls;
 
-public partial class GOSCartesian : TemplatedControl
+public partial class GOSCartesian : GOSChartBase
 {
     //public static readonly StyledProperty<ObservableCollection<(double X, double Y)>?> DataProperty = AvaloniaProperty.Register<GOSCartesian, ObservableCollection<(double X, double Y)>?>(nameof(Data), defaultBindingMode: BindingMode.OneWay);
     public static readonly StyledProperty<IEnumerable?> DataProperty = AvaloniaProperty.Register<GOSCartesian, IEnumerable?>(nameof(Data), defaultBindingMode: BindingMode.OneWay);
-    public static readonly StyledProperty<bool> IsDarkThemeProperty = AvaloniaProperty.Register<GOSCartesian, bool>(nameof(IsDarkTheme), false, false, BindingMode.OneWay);
     public static readonly StyledProperty<bool> IsVerticalLineProperty = AvaloniaProperty.Register<GOSCartesian, bool>(nameof(IsVerticalLine), false, false, BindingMode.OneWay);
     public static readonly StyledProperty<bool> IsZoomingProperty = AvaloniaProperty.Register<GOSCartesian, bool>(nameof(IsZooming), false, false, BindingMode.OneWay);
     public static readonly StyledProperty<string> XlabelProperty = AvaloniaProperty.Register<GOSCartesian, string>(nameof(XLabel), "X", false, BindingMode.OneWay);
     public static readonly StyledProperty<string> YlabelProperty = AvaloniaProperty.Register<GOSCartesian, string>(nameof(YLabel), "Y", false, BindingMode.OneWay);
 
-
-    //public ObservableCollection<(double X, double Y)>? Data
-    //{
-    //    get => GetValue(DataProperty);
-    //    set => SetValue(DataProperty, value);
-    //}
     public IEnumerable? Data
     {
         get => GetValue(DataProperty);
         set => SetValue(DataProperty, value);
     }
-    /// <summary>
-    /// True = Dark; False = Ligth
-    /// </summary>
-    public bool IsDarkTheme
-    {
-        get => GetValue(IsDarkThemeProperty);
-        set => SetValue(IsDarkThemeProperty, value);
-    }
+    protected override IEnumerable? _data => Data;
+    protected override IEnumerable<ISeries>? _series =>  _chart?.Series;
+    protected override IChartView _chartBase => _chart;
     public bool IsVerticalLine
     {
         get => GetValue(IsVerticalLineProperty);
@@ -100,7 +90,7 @@ public partial class GOSCartesian : TemplatedControl
         ChangeZoom();
 
     }
-    private void ChangeData(AvaloniaPropertyChangedEventArgs? e)
+    protected override void ChangeData(AvaloniaPropertyChangedEventArgs? e)
     {
         if (Data is null)
         {

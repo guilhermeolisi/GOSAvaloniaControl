@@ -12,10 +12,8 @@ public partial class GOSPieChart
 
     private readonly ObservableCollection<PieSeries<double>> DataToShow = new();
 
-    private void ChangeTheme()
+    protected override void ChangeTheme()
     {
-
-
         int indSeries = 0;
         int k = 0;
         foreach (var item in DataToShow)

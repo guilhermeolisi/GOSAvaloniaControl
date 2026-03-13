@@ -15,6 +15,8 @@ public class TextBoxNumber : TemplatedControl
     public static readonly StyledProperty<bool> IsIntegerProperty = AvaloniaProperty.Register<TextBoxNumber, bool>(nameof(IsInteger), false, false, BindingMode.TwoWay);
     public static readonly StyledProperty<string> WatermarkProperty =
         AvaloniaProperty.Register<TextBoxNumber, string>(nameof(Watermark), string.Empty, false, BindingMode.TwoWay, enableDataValidation: true);
+    public static readonly StyledProperty<bool> UseFloatingWatermarkProperty =
+        AvaloniaProperty.Register<TextBoxNumber, bool>(nameof(UseFloatingWatermark), true, false, BindingMode.TwoWay);
 
     public double Value
     {
@@ -36,6 +38,11 @@ public class TextBoxNumber : TemplatedControl
         get => GetValue(WatermarkProperty);
         set => SetValue(WatermarkProperty, value);
     }
+    public bool UseFloatingWatermark
+    {
+        get => GetValue(UseFloatingWatermarkProperty);
+        set => SetValue(UseFloatingWatermarkProperty, value);
+    }
     public TextBoxNumber()
     {
         ValueProperty.Changed.AddClassHandler<TextBoxNumber>((x, e) => x.ChangeValueDouble());
@@ -45,6 +52,13 @@ public class TextBoxNumber : TemplatedControl
         {
             if (x._textBox is not null)
                 x._textBox.Watermark = x.Watermark;
+        });
+        UseFloatingWatermarkProperty.Changed.AddClassHandler<TextBoxNumber>((x, e) =>
+        {
+            if (x._textBox is not null)
+            {
+                x._textBox.UseFloatingWatermark = x.UseFloatingWatermark;
+            }
         });
         //Monitora a digitação no TextBox ao pressionar uma tecla
         this.TextInput += TextBoxNumber_TextInput;
@@ -77,6 +91,7 @@ public class TextBoxNumber : TemplatedControl
         {
             ChangeValueDouble();
         }
+        _textBox.UseFloatingWatermark = UseFloatingWatermark;
         //if (string.IsNullOrEmpty(_textBox?.Text) && string.IsNullOrWhiteSpace(Watermark))
         //{
         //    _textBox!.Text = 0.ToString();

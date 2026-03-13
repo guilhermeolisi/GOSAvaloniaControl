@@ -2,38 +2,30 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
+using LiveChartsCore;
+using LiveChartsCore.Kernel.Sketches;
 using LiveChartsCore.Measure;
 using LiveChartsCore.SkiaSharpView.Avalonia;
 using LiveChartsCore.SkiaSharpView.Extensions;
+using System.Collections;
 using System.Collections.ObjectModel;
+using static GOSAvaloniaControls.GOSChartsBusiness;
 
 namespace GOSAvaloniaControls;
 
-public partial class GOSPieChart : TemplatedControl
+public partial class GOSPieChart : GOSChartBase
 {
     public static readonly StyledProperty<ObservableCollection<double>?> DataProperty = AvaloniaProperty.Register<GOSPieChart, ObservableCollection<double>?>(nameof(Data), null, false, BindingMode.OneWay);
-    public static readonly StyledProperty<bool> IsDarkThemeProperty = AvaloniaProperty.Register<GOSPieChart, bool>(nameof(IsDarkTheme), true, false, BindingMode.OneWay);
     public static readonly StyledProperty<bool> ShowPercentToolTipProperty = AvaloniaProperty.Register<GOSPieChart, bool>(nameof(ShowPercentToolTip), true, false, BindingMode.OneWay);
     public static readonly StyledProperty<bool> ShowValueToolTipProperty = AvaloniaProperty.Register<GOSPieChart, bool>(nameof(ShowValueToolTip), true, false, BindingMode.OneWay);
-    public static readonly StyledProperty<ObservableCollection<string>?> LabelsProperty = AvaloniaProperty.Register<GOSPieChart, ObservableCollection<string>?>(nameof(Labels), null, false, BindingMode.OneWay);
-    public static readonly StyledProperty<byte> ShowLegendProperty = AvaloniaProperty.Register<GOSPieChart, byte>(nameof(ShowLegend), 0, false, BindingMode.OneWay);
-    public static readonly StyledProperty<string?> StringFormatValueProperty = AvaloniaProperty.Register<GOSPieChart, string?>(nameof(StringFormatValue), null, false, BindingMode.OneWay);
-
-
-
     public ObservableCollection<double>? Data
     {
         get => GetValue(DataProperty);
         set => SetValue(DataProperty, value);
     }
-    /// <summary>
-    /// True = Dark; False = Ligth
-    /// </summary>
-    public bool IsDarkTheme
-    {
-        get => GetValue(IsDarkThemeProperty);
-        set => SetValue(IsDarkThemeProperty, value);
-    }
+    protected override IEnumerable? _data => Data;
+    protected override IEnumerable<ISeries>? _series => _chart?.Series;
+    protected override IChartView _chartBase => _chart;
     public bool ShowPercentToolTip
     {
         get => GetValue(ShowPercentToolTipProperty);
@@ -44,61 +36,33 @@ public partial class GOSPieChart : TemplatedControl
         get => GetValue(ShowValueToolTipProperty);
         set => SetValue(ShowValueToolTipProperty, value);
     }
-    public ObservableCollection<string>? Labels
-    {
-        get => GetValue(LabelsProperty);
-        set => SetValue(LabelsProperty, value);
-    }
-    /// <summary>
-    /// 0 = Hidden, 1 = Left, 2 = Top, 3 = Right, 4 = Bottom
-    /// </summary>
-    public byte ShowLegend
-    {
-        get => GetValue(ShowLegendProperty);
-        set => SetValue(ShowLegendProperty, value);
-    }
-    public string? StringFormatValue
-    {
-        get => GetValue(StringFormatValueProperty);
-        set => SetValue(StringFormatValueProperty, value);
-    }
-
 
     public GOSPieChart()
     {
 
-        IsDarkThemeProperty.Changed.AddClassHandler<GOSPieChart>((x, e) => x.ChangeTheme());
         ShowValueToolTipProperty.Changed.AddClassHandler<GOSPieChart>((x, e) => x.SetData());
         ShowPercentToolTipProperty.Changed.AddClassHandler<GOSPieChart>((x, e) => x.SetData());
-        DataProperty.Changed.AddClassHandler<GOSPieChart>((x, e) => x.ChangeData());
-        LabelsProperty.Changed.AddClassHandler<GOSPieChart>((x, e) => x.ChangeLabels());
+        DataProperty.Changed.AddClassHandler<GOSPieChart>((x, e) => x.ChangeData(e));
         ShowLegendProperty.Changed.AddClassHandler<GOSPieChart>((x, e) => x.ChangeShowLegend());
+        //FilePathToSaveProperty.Changed.AddClassHandler<GOSPieChart>((x, e) => x.ChangeFilePathToSave());
     }
     PieChart _chart;
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
-        base.OnApplyTemplate(e);
-
         _chart = e.NameScope.Find<PieChart>("PART_Chart");
         _chart.Series = DataToShow;
+        
+        
+        base.OnApplyTemplate(e);
 
-        //ChangeData();
-        //var wrap = e.NameScope.Find<ToggleButton>("PART_WrapCheck");
-        //var edit = e.NameScope.Find<ToggleButton>("PART_EditCheck");
-
-        //https://github.com/AvaloniaUI/Avalonia/issues/4616
-        //http://reference.avaloniaui.net/api/Avalonia.Controls/ResourceDictionary/50FEA02D
-        //if (Application.Current.TryFindResource(""))
-        //{
-        //    wrap[ForegroundProperty] = new DynamicResourceExtension("MyResource");
-        //}
-
+        
+        
         ChangeTheme();
         ChangeLabels();
-        ChangeData();
+        ChangeData(null);
         ChangeShowLegend();
     }
-    private void ChangeData()
+    protected override void ChangeData(AvaloniaPropertyChangedEventArgs? e)
     {
         if (_chart is null)
             return;
@@ -162,7 +126,7 @@ public partial class GOSPieChart : TemplatedControl
         //SetData();
         //Data.CollectionChanged += Data_CollectionChanged;
     }
-    private void ChangeLabels()
+    protected override void ChangeLabels()
     {
         if (_chart is null)
             return;
@@ -182,29 +146,49 @@ public partial class GOSPieChart : TemplatedControl
         //ChangeDataToObservableCollection(Data, DataToShow);
         ChangeShowLegend();
     }
-    private void ChangeShowLegend()
-    {
-        if (_chart is null)
-            return;
-        if (Labels is null || Data is null || Labels.Count != Data.Count)
-        {
-            _chart.LegendPosition = LegendPosition.Hidden;
-            return;
-        }
+    //private void ChangeShowLegend()
+    //{
+    //    if (_chart is null)
+    //        return;
+    //    if (Labels is null || Data is null || Labels.Count != Data.Count)
+    //    {
+    //        _chart.LegendPosition = LegendPosition.Hidden;
+    //        return;
+    //    }
 
-        _chart.Legend = IsDarkTheme ? new LiveLegendDark(true) : new LiveLegendLigth(true);
+    //    _chart.Legend = IsDarkTheme ? new LiveLegendDark(true) : new LiveLegendLigth(true);
 
-        _chart.LegendPosition = ShowLegend switch
-        {
-            0 => LegendPosition.Hidden,
-            1 => LegendPosition.Left,
-            2 => LegendPosition.Top,
-            3 => LegendPosition.Right,
-            4 => LegendPosition.Bottom,
-            _ => LegendPosition.Hidden
-        };
+    //    _chart.LegendPosition = ShowLegend switch
+    //    {
+    //        0 => LegendPosition.Hidden,
+    //        1 => LegendPosition.Left,
+    //        2 => LegendPosition.Top,
+    //        3 => LegendPosition.Right,
+    //        4 => LegendPosition.Bottom,
+    //        _ => LegendPosition.Hidden
+    //    };
 
-        _chart.CoreChart.Update(new LiveChartsCore.Kernel.ChartUpdateParams { IsAutomaticUpdate = false, Throttling = false });
-        //&& Labels is not null && Labels.Count == Data.Count ? LegendPosition.Right : LegendPosition.Hidden;
-    }
+    //    _chart.CoreChart.Update(new LiveChartsCore.Kernel.ChartUpdateParams { IsAutomaticUpdate = false, Throttling = false });
+    //    //&& Labels is not null && Labels.Count == Data.Count ? LegendPosition.Right : LegendPosition.Hidden;
+    //}
+
+    //private IGOSChartsBusiness _chartBusiness = new GOSChartsBusiness();
+
+    //public void SaveToFileCommand(object parameter)
+    //{
+    //    string param = (string)parameter;
+    //    if (param == "txt")
+    //    {
+
+    //    }
+    //    else
+    //    {
+    //        _chartBusiness.SaveImagePieChart(_chart.Series, null, FilePathToSave, parameter == "png" ? FormatImage.PNG : FormatImage.SVG, (int)Width, (int)Height, IsDarkTheme, _chart.LegendPosition);
+    //    }
+    //}
+    //public bool CanSaveToFileCommand(object msg)
+    //{
+
+    //    return msg as string == "txt" ? false : !string.IsNullOrWhiteSpace(FilePathToSave);
+    //}
 }

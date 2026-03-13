@@ -12,4 +12,10 @@
     <PackageReference Include="SkiaSharp" Version="3.119.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\BaseLibrary\src\BaseLibrary.Colors\BaseLibrary.Colors.csproj" />
+    <ProjectReference Include="..\..\..\BaseLibrary\src\BaseLibrary.File\BaseLibrary.File.csproj" />
+    <ProjectReference Include="..\..\..\GOSAvaloniaServices\src\GOSDependencyInjection\GOSDependencyInjection.csproj" />
+  </ItemGroup>
+
 </Project>

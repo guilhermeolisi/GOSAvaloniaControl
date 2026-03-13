@@ -1,54 +1,62 @@
 <Styles
-    xmlns="https://github.com/avaloniaui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:gos="using:GOSAvaloniaControls"
-    xmlns:lvc="using:LiveChartsCore.SkiaSharpView.Avalonia">
-    <!--  xmlns:oxy="http://oxyplot.org/avalonia"  -->
-    <!--  xmlns:oxy="clr-namespace:OxyPlot.Avalonia;assembly=OxyPlot.Avalonia"  -->
-    <!--<Design.PreviewWith>
-        <gos:GOSCartesian />
-    </Design.PreviewWith>-->
-    <Styles.Resources>
-        <ControlTheme x:Key="{x:Type gos:GOSCartesian}" TargetType="gos:GOSCartesian">
-            <!--  Set Defaults  -->
-            <Setter Property="Template">
-                <ControlTemplate>
-                    <Border
-                        x:Name="RootBorder"
-                        Background="{TemplateBinding Background}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}"
-                        CornerRadius="{TemplateBinding CornerRadius}">
-                        <Grid RowDefinitions="*,Auto">
-                            <lvc:CartesianChart
-                                x:Name="PART_Chart"
-                                AnimationsSpeed="0"
-                                EasingFunction="{x:Null}"
-                                LegendPosition="Hidden"
-                                TooltipPosition="Hidden"
-                                ZoomMode="None" />
-                        </Grid>
-                    </Border>
-                </ControlTemplate>
-            </Setter>
-        </ControlTheme>
+xmlns="https://github.com/avaloniaui"
+xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+xmlns:gos="using:GOSAvaloniaControls"
+xmlns:lvc="using:LiveChartsCore.SkiaSharpView.Avalonia">
+	<!--  xmlns:oxy="http://oxyplot.org/avalonia"  -->
+	<!--  xmlns:oxy="clr-namespace:OxyPlot.Avalonia;assembly=OxyPlot.Avalonia"  -->
+	<!--<Design.PreviewWith>
+	<gos:GOSCartesian />
+	</Design.PreviewWith>-->
+	<Styles.Resources>
+		<ControlTheme x:Key="{x:Type gos:GOSCartesian}" TargetType="gos:GOSCartesian">
+			<!--  Set Defaults  -->
+			<Setter Property="Template">
+				<ControlTemplate>
+					<Border
+					x:Name="RootBorder"
+					Background="{TemplateBinding Background}"
+					BorderBrush="{TemplateBinding BorderBrush}"
+					BorderThickness="{TemplateBinding BorderThickness}"
+					CornerRadius="{TemplateBinding CornerRadius}">
+						<Grid RowDefinitions="*,Auto">
+							<lvc:CartesianChart
+							x:Name="PART_Chart"
+							AnimationsSpeed="0"
+							EasingFunction="{x:Null}"
+							LegendPosition="Hidden"
+							TooltipPosition="Hidden"
+							ZoomMode="None" />
+						</Grid>
+					</Border>
+				</ControlTemplate>
+			</Setter>
+		</ControlTheme>
 
-        <ControlTheme x:Key="{x:Type gos:GOSPieChart}" TargetType="gos:GOSPieChart">
-              <!--Set Defaults-->  
-            <Setter Property="Template">
-                <ControlTemplate>
-                    <Border
-                        x:Name="RootBorder"
-                        Background="{TemplateBinding Background}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}"
-                        CornerRadius="{TemplateBinding CornerRadius}">
-                        <Grid RowDefinitions="*,Auto">
-                            <lvc:PieChart x:Name="PART_Chart" />
-                        </Grid>
-                    </Border>
-                </ControlTemplate>
-            </Setter>
-        </ControlTheme>
-    </Styles.Resources>
+		<ControlTheme x:Key="{x:Type gos:GOSPieChart}" TargetType="gos:GOSPieChart">
+			<!--Set Defaults-->
+			<Setter Property="Template">
+				<ControlTemplate>
+					<Border
+					x:Name="RootBorder"
+					Background="{TemplateBinding Background}"
+					BorderBrush="{TemplateBinding BorderBrush}"
+					BorderThickness="{TemplateBinding BorderThickness}"
+					CornerRadius="{TemplateBinding CornerRadius}">
+						<Grid RowDefinitions="*,Auto">
+							<lvc:PieChart x:Name="PART_Chart">
+								<lvc:PieChart.ContextFlyout>
+									<MenuFlyout>
+										<MenuItem Header="Save to TXT file" CommandParameter="txt"/>
+										<MenuItem Header="Save to PNG file" CommandParameter="png"/>
+										<MenuItem Header="Save to SVG file" CommandParameter="svg"/>
+									</MenuFlyout>
+								</lvc:PieChart.ContextFlyout>
+							</lvc:PieChart>
+						</Grid>
+					</Border>
+				</ControlTemplate>
+			</Setter>
+		</ControlTheme>
+	</Styles.Resources>
 </Styles>

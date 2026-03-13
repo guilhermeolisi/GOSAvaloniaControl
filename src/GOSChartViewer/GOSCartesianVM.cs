@@ -58,7 +58,7 @@ public partial class GOSCartesian
             },
         ]
     ];
-    private void ChangeTheme()
+    protected override void ChangeTheme()
     {
         DrawMarginFrame.Stroke = new SolidColorPaint { Color = IsDarkTheme ? SKColors.White : SKColors.Black };
         for (int i = 0; i < Axes.Length; i++)
