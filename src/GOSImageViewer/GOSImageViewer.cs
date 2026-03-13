@@ -14,9 +14,12 @@ public partial class GOSImageViewer : TemplatedControl
         get => GetValue(FilePathProperty);
         set => SetValue(FilePathProperty, value);
     }
-    public GOSImageViewer()
+    static GOSImageViewer()
     {
         FilePathProperty.Changed.AddClassHandler<GOSImageViewer>((x, e) => x.ChangeFile());
+    }
+    public GOSImageViewer()
+    {
     }
     protected override async void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
