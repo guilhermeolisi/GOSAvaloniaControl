@@ -36,7 +36,7 @@ public class TextBoxNumber : TemplatedControl
         get => GetValue(WatermarkProperty);
         set => SetValue(WatermarkProperty, value);
     }
-    static TextBoxNumber()
+    public TextBoxNumber()
     {
         ValueProperty.Changed.AddClassHandler<TextBoxNumber>((x, e) => x.ChangeValueDouble());
         ValueIntProperty.Changed.AddClassHandler<TextBoxNumber>((x, e) => x.ChangeValueInt());
@@ -46,9 +46,6 @@ public class TextBoxNumber : TemplatedControl
             if (x._textBox is not null)
                 x._textBox.Watermark = x.Watermark;
         });
-    }
-    public TextBoxNumber()
-    {
         //Monitora a digitação no TextBox ao pressionar uma tecla
         this.TextInput += TextBoxNumber_TextInput;
         //Monitora o texto do TextBox

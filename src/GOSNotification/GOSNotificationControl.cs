@@ -36,15 +36,12 @@ public class GOSNotificationControl : TemplatedControl, IGOSNotification
 
     ObservableCollection<BallonItem> ItemsBallon = new();
 
-    static GOSNotificationControl()
-    {
-        ItemsProperty.Changed.AddClassHandler<GOSNotificationControl>((x, e) => x.ItemsPropertyChanged());
-        SizeBellProperty.Changed.AddClassHandler<GOSNotificationControl>((x, e) => x.SizeBellPropertyChanged(x.SizeBell));
-    }
     public GOSNotificationControl()
     {
         timerBallon.Interval = TimeSpan.FromSeconds(1);
         timerBallon.Tick += TimerBallonTick;
+        ItemsProperty.Changed.AddClassHandler<GOSNotificationControl>((x, e) => x.ItemsPropertyChanged());
+        SizeBellProperty.Changed.AddClassHandler<GOSNotificationControl>((x, e) => x.SizeBellPropertyChanged(x.SizeBell));
     }
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
