@@ -37,7 +37,7 @@ public partial class GOSPieChart : GOSChartBase
         set => SetValue(ShowValueToolTipProperty, value);
     }
 
-    public GOSPieChart()
+    static GOSPieChart()
     {
 
         ShowValueToolTipProperty.Changed.AddClassHandler<GOSPieChart>((x, e) => x.SetData());
@@ -49,14 +49,12 @@ public partial class GOSPieChart : GOSChartBase
     PieChart _chart;
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
+        // Tem que pegar o chart antes do base.OnApplyTemplate, porque o base chama o chart
         _chart = e.NameScope.Find<PieChart>("PART_Chart");
         _chart.Series = DataToShow;
         
-        
         base.OnApplyTemplate(e);
 
-        
-        
         ChangeTheme();
         ChangeLabels();
         ChangeData(null);
@@ -146,49 +144,4 @@ public partial class GOSPieChart : GOSChartBase
         //ChangeDataToObservableCollection(Data, DataToShow);
         ChangeShowLegend();
     }
-    //private void ChangeShowLegend()
-    //{
-    //    if (_chart is null)
-    //        return;
-    //    if (Labels is null || Data is null || Labels.Count != Data.Count)
-    //    {
-    //        _chart.LegendPosition = LegendPosition.Hidden;
-    //        return;
-    //    }
-
-    //    _chart.Legend = IsDarkTheme ? new LiveLegendDark(true) : new LiveLegendLigth(true);
-
-    //    _chart.LegendPosition = ShowLegend switch
-    //    {
-    //        0 => LegendPosition.Hidden,
-    //        1 => LegendPosition.Left,
-    //        2 => LegendPosition.Top,
-    //        3 => LegendPosition.Right,
-    //        4 => LegendPosition.Bottom,
-    //        _ => LegendPosition.Hidden
-    //    };
-
-    //    _chart.CoreChart.Update(new LiveChartsCore.Kernel.ChartUpdateParams { IsAutomaticUpdate = false, Throttling = false });
-    //    //&& Labels is not null && Labels.Count == Data.Count ? LegendPosition.Right : LegendPosition.Hidden;
-    //}
-
-    //private IGOSChartsBusiness _chartBusiness = new GOSChartsBusiness();
-
-    //public void SaveToFileCommand(object parameter)
-    //{
-    //    string param = (string)parameter;
-    //    if (param == "txt")
-    //    {
-
-    //    }
-    //    else
-    //    {
-    //        _chartBusiness.SaveImagePieChart(_chart.Series, null, FilePathToSave, parameter == "png" ? FormatImage.PNG : FormatImage.SVG, (int)Width, (int)Height, IsDarkTheme, _chart.LegendPosition);
-    //    }
-    //}
-    //public bool CanSaveToFileCommand(object msg)
-    //{
-
-    //    return msg as string == "txt" ? false : !string.IsNullOrWhiteSpace(FilePathToSave);
-    //}
 }

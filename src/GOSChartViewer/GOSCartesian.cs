@@ -64,9 +64,11 @@ public partial class GOSCartesian : GOSChartBase
     CartesianChart _chart;
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
+        
+        _chart = e.NameScope.Find<CartesianChart>("PART_Chart");
+
         base.OnApplyTemplate(e);
 
-        _chart = e.NameScope.Find<CartesianChart>("PART_Chart");
         _chart.Series = Series;
         _chart.XAxes = Axes[0];
         _chart.YAxes = Axes[1];

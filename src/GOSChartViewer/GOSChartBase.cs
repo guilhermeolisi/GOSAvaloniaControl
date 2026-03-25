@@ -162,12 +162,25 @@ public class GOSChartBase : TemplatedControl
         }
         if (this is GOSPieChart)
         {
-            if (param != "txt")
-                _chartBusiness.SaveImagePieChart(_series, Title, pathToSave, param == "png" ? FormatImage.PNG : FormatImage.SVG, 1600, 900, IsDarkTheme, _chartBase.LegendPosition);
+            if (param == "txt")
+            {
+
+            }
+            else
+            {
+                _chartBusiness.SaveToImagePieChart(_series, IsDarkTheme, Title, pathToSave, param == "png" ? FormatImage.PNG : FormatImage.SVG, _chartBase.LegendPosition, 1600, 900);
+            }
         }
         else if (this is GOSCartesian)
         {
-            if (param != "txt") { /* implementar */ }
+            if (param != "txt") 
+            { 
+                
+            }
+            else
+            {
+
+            }
         }
     }
 

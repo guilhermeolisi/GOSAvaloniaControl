@@ -21,12 +21,20 @@ xmlns:lvc="using:LiveChartsCore.SkiaSharpView.Avalonia">
 					CornerRadius="{TemplateBinding CornerRadius}">
 						<Grid RowDefinitions="*,Auto">
 							<lvc:CartesianChart
-							x:Name="PART_Chart"
-							AnimationsSpeed="0"
-							EasingFunction="{x:Null}"
-							LegendPosition="Hidden"
-							TooltipPosition="Hidden"
-							ZoomMode="None" />
+								x:Name="PART_Chart"
+								AnimationsSpeed="0"
+								EasingFunction="{x:Null}"
+								LegendPosition="Hidden"
+								TooltipPosition="Hidden"
+								ZoomMode="None">
+								<lvc:CartesianChart.ContextFlyout>
+									<MenuFlyout>
+										<MenuItem Header="Save to TXT file" CommandParameter="txt"/>
+										<MenuItem Header="Save to PNG file" CommandParameter="png"/>
+										<MenuItem Header="Save to SVG file" CommandParameter="svg"/>
+									</MenuFlyout>
+								</lvc:CartesianChart.ContextFlyout>
+							</lvc:CartesianChart>
 						</Grid>
 					</Border>
 				</ControlTemplate>
@@ -38,11 +46,11 @@ xmlns:lvc="using:LiveChartsCore.SkiaSharpView.Avalonia">
 			<Setter Property="Template">
 				<ControlTemplate>
 					<Border
-					x:Name="RootBorder"
-					Background="{TemplateBinding Background}"
-					BorderBrush="{TemplateBinding BorderBrush}"
-					BorderThickness="{TemplateBinding BorderThickness}"
-					CornerRadius="{TemplateBinding CornerRadius}">
+						x:Name="RootBorder"
+						Background="{TemplateBinding Background}"
+						BorderBrush="{TemplateBinding BorderBrush}"
+						BorderThickness="{TemplateBinding BorderThickness}"
+						CornerRadius="{TemplateBinding CornerRadius}">
 						<Grid RowDefinitions="*,Auto">
 							<lvc:PieChart x:Name="PART_Chart">
 								<lvc:PieChart.ContextFlyout>
