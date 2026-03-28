@@ -1,8 +1,10 @@
-﻿using Avalonia;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
-using static System.Net.Mime.MediaTypeNames;
+using Avalonia.Threading;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace GOSAvaloniaControls;
 
@@ -12,11 +14,18 @@ public class TextBoxNumber : TemplatedControl
         AvaloniaProperty.Register<TextBoxNumber, double>(nameof(Value), 0, false, BindingMode.TwoWay, enableDataValidation: true);
     public static readonly StyledProperty<int> ValueIntProperty =
         AvaloniaProperty.Register<TextBoxNumber, int>(nameof(ValueInt), 0, false, BindingMode.TwoWay, enableDataValidation: true);
-    public static readonly StyledProperty<bool> IsIntegerProperty = AvaloniaProperty.Register<TextBoxNumber, bool>(nameof(IsInteger), false, false, BindingMode.TwoWay);
+    public static readonly StyledProperty<bool> IsIntegerProperty =
+        AvaloniaProperty.Register<TextBoxNumber, bool>(nameof(IsInteger), false, false, BindingMode.TwoWay);
     public static readonly StyledProperty<string> WatermarkProperty =
         AvaloniaProperty.Register<TextBoxNumber, string>(nameof(Watermark), string.Empty, false, BindingMode.TwoWay, enableDataValidation: true);
     public static readonly StyledProperty<bool> UseFloatingWatermarkProperty =
         AvaloniaProperty.Register<TextBoxNumber, bool>(nameof(UseFloatingWatermark), true, false, BindingMode.TwoWay);
+    public static readonly StyledProperty<double> MinValueProperty =
+        AvaloniaProperty.Register<TextBoxNumber, double>(nameof(MinValue), double.MinValue, false, BindingMode.TwoWay);
+    public static readonly StyledProperty<double> MaxValueProperty =
+        AvaloniaProperty.Register<TextBoxNumber, double>(nameof(MaxValue), double.MaxValue, false, BindingMode.TwoWay);
+    public static readonly StyledProperty<int> ValidationDelayProperty =
+        AvaloniaProperty.Register<TextBoxNumber, int>(nameof(ValidationDelay), 3000, false, BindingMode.TwoWay);
 
     public double Value
     {
@@ -43,6 +52,22 @@ public class TextBoxNumber : TemplatedControl
         get => GetValue(UseFloatingWatermarkProperty);
         set => SetValue(UseFloatingWatermarkProperty, value);
     }
+    public double MinValue
+    {
+        get => GetValue(MinValueProperty);
+        set => SetValue(MinValueProperty, value);
+    }
+    public double MaxValue
+    {
+        get => GetValue(MaxValueProperty);
+        set => SetValue(MaxValueProperty, value);
+    }
+    public int ValidationDelay
+    {
+        get => GetValue(ValidationDelayProperty);
+        set => SetValue(ValidationDelayProperty, value);
+    }
+
     static TextBoxNumber()
     {
         ValueProperty.Changed.AddClassHandler<TextBoxNumber>((x, e) => x.ChangeValueDouble());
@@ -61,30 +86,38 @@ public class TextBoxNumber : TemplatedControl
             }
         });
     }
+
     public TextBoxNumber()
     {
-        //Monitora a digitação no TextBox ao pressionar uma tecla
-        this.TextInput += TextBoxNumber_TextInput;
-        //Monitora o texto do TextBox
     }
+
+    protected override void OnDetachedFromLogicalTree(Avalonia.LogicalTree.LogicalTreeAttachmentEventArgs e)
+    {
+        base.OnDetachedFromLogicalTree(e);
+        _validationCts?.Cancel();
+        _validationCts?.Dispose();
+        _validationCts = null;
+    }
+
     protected override void UpdateDataValidation(AvaloniaProperty property, BindingValueType state, Exception? error)
     {
         base.UpdateDataValidation(property, state, error);
-        //Tem que colocar este override para funcionar a validação de dados
         if (property == ValueProperty || property == ValueIntProperty)
         {
             DataValidationErrors.SetError(this, error);
             if (_textBox is not null)
                 DataValidationErrors.SetError(_textBox, error);
-
         }
     }
+
     TextBox? _textBox = null;
+    private CancellationTokenSource? _validationCts;
+
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
         base.OnApplyTemplate(e);
         _textBox = e.NameScope.Find<TextBox>("PART_TextBox");
-        _textBox.Watermark = Watermark;
+        _textBox!.Watermark = Watermark;
         _textBox.TextChanged += _textBox_TextChanged;
         if (IsInteger)
         {
@@ -95,10 +128,6 @@ public class TextBoxNumber : TemplatedControl
             ChangeValueDouble();
         }
         _textBox.UseFloatingWatermark = UseFloatingWatermark;
-        //if (string.IsNullOrEmpty(_textBox?.Text) && string.IsNullOrWhiteSpace(Watermark))
-        //{
-        //    _textBox!.Text = 0.ToString();
-        //}
     }
 
     private void _textBox_TextChanged(object? sender, TextChangedEventArgs e)
@@ -130,31 +159,53 @@ public class TextBoxNumber : TemplatedControl
             {
                 if (ValueInt != valueInt)
                     ValueInt = valueInt;
+                ScheduleValidation();
                 return;
             }
         }
         else
         {
-            if (double.TryParse(textBox.Text, out double valueDoube))
+            if (double.TryParse(textBox.Text, out double valueDouble))
             {
-                if (Value != valueDoube)
-                    Value = valueDoube;
+                if (Value != valueDouble)
+                    Value = valueDouble;
+                ScheduleValidation();
                 return;
             }
         }
         textBox.Text = Value.ToString();
     }
 
-    private void TextBoxNumber_TextInput(object? sender, Avalonia.Input.TextInputEventArgs e)
+    private void ScheduleValidation()
     {
-        //Se o texto digitado não for um número, ponto, vírgula, sinal de menos ou sinal de mais
-        //if (e.Text is null ||
-        //        (IsInteger && e.Text.Any(x => !char.IsDigit(x)) && e.Text != "-" && e.Text != "+") ||
-        //        (!IsInteger && e.Text.Any(x => !char.IsDigit(x)) && e.Text != "." && e.Text != "," && e.Text != "-" && e.Text != "+"))
-        //{
-        //    e.Handled = true;
-        //}
+        _validationCts?.Cancel();
+        _validationCts?.Dispose();
+        _validationCts = new CancellationTokenSource();
+        var token = _validationCts.Token;
+        var delay = ValidationDelay;
+        Task.Delay(delay, token).ContinueWith(t =>
+        {
+            if (t.IsCompletedSuccessfully)
+                Dispatcher.UIThread.Post(ValidateAndClamp);
+        }, TaskScheduler.Default);
     }
+
+    private void ValidateAndClamp()
+    {
+        if (IsInteger)
+        {
+            int min = (int)Math.Clamp(MinValue, int.MinValue, int.MaxValue);
+            int max = (int)Math.Clamp(MaxValue, int.MinValue, int.MaxValue);
+            if (ValueInt < min) ValueInt = min;
+            else if (ValueInt > max) ValueInt = max;
+        }
+        else
+        {
+            if (Value < MinValue) Value = MinValue;
+            else if (Value > MaxValue) Value = MaxValue;
+        }
+    }
+
     bool isSetValueToZeroFromText = false;
     private void ChangeValueDouble()
     {
@@ -168,14 +219,15 @@ public class TextBoxNumber : TemplatedControl
                 return;
             }
 
-            if (double.TryParse(_textBox.Text, out double valueDoube))
+            if (double.TryParse(_textBox.Text, out double valueDouble))
             {
-                if (Value == valueDoube)
+                if (Value == valueDouble)
                     return;
             }
             _textBox.Text = temp;
         }
     }
+
     private void ChangeValueInt()
     {
         if (_textBox is null)
@@ -197,6 +249,7 @@ public class TextBoxNumber : TemplatedControl
             _textBox.Text = temp;
         }
     }
+
     private void ChangeIsInteger()
     {
         if (IsInteger)
@@ -211,4 +264,3 @@ public class TextBoxNumber : TemplatedControl
         }
     }
 }
-

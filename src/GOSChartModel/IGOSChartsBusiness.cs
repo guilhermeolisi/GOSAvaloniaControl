@@ -1,4 +1,5 @@
-﻿using LiveChartsCore;
+﻿using BaseLibrary;
+using LiveChartsCore;
 using LiveChartsCore.Measure;
 using static GOSAvaloniaControls.GOSChartsBusiness;
 
@@ -10,4 +11,6 @@ public interface IGOSChartsBusiness
     void SaveToImagePieChart(IEnumerable<ISeries> mainSeries, bool needLigth, string title, string filePathToSave, FormatImage format, LegendPosition legendPosition, int width, int height);
     void SaveToImageCartesianChart(IEnumerable<ISeries> mainSeries, IEnumerable<ISeries>? stackDownSeries, bool needLigth, string title, string xLabel, string yLabel, string filePathToSave, FormatImage format, LegendPosition legendPosition, int width, int height, double? xmin, double? xmax, double? ymin, double? ymax);
     ISeries CopyISerie(ISeries series, bool needLight, double total);
+    (string? sharedXfilename, string? otherFilename) SaveToTextCartesianChart(IEnumerable<ISeries> mainSeries, IEnumerable<ISeries>? stackDownSeries, string filePathToSave, string labelX);
+    void SaveToTextPieChart(IEnumerable<ISeries> mainSeries, string filePathToSave);
 }

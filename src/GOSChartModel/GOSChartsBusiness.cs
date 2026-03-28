@@ -14,6 +14,7 @@ using LiveChartsCore.SkiaSharpView.VisualElements;
 using SkiaSharp;
 using System.Collections;
 using System.Reflection.Emit;
+using System.Text;
 
 namespace GOSAvaloniaControls;
 
@@ -43,10 +44,179 @@ public class GOSChartsBusiness : IGOSChartsBusiness
         GOSChartsBusiness.colorServices = colorServices ?? ContainersDIServices.Resolve<IColorServices>() ?? new ColorServices();
         GOSChartsBusiness.fileServices = fileServices ?? ContainersDIServices.Resolve<IFileServices>() ?? new FileServices();
     }
-    public void SaveToTextCartesianChart(IEnumerable<ISeries> mainSeries, IEnumerable<ISeries>? stackDownSeries, string title, string labelX, string filePathToSave)
+    /// <summary>
+    /// Saves the visible series of a cartesian chart to one or two tab-separated text files.
+    /// Series sharing the same X values as the first visible series are written to
+    /// <paramref name="filePathToSave"/> (single X column + one Y column per series).
+    /// Remaining series are written to a sibling file whose name carries an "_other" suffix,
+    /// with each series occupying its own X/Y column pair.
+    /// </summary>
+    public (string? sharedXfilename, string? otherFilename) SaveToTextCartesianChart(IEnumerable<ISeries> mainSeries, IEnumerable<ISeries>? stackDownSeries, string filePathToSave, string? labelX)
     {
-        // Selecionar as séries que tem os mesmos valroes de X que a primeira série
-        
+        // Collect all visible series from both collections
+        var allSeries = mainSeries
+            .Concat(stackDownSeries ?? Enumerable.Empty<ISeries>())
+            //.Where(s => s.IsVisible)
+            .ToList();
+
+        string? sharedPath = null, otherPath = null;
+
+        if (allSeries.Count == 0)
+            return (sharedPath, otherPath);
+
+        // Extract non-null (non-separator) points from each series; skip series with no points
+        var seriesPoints = allSeries
+            .Select(s => (Series: s, Points: GetPoints(s)))
+            .Where(x => x.Points.Count > 0)
+            .ToList();
+
+        if (seriesPoints.Count == 0)
+            return (sharedPath, otherPath);
+
+        if (string.IsNullOrEmpty(labelX))
+            labelX = "x";
+
+        // First series' X values are the reference for grouping
+        var firstPoints = seriesPoints[0].Points;
+
+        // Split into shared group (same X as first) and other group
+        var sharedGroup = new List<(ISeries Series, IReadOnlyList<ObservablePoint> Points)>();
+        var otherGroup = new List<(ISeries Series, IReadOnlyList<ObservablePoint> Points)>();
+
+        for (int i = 0; i < seriesPoints.Count; i++)
+        {
+            if (i == 0 || HaveSameXValues(firstPoints, seriesPoints[i].Points))
+                sharedGroup.Add(seriesPoints[i]);
+            else
+                otherGroup.Add(seriesPoints[i]);
+        }
+
+        if (sharedGroup.Count == 1 && otherGroup.Count > 0)
+        {
+            // If only the first series has the reference X values, move it to the other group
+            otherGroup.Insert(0, sharedGroup[0]);
+            sharedGroup.Clear();
+        }
+
+        if (sharedGroup.Count > 1)
+        {
+
+            // --- Write shared-X file ---
+            sharedPath = fileServices.Name.FileNameAvailable(filePathToSave);
+            var sbShared = new StringBuilder();
+
+            // Header: labelX <tab> Series1 <tab> Series2 ...
+            sbShared.Append(labelX);
+            foreach (var (series, _) in sharedGroup)
+                sbShared.Append('\t').Append(series.Name ?? string.Empty);
+            sbShared.AppendLine();
+
+            // Data rows: x <tab> y1 <tab> y2 ...
+            for (int i = 0; i < firstPoints.Count; i++)
+            {
+                sbShared.Append(firstPoints[i].X?.ToString("G6") ?? string.Empty);
+                foreach (var (_, points) in sharedGroup)
+                {
+                    double? y = i < points.Count ? points[i].Y : null;
+                    sbShared.Append('\t').Append(y?.ToString("G6") ?? string.Empty);
+                }
+                sbShared.AppendLine();
+            }
+
+            fileServices.Text.WriteTXT(sharedPath, sbShared.ToString());
+        }
+
+        if (otherGroup.Count > 0)
+        {
+            // --- Write other-series file (only when there are series with different X) ---
+            string otherBase = sharedPath ?? filePathToSave;
+            string ext = Path.GetExtension(otherBase);
+            otherPath = Path.Combine(
+                Path.GetDirectoryName(otherBase) ?? string.Empty,
+                Path.GetFileNameWithoutExtension(otherBase) + 
+                (string.IsNullOrWhiteSpace(sharedPath) ? string.Empty : "_others") + 
+                ext);
+            otherPath = fileServices.Name.FileNameAvailable(otherPath);
+
+            var sbOther = new StringBuilder();
+
+            // Header: labelX <tab> Series3 <tab> labelX <tab> Series4 ...
+            bool firstHeader = true;
+            foreach (var (series, _) in otherGroup)
+            {
+                if (!firstHeader) sbOther.Append('\t');
+                sbOther.Append(labelX).Append('\t').Append(series.Name ?? string.Empty);
+                firstHeader = false;
+            }
+            sbOther.AppendLine();
+
+            // Data rows: x3 <tab> y3 <tab> x4 <tab> y4 ...
+            int maxCount = otherGroup.Max(x => x.Points.Count);
+            for (int i = 0; i < maxCount; i++)
+            {
+                bool firstCol = true;
+                foreach (var (_, points) in otherGroup)
+                {
+                    if (!firstCol) sbOther.Append('\t');
+                    if (i < points.Count)
+                    {
+                        sbOther
+                            .Append(points[i].X?.ToString("G6") ?? string.Empty)
+                            .Append('\t')
+                            .Append(points[i].Y?.ToString("G6") ?? string.Empty);
+                    }
+                    else
+                    {
+                        sbOther.Append('\t'); // empty X and Y columns
+                    }
+                    firstCol = false;
+                }
+                sbOther.AppendLine();
+            }
+
+            fileServices.Text.WriteTXT(otherPath, sbOther.ToString());
+        }
+
+        return (sharedPath, otherPath);
+    }
+    /// <summary>
+    /// Extracts non-null <see cref="ObservablePoint"/> values from a supported series type,
+    /// skipping null separator points.
+    /// </summary>
+    private static IReadOnlyList<ObservablePoint> GetPoints(ISeries series)
+    {
+        IEnumerable<ObservablePoint?>? values = series switch
+        {
+            ScatterSeries<ObservablePoint> scatter => scatter.Values,
+            LineSeries<ObservablePoint> line => line.Values,
+            ScatterSeries<ObservablePoint, VariableSVGPathGeometry> varScatter => varScatter.Values,
+            _ => null
+        };
+
+        if (values is null)
+            return Array.Empty<ObservablePoint>();
+
+        return values.Where(p => p is not null).Cast<ObservablePoint>().ToList();
+    }
+
+    /// <summary>
+    /// Returns <see langword="true"/> when <paramref name="first"/> and <paramref name="second"/>
+    /// have the same count and identical X values at every index.
+    /// </summary>
+    private static bool HaveSameXValues(
+        IReadOnlyList<ObservablePoint> first,
+        IReadOnlyList<ObservablePoint> second)
+    {
+        if (first.Count != second.Count)
+            return false;
+
+        for (int i = 0; i < first.Count; i++)
+        {
+            if (first[i].X != second[i].X)
+                return false;
+        }
+
+        return true;
     }
     public void SaveToImageCartesianChart(IEnumerable<ISeries> mainSeries, IEnumerable<ISeries>? stackDownSeries, bool needLigth, string title, string xLabel, string yLabel, string filePathToSave, FormatImage format, LegendPosition legendPosition, int width, int height, double? xmin, double? xmax, double? ymin, double? ymax)
     {
@@ -106,6 +276,31 @@ public class GOSChartsBusiness : IGOSChartsBusiness
 
         var chart = CreateCartesianChart(seriesTemp, title, xLabel, yLabel, legendPosition, filePathToSave, format, width, height, xmin, xmax, ymin, ymax);
         SaveChart(chart, filePathToSave, format);
+    }
+    public void SaveToTextPieChart(IEnumerable<ISeries> mainSeries, string filePathToSave)
+    {
+        var sb = new StringBuilder();
+
+        foreach (var series in mainSeries)
+        {
+            if (!series.IsVisible)
+                continue;
+
+            if (series is not PieSeries<double> pie)
+                continue;
+
+            double value = pie.Values?.Sum() ?? 0;
+            sb.Append(pie.Name ?? string.Empty)
+              .Append('\t')
+              .Append(value.ToString("G6"))
+              .AppendLine();
+        }
+
+        if (sb.Length == 0)
+            return;
+
+        string path = fileServices.Name.FileNameAvailable(filePathToSave);
+        fileServices.Text.WriteTXT(path, sb.ToString());
     }
     public void SaveToImagePieChart(IEnumerable<ISeries> series, bool needLigth, string title, string filePathToSave, FormatImage format, LegendPosition legendPosition, int width, int height)
     {
@@ -283,7 +478,7 @@ public class GOSChartsBusiness : IGOSChartsBusiness
     {
         if (series is ScatterSeries<ObservablePoint> sca)
         {
-           foreach (var item in sca.Values)
+            foreach (var item in sca.Values)
             {
                 if (item is not null && item.Y.HasValue)
                     item.Y += correction;
@@ -299,7 +494,7 @@ public class GOSChartsBusiness : IGOSChartsBusiness
         }
         else if (series is PieSeries<double> pieDouble)
         {
-            
+
         }
         else if (series is ScatterSeries<ObservablePoint, VariableSVGPathGeometry> scatRef)
         {

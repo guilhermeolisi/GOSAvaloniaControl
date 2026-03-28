@@ -76,7 +76,7 @@ public class GOSChartBase : TemplatedControl
     {
         _saveToFileRelayCommand = new GOSRelayCommand(
         param => ExecuteSaveToFile((string?)param),
-        param => (string?)param != "txt" && !string.IsNullOrWhiteSpace(FilePathToSave));
+        param => /*(string?)param != "txt" && */!string.IsNullOrWhiteSpace(FilePathToSave));
 
 
         // Assina mudanças da StyledProperty e força RaiseCanExecuteChanged quando mudar
@@ -164,7 +164,7 @@ public class GOSChartBase : TemplatedControl
         {
             if (param == "txt")
             {
-
+                _chartBusiness.SaveToTextPieChart(_series, pathToSave);
             }
             else
             {
@@ -173,13 +173,14 @@ public class GOSChartBase : TemplatedControl
         }
         else if (this is GOSCartesian)
         {
-            if (param != "txt") 
-            { 
-                
+            CartesianChart cart = _chartBase as CartesianChart;
+            if (param == "txt") 
+            {
+                _chartBusiness.SaveToTextCartesianChart(_series, null, pathToSave, cart.XAxes.FirstOrDefault()?.Name);
             }
             else
             {
-
+                _chartBusiness.SaveToImageCartesianChart(_series, null, IsDarkTheme, Title, cart.XAxes.FirstOrDefault()?.Name, cart.YAxes.FirstOrDefault()?.Name, pathToSave, param == "png" ? FormatImage.PNG : FormatImage.SVG, _chartBase.LegendPosition, 1600, 900, null, null, null, null);
             }
         }
     }
