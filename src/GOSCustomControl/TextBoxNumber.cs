@@ -25,7 +25,7 @@ public class TextBoxNumber : TemplatedControl
     public static readonly StyledProperty<double> MaxValueProperty =
         AvaloniaProperty.Register<TextBoxNumber, double>(nameof(MaxValue), double.MaxValue, false, BindingMode.TwoWay);
     public static readonly StyledProperty<int> ValidationDelayProperty =
-        AvaloniaProperty.Register<TextBoxNumber, int>(nameof(ValidationDelay), 3000, false, BindingMode.TwoWay);
+        AvaloniaProperty.Register<TextBoxNumber, int>(nameof(ValidationDelay), 2900, false, BindingMode.TwoWay);
 
     public double Value
     {
