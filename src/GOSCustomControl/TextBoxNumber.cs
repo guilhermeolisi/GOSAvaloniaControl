@@ -97,8 +97,28 @@ public class TextBoxNumber : TemplatedControl
         _validationCts?.Cancel();
         _validationCts?.Dispose();
         _validationCts = null;
+        ForceApplyCurrentValue();
     }
-
+    private void ForceApplyCurrentValue()
+    {
+        if (_textBox is null)
+            return;
+        var text = _textBox.Text;
+        if (!string.IsNullOrEmpty(text) && text != "-" && text != "+")
+        {
+            if (IsInteger)
+            {
+                if (int.TryParse(text, out int valueInt) && ValueInt != valueInt)
+                    ValueInt = valueInt;
+            }
+            else
+            {
+                if (double.TryParse(text, out double valueDouble) && Value != valueDouble)
+                    Value = valueDouble;
+            }
+        }
+        ValidateAndClamp();
+    }
     protected override void UpdateDataValidation(AvaloniaProperty property, BindingValueType state, Exception? error)
     {
         base.UpdateDataValidation(property, state, error);
