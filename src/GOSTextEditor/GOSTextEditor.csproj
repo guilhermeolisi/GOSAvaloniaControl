@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <RootNamespace>GOSAvaloniaControls</RootNamespace>
     <Platforms>AnyCPU;x64;x86;ARM64</Platforms>
-    <Configurations>Debug;Release;Debug Velopack</Configurations>
+    <Configurations>Debug;Release</Configurations>
   </PropertyGroup>
 
   <ItemGroup>

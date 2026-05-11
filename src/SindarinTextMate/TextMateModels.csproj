@@ -6,7 +6,7 @@
 	<Nullable>enable</Nullable>
 	<RootNamespace>$(MSBuildProjectName.Replace(" ", "."))</RootNamespace>
 	<Platforms>AnyCPU;x64;x86;ARM64</Platforms>
-	<Configurations>Debug;Release;Debug Velopack</Configurations>
+	<Configurations>Debug;Release</Configurations>
 	<!--<RuntimeIdentifiers>win-x86;win-x64;linux-x64;osx-x64</RuntimeIdentifiers>-->
 	<!--<PlatformTarget>x64</PlatformTarget>-->
   </PropertyGroup>
