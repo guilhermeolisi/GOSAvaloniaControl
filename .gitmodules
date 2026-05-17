@@ -1,0 +1,3 @@
+[submodule "src/SindarinTextMate/Grammars/sindarin"]
+	path = src/SindarinTextMate/Grammars/sindarin
+	url = https://github.com/guilhermeolisi/sindarin-grammar.git
