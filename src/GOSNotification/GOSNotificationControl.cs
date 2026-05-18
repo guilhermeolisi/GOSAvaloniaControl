@@ -61,7 +61,7 @@ public class GOSNotificationControl : TemplatedControl, IGOSNotification
         buttonBell = e.NameScope.Find<Button>("PART_buttonBell");
         flyout = buttonBell.Flyout as Flyout;
         flyoutBallon = FlyoutBase.GetAttachedFlyout(buttonBell);//.At//e.NameScope.Find<Flyout>("PART_flyoutBallon");
-        //flyoutBallon.ShowMode = FlyoutShowMode.Transient;
+        ((Flyout)flyoutBallon).ShowMode = FlyoutShowMode.Transient;
         flyout.ShowMode = FlyoutShowMode.TransientWithDismissOnPointerMoveAway;
 
         buttonBell.IsEnabled = Items is not null ? Items.Count > 0 : false;
