@@ -254,8 +254,14 @@ public class GOSNavigationBar : TemplatedControl
             if (ChildrenItems is null || ChildrenItems.Count == 0)
             {
                 GOSNavigationBarTree? temp = RootItem?.GetParentOfSelected();
-                UpdateChildrenCaption(temp?.Children[0].Caption ?? RootItem.Children[0].Caption);
-                ChangeChildrenItems(temp?.Children ?? RootItem?.Children);
+                // Prefere os filhos do pai do item selecionado; senão usa os do root.
+                // Guarda contra listas nulas/vazias: indexar [0] direto lançava
+                // ArgumentOutOfRange ao voltar para um nó sem irmãos carregados.
+                List<GOSNavigationBarTree>? siblings = temp?.Children is { Count: > 0 }
+                    ? temp.Children
+                    : (RootItem?.Children is { Count: > 0 } ? RootItem.Children : null);
+                UpdateChildrenCaption(siblings is { Count: > 0 } ? siblings[0].Caption : null);
+                ChangeChildrenItems(siblings);
                 if (ListChildrenlb is not null)
                     ListChildrenlb.SelectedItem = selected;
             }
