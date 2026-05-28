@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="11.3.15" />
+    <PackageReference Include="Avalonia" Version="11.3.17" />
     <PackageReference Include="PanAndZoom" Version="11.3.9.1" />
     <PackageReference Include="Svg.Controls.Skia.Avalonia" Version="11.3.9.2" />
     <PackageReference Include="Svg.Skia" Version="3.4.1" />
