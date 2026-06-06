@@ -13,8 +13,8 @@
     <PackageReference Include="Avalonia" Version="11.3.17" />
     <PackageReference Include="Avalonia.AvaloniaEdit" Version="11.4.1" />
     <PackageReference Include="AvaloniaEdit.TextMate" Version="11.4.1" />
-    <PackageReference Include="Splat" Version="19.3.1" />
-    <PackageReference Include="TextMateSharp" Version="2.0.3" />
+    <PackageReference Include="Splat" Version="19.4.1" />
+    <PackageReference Include="TextMateSharp" Version="2.0.4" />
   </ItemGroup>
 
   <ItemGroup>
