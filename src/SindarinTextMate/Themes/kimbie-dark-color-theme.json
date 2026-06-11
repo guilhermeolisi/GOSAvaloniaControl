@@ -54,6 +54,9 @@
 		"progressBar.background": "#7f5d38"
 	},
 	"tokenColors": [
+		{ "name": "Sindarin variável geral @", "scope": "entity.name.type.struct.sin", "settings": { "foreground": "#DC3958" } },
+		{ "name": "Sindarin variável onebyone !", "scope": "entity.name.type.struct.onebyone.sin", "settings": { "foreground": "#E46980" } },
+		{ "name": "Sindarin decimal fixo #", "scope": "constant.fixed.sin", "settings": { "foreground": "#D68D3C" } },
 		{
 			"settings": {
 				"foreground": "#d3af86"

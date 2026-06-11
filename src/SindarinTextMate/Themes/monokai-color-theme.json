@@ -102,6 +102,8 @@
 		"terminal.ansiBrightWhite": "#f8f8f2"
 	},
 	"tokenColors": [
+		{ "name": "Sindarin variável onebyone !", "scope": "entity.name.type.struct.onebyone.sin", "settings": { "foreground": "#BBE960" } },
+		{ "name": "Sindarin decimal fixo #", "scope": "constant.fixed.sin", "settings": { "foreground": "#CBCABE" } },
 		{
 			"settings": {
 				"foreground": "#F8F8F2"

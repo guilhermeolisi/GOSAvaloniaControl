@@ -1,6 +1,8 @@
 {
 	"name": "Quiet Light",
 	"tokenColors": [
+		{ "name": "Sindarin variável onebyone !", "scope": "entity.name.type.struct.onebyone.sin", "settings": { "foreground": "#5D2F77" } },
+		{ "name": "Sindarin decimal fixo #", "scope": "constant.fixed.sin", "settings": { "foreground": "#636363" } },
 		{
 			"settings": {
 				"foreground": "#333333"

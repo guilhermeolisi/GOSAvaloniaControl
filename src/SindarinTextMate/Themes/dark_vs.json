@@ -23,6 +23,9 @@
 		"list.activeSelectionIconForeground": "#FFF"
 	},
 	"tokenColors": [
+		{ "name": "Sindarin variável geral @", "scope": "entity.name.type.struct.sin", "settings": { "foreground": "#4EC9B0" } },
+		{ "name": "Sindarin variável onebyone !", "scope": "entity.name.type.struct.onebyone.sin", "settings": { "foreground": "#A0E4D6" } },
+		{ "name": "Sindarin decimal fixo #", "scope": "constant.fixed.sin", "settings": { "foreground": "#AABCA1" } },
 		{
 			"scope": [
 				"meta.embedded",

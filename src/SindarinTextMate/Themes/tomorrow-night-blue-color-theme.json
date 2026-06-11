@@ -58,6 +58,8 @@
 		"terminal.ansiBrightWhite": "#ffffff"
 	},
 	"tokenColors": [
+		{ "name": "Sindarin variável onebyone !", "scope": "entity.name.type.struct.onebyone.sin", "settings": { "foreground": "#FFF2C1" } },
+		{ "name": "Sindarin decimal fixo #", "scope": "constant.fixed.sin", "settings": { "foreground": "#C7CEE2" } },
 		{
 			"settings": {
 				"background": "#002451",

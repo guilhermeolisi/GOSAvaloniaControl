@@ -1,6 +1,8 @@
 {
 	"name": "Abyss",
 	"tokenColors": [
+		{ "name": "Sindarin variável onebyone !", "scope": "entity.name.type.struct.onebyone.sin", "settings": { "foreground": "#FFF2CB" } },
+		{ "name": "Sindarin decimal fixo #", "scope": "constant.fixed.sin", "settings": { "foreground": "#546EB0" } },
 		{
 			"settings": {
 				"foreground": "#6688cc"

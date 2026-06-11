@@ -2,6 +2,9 @@
 	"$schema": "vscode://schemas/color-theme",
 	"name": "Light High Contrast",
 	"tokenColors": [
+		{ "name": "Sindarin variável geral @", "scope": "entity.name.type.struct.sin", "settings": { "foreground": "#267F99" } },
+		{ "name": "Sindarin variável onebyone !", "scope": "entity.name.type.struct.onebyone.sin", "settings": { "foreground": "#1D6174" } },
+		{ "name": "Sindarin decimal fixo #", "scope": "constant.fixed.sin", "settings": { "foreground": "#393939" } },
 		{
 			"scope": ["meta.embedded", "source.groovy.embedded"],
 			"settings": {

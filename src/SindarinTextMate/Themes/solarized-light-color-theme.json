@@ -1,6 +1,8 @@
 {
 	"name": "Solarized (light)",
 	"tokenColors": [
+		{ "name": "Sindarin variável onebyone !", "scope": "entity.name.type.struct.onebyone.sin", "settings": { "foreground": "#9A3911" } },
+		{ "name": "Sindarin decimal fixo #", "scope": "constant.fixed.sin", "settings": { "foreground": "#778A8F" } },
 		{
 			"settings": {
 				"foreground": "#657B83"

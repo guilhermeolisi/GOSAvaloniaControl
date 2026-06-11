@@ -61,6 +61,8 @@
 		"extensionButton.prominentHoverBackground": "#cc333388"
 	},
 	"tokenColors": [
+		{ "name": "Sindarin variável onebyone !", "scope": "entity.name.type.struct.onebyone.sin", "settings": { "foreground": "#FED480" } },
+		{ "name": "Sindarin decimal fixo #", "scope": "constant.fixed.sin", "settings": { "foreground": "#B87777" } },
 		{
 			"settings": {
 				"foreground": "#F8F8F8",
