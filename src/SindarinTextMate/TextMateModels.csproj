@@ -16,6 +16,13 @@
 	<PackageReference Include="TextMateSharp" Version="2.0.4" />
   </ItemGroup>
 
+  <!-- O submódulo sindarin-grammar traz um utilitário .NET em Grammars\sindarin\tools.
+       Como este projeto é SDK-style (auto-inclui **\*.cs), excluímos qualquer .cs sob
+       Grammars\ para não tentar compilar o utilitário (que tem seu próprio Main). -->
+  <ItemGroup>
+	<Compile Remove="Grammars\**\*.cs" />
+  </ItemGroup>
+
   <ItemGroup>
 	<None Update="Grammars\bat\cgmanifest.json">
 	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
