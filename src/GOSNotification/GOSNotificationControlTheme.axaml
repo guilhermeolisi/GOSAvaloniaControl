@@ -12,6 +12,8 @@
 
     <Styles.Resources>
         <StreamGeometry x:Key="icon_bellfill">M7,16 A2,-2 0 0 0 9,14 L5,14 A2,-2 0 0 0 7,16 z M7.995,1.1 A0.9999,-0.9999 0 1 0 6.005,1.1 A5.002,-5.002 0 0 0 2,6.001 C2,7.098 1.5,12 0,13 L14,13 C12.5,12 12,7.098 12,6.001 C12,3.581 10.28,1.561 7.995,1.1 z</StreamGeometry>
+        <StreamGeometry x:Key="icon_close">M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z</StreamGeometry>
+        <StreamGeometry x:Key="icon_trash">M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z</StreamGeometry>
         <controls:ByteToSeverityConverter x:Key="ByteToSeverityConverter" />
     </Styles.Resources>
     <!--<Style Selector=":is(Button).clean">
@@ -143,27 +145,64 @@
                         </Panel>
                         <Button.Flyout>
                             <Flyout Placement="TopEdgeAlignedRight">
-                                <ItemsControl
-                                    x:Name="PART_buttonBellFlyout"
-                                    Width="300"
-                                    HorizontalAlignment="Stretch">
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate DataType="controls:NotificationItem">
-                                            <!--<ContentControl Classes="items" HorizontalAlignment="Stretch">
-												<fl:InfoBar IsOpen="True" Severity="{Binding Item.Severity, Converter={StaticResource ByteToSeverityConverter}}" Message="{Binding Message}" VerticalAlignment="Center"/>
-											</ContentControl>-->
-                                            <!--  PointerPressed="{x:Static controls:GOSNotificationControl.Notification_PointerPressed}"  -->
-                                            <fl:InfoBar
-                                                MaxHeight="80"
-                                                VerticalAlignment="Center"
-                                                IsClosable="False"
-                                                IsOpen="True"
-                                                Message="{Binding Message}"
-                                                Severity="{Binding Severity, Converter={StaticResource ByteToSeverityConverter}}" />
-
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                </ItemsControl>
+                                <DockPanel Width="320" MaxHeight="420">
+                                    <Grid
+                                        Margin="0,0,0,4"
+                                        ColumnDefinitions="*,Auto"
+                                        DockPanel.Dock="Top">
+                                        <TextBlock
+                                            Grid.Column="0"
+                                            VerticalAlignment="Center"
+                                            FontWeight="SemiBold"
+                                            Text="Notificações" />
+                                        <Button
+                                            x:Name="PART_clearAll"
+                                            Grid.Column="1"
+                                            Padding="6,3"
+                                            ToolTip.Tip="Limpar todas as notificações">
+                                            <StackPanel Orientation="Horizontal" Spacing="4">
+                                                <PathIcon
+                                                    Width="12"
+                                                    Height="12"
+                                                    Data="{StaticResource icon_trash}" />
+                                                <TextBlock VerticalAlignment="Center" Text="Limpar tudo" />
+                                            </StackPanel>
+                                        </Button>
+                                    </Grid>
+                                    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                                        <ItemsControl
+                                            x:Name="PART_buttonBellFlyout"
+                                            HorizontalAlignment="Stretch">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate DataType="controls:NotificationItem">
+                                                    <Panel Margin="0,2">
+                                                        <fl:InfoBar
+                                                            MaxHeight="80"
+                                                            VerticalAlignment="Center"
+                                                            IsClosable="False"
+                                                            IsOpen="True"
+                                                            Message="{Binding Message}"
+                                                            Severity="{Binding Severity, Converter={StaticResource ByteToSeverityConverter}}" />
+                                                        <Button
+                                                            Margin="0,4,4,0"
+                                                            Padding="2"
+                                                            HorizontalAlignment="Right"
+                                                            VerticalAlignment="Top"
+                                                            Background="Transparent"
+                                                            BorderThickness="0"
+                                                            Classes="removeNotification"
+                                                            ToolTip.Tip="Remover notificação">
+                                                            <PathIcon
+                                                                Width="8"
+                                                                Height="8"
+                                                                Data="{StaticResource icon_close}" />
+                                                        </Button>
+                                                    </Panel>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </ScrollViewer>
+                                </DockPanel>
                             </Flyout>
                         </Button.Flyout>
                         <FlyoutBase.AttachedFlyout>

@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
+using Avalonia.Interactivity;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 using System.Collections.ObjectModel;
@@ -89,6 +90,11 @@ public class GOSNotificationControl : TemplatedControl, IGOSNotification
             }
         }
         showNotifications.PointerPressed += Notification_PointerPressed;
+        showNotifications.AddHandler(Button.ClickEvent, RemoveNotification_Click);
+
+        var clearAllButton = e.NameScope.Find<Button>("PART_clearAll");
+        if (clearAllButton is not null)
+            clearAllButton.Click += ClearAll_Click;
 
 
         //https://github.com/AvaloniaUI/Avalonia/issues/4616
@@ -245,6 +251,31 @@ public class GOSNotificationControl : TemplatedControl, IGOSNotification
         //    showNotifications.Items = Items;
         //Items.Add(new NotificationItem(severity, message, showBallon));
     }
+    private void ClearAll_Click(object? sender, RoutedEventArgs e)
+    {
+        Items?.Clear();
+        countNotification = 0;
+        if (infoBadge is not null)
+        {
+            infoBadge.Value = 0;
+            infoBadge.IsVisible = false;
+        }
+        flyout?.Hide();
+    }
+
+    private void RemoveNotification_Click(object? sender, RoutedEventArgs e)
+    {
+        if (e.Source is not Visual visual)
+            return;
+
+        var button = visual as Button ?? visual.FindAncestorOfType<Button>();
+        if (button?.DataContext is NotificationItem item)
+        {
+            Items?.Remove(item);
+            e.Handled = true;
+        }
+    }
+
     public bool UIContextIsNull => UIContext is null;
     public void SetUIContext(SynchronizationContext? uiContext) => UIContext = uiContext;
     public static void Notification_PointerPressed(object? sender, Avalonia.Input.PointerPressedEventArgs e)
