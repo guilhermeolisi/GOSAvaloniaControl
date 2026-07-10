@@ -361,3 +361,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# Claude Code ephemeral worktrees (nao versionar; gitlink orfao quebra o git submodule)
+.claude/worktrees/
