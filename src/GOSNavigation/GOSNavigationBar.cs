@@ -8,6 +8,7 @@ using GOSAvaloniaControls.NavigationBar.Model;
 using System.Collections.ObjectModel;
 
 namespace GOSAvaloniaControls;
+
 [TemplatePart(PART_ElementReturnButton, typeof(Button))]
 [TemplatePart(PART_ElementHomeButton, typeof(Button))]
 [TemplatePart(PART_ElementCaptionChildren, typeof(TextBlock))]
@@ -250,7 +251,7 @@ public class GOSNavigationBar : TemplatedControl
         }
         else
         {
-            // tem que verificar se est� com os filhos e captions adequados. Isso � necess�rio por causa do momento em que o controle � criado novamente na View com um viewmodel com um caminho estabelecido.
+            // tem que verificar se está com os filhos e captions adequados. Isso é necessário por causa do momento em que o controle é criado novamente na View com um viewmodel com um caminho estabelecido.
             if (ChildrenItems is null || ChildrenItems.Count == 0)
             {
                 GOSNavigationBarTree? temp = RootItem?.GetParentOfSelected();

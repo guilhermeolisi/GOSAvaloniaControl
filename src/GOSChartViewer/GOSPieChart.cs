@@ -139,7 +139,7 @@ public partial class GOSPieChart : GOSChartBase
             DataToShow[i].Name = Labels[i];
         }
 
-        //Forçar o Update
+        //ForÃ§ar o Update
         _chart.CoreChart.Update(new LiveChartsCore.Kernel.ChartUpdateParams { IsAutomaticUpdate = false, Throttling = false });
         //ChangeDataToObservableCollection(Data, DataToShow);
         ChangeShowLegend();
