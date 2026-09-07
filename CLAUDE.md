@@ -11,9 +11,6 @@ Regras compartilhadas em `../CLAUDE.md`; regras de Avalonia/XAML em
 
 - Submodulo git: `src/SindarinTextMate/Grammars/sindarin` aponta para
   `github.com/guilhermeolisi/sindarin-grammar`. Atualize com `git submodule update`.
-- Arquivos `*-DESKTOP-KVEQ1R5.csproj` sao duplicatas de conflito de sincronizacao,
-  fora de qualquer solucao e com referencias quebradas. Nao usar; candidatos a remocao.
-- `GOSChartViewer` referencia `..\..\LiveCharts2\...`, caminho que nao existe.
 - Nao ha testes. Testes novos vao em `test/<Projeto>.Tests` com
   `Avalonia.Headless.XUnit` 11.3.x (`[AvaloniaFact]`, paralelismo desligado).
 - DI pelo `BaseLibrary.DependencyInjection`. Depende de `GOSAvaloniaServices`.
