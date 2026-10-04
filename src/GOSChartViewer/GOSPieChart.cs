@@ -72,12 +72,15 @@ public partial class GOSPieChart : GOSChartBase
             return;
         }
 
+        // O callback roda uma vez por elemento, na ordem do Data: o rotulo vem da POSICAO. Data.IndexOf(valor) dava o
+        // nome da primeira fatia a toda fatia de mesmo valor (fases 50/50, E089 A022).
+        int position = 0;
         _chart.Series = Data.AsPieSeries((value, series) =>
             {
 
                 //https://livecharts.dev/docs/Avalonia/2.0.0-rc2/samples.pies.outlabels
 
-                int index = Data.IndexOf(value);
+                int index = position++;
 
                 series.Name = Labels is null || index >= Labels.Count ? string.Empty : Labels[index];
 
