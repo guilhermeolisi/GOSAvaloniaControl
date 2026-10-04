@@ -133,8 +133,8 @@ public class GOSChartsBusiness : IGOSChartsBusiness
             string ext = Path.GetExtension(otherBase);
             otherPath = Path.Combine(
                 Path.GetDirectoryName(otherBase) ?? string.Empty,
-                Path.GetFileNameWithoutExtension(otherBase) + 
-                (string.IsNullOrWhiteSpace(sharedPath) ? string.Empty : "_others") + 
+                Path.GetFileNameWithoutExtension(otherBase) +
+                (string.IsNullOrWhiteSpace(sharedPath) ? string.Empty : "_others") +
                 ext);
             otherPath = fileServices.Name.FileNameAvailable(otherPath);
 
@@ -505,6 +505,23 @@ public class GOSChartsBusiness : IGOSChartsBusiness
             }
         }
     }
+    internal const float ExportTitleTextSize = 30;
+    internal const float ExportTitlePadding = 15;
+
+    /// <summary>
+    /// Titulo da imagem exportada (E089, achado 140). Sem <c>MaxWidth</c> o LiveCharts desenha o titulo numa linha so, e um
+    /// titulo longo (a descricao da imagem 3D com o L e o plano de projecao) passava da largura da imagem e saia cortado.
+    /// Com ele, o texto quebra a linha dentro da largura util.
+    /// </summary>
+    internal static LabelVisual CreateExportTitle(string title, int width) => new()
+    {
+        Text = title,
+        TextSize = ExportTitleTextSize,
+        Padding = new Padding(ExportTitlePadding),
+        MaxWidth = width - 2 * ExportTitlePadding,
+        Paint = new SolidColorPaint(0xff303030)
+    };
+
     private InMemorySkiaSharpChart CreateCartesianChart(IEnumerable<ISeries> series, string title, string xLabel, string yLabel, LegendPosition legendPosition, string filePathToSave, FormatImage format, int width, int height, double? xmin, double? xmax, double? ymin, double? ymax)
     {
         InMemorySkiaSharpChart chart = new SKCartesianChart
@@ -517,13 +534,7 @@ public class GOSChartsBusiness : IGOSChartsBusiness
             EasingFunction = null,
             LegendBackgroundPaint = new SolidColorPaint { Color = SKColors.White },
             Series = series,
-            Title = new LabelVisual
-            {
-                Text = title,
-                TextSize = 30,
-                Padding = new Padding(15),
-                Paint = new SolidColorPaint(0xff303030)
-            },
+            Title = CreateExportTitle(title, width),
             XAxes =
             [
                 new Axis
@@ -568,13 +579,7 @@ public class GOSChartsBusiness : IGOSChartsBusiness
             EasingFunction = null,
             LegendBackgroundPaint = new SolidColorPaint { Color = SKColors.White },
             Series = series,
-            Title = new LabelVisual
-            {
-                Text = title,
-                TextSize = 30,
-                Padding = new Padding(15),
-                Paint = new SolidColorPaint(0xff303030)
-            },
+            Title = CreateExportTitle(title, width),
         };
         (chart as SKPieChart).Legend = new LiveLegendLigth(legendPosition == LegendPosition.Right || legendPosition == LegendPosition.Left);
         (chart as SKPieChart).LegendPosition = legendPosition;
