@@ -23,7 +23,7 @@ public partial class GOSTextEditor : TemplatedControl
     public static readonly DirectProperty<GOSTextEditor, bool> IsReadOnlyProperty = AvaloniaProperty.RegisterDirect<GOSTextEditor, bool>(nameof(IsReadOnly), o => o.IsReadOnly);
     public static readonly StyledProperty<bool> IsWrapProperty = AvaloniaProperty.Register<GOSTextEditor, bool>(nameof(IsWrap), false, false, BindingMode.TwoWay);
     public static readonly StyledProperty<bool> ShowToolBarProperty = AvaloniaProperty.Register<GOSTextEditor, bool>(nameof(ShowToolBar), true, false, BindingMode.OneWay);
-    public static readonly StyledProperty<bool> ThemeProperty = AvaloniaProperty.Register<GOSTextEditor, bool>(nameof(Theme), defaultBindingMode: BindingMode.OneWay);
+    public static readonly StyledProperty<bool> EditorThemeProperty = AvaloniaProperty.Register<GOSTextEditor, bool>(nameof(EditorTheme), defaultBindingMode: BindingMode.OneWay);
     public static readonly StyledProperty<string> TextProperty = AvaloniaProperty.Register<GOSTextEditor, string>(nameof(Text), defaultBindingMode: BindingMode.TwoWay);
 
     public string? FilePath
@@ -66,10 +66,10 @@ public partial class GOSTextEditor : TemplatedControl
     /// <summary>
     /// True = Dark; False = Ligth
     /// </summary>
-    public bool Theme
+    public bool EditorTheme
     {
-        get => GetValue(ThemeProperty);
-        set => SetValue(ThemeProperty, value);
+        get => GetValue(EditorThemeProperty);
+        set => SetValue(EditorThemeProperty, value);
     }
     public string Text
     {
@@ -80,7 +80,7 @@ public partial class GOSTextEditor : TemplatedControl
     {
         FilePathProperty.Changed.AddClassHandler<GOSTextEditor>((x, e) => x.ChangeFile());
         ExtensionProperty.Changed.AddClassHandler<GOSTextEditor>((x, e) => x.ChangeExtension());
-        ThemeProperty.Changed.AddClassHandler<GOSTextEditor>((x, e) => x.ChangeTheme());
+        EditorThemeProperty.Changed.AddClassHandler<GOSTextEditor>((x, e) => x.ChangeTheme());
         IsEditingProperty.Changed.AddClassHandler<GOSTextEditor>((x, e) => x.IsReadOnly = !x.IsEditing);
         TextProperty.Changed.AddClassHandler<GOSTextEditor>((x, e) => x.TextPropertyChanged(x.Text));
     }
@@ -238,7 +238,7 @@ public partial class GOSTextEditor : TemplatedControl
 
         }
         isEditNull = false;
-        if (Theme)
+        if (EditorTheme)
         {
             _textMateInstallation.SetTheme(_registryOptions.LoadTheme(ThemeName.DarkPlus));
         }
