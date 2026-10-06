@@ -251,7 +251,6 @@ public partial class GOSCartesian
     private void ChangeDataToObservableCollection(ObservableCollection<(double X, double Y)> data, ObservableCollection<ObservablePoint> obs)
     {
         obs.Clear();
-        int indPlus = 0;
         if (IsVerticalLine)
         {
             for (int i = 0; i < data.Count; i++)

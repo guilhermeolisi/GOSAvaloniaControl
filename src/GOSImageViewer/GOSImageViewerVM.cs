@@ -54,7 +54,7 @@ public partial class GOSImageViewer
                     ImageToView = await Task.Run(() => new Bitmap(imageStream));
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
 
             }

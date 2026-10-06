@@ -150,8 +150,9 @@ public class RegistryOptions : IRegistryOptions
                 throw;
                 //return null;
             }
-#endif
+#else
             return ThemeReader.ReadThemeSync(reader);
+#endif
         }
     }
 
@@ -179,9 +180,9 @@ public class RegistryOptions : IRegistryOptions
             var grammar = GrammarReader.ReadGrammarSync(reader);
             //var grammar2 = GrammarReader.ReadGrammarSync(reader);
             return grammar; //Se eu tentar usar novamente o reader, ele vai dar erro
-#endif
-
+#else
             return GrammarReader.ReadGrammarSync(reader);
+#endif
         }
         catch (Exception ex)
         {
