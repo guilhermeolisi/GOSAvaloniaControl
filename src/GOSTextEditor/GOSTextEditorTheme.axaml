@@ -39,12 +39,12 @@
 							<StackPanel DockPanel.Dock="Left" Orientation="Horizontal" HorizontalAlignment="Left">
 								<ToggleButton x:Name="PART_WrapCheck" IsChecked="{TemplateBinding IsWrap, Mode=TwoWay}" ToolTip.Tip="Word Wrap">
 									<Viewbox>
-										<Path Stretch="UniformToFill" Fill="{Binding $parent[Button].Foreground}" Data="{StaticResource icon_wrapinternal}" />
+										<Path Stretch="UniformToFill" Fill="{CompiledBinding $parent[Button].Foreground}" Data="{StaticResource icon_wrapinternal}" />
 									</Viewbox>
 								</ToggleButton>
 								<Button x:Name="PART_CopyClipBoard" ToolTip.Tip="Copy text to Clipboard">
 									<Viewbox>
-										<Path Stretch="UniformToFill" Fill="{Binding $parent[Button].Foreground}" Data="{StaticResource icon_clipboardplusinternal}" />
+										<Path Stretch="UniformToFill" Fill="{CompiledBinding $parent[Button].Foreground}" Data="{StaticResource icon_clipboardplusinternal}" />
 									</Viewbox>
 								</Button>
 							</StackPanel>
@@ -52,12 +52,12 @@
 								<!--<TextBlock Text="Editing" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0"/>
 								<ToggleSwitch x:Name="PART_EditCheck" IsChecked="{TemplateBinding IsEditing, Mode=TwoWay}"  Margin="0" VerticalAlignment="Center">
 									--><!--<Viewbox>
-										<Path Stretch="UniformToFill" Fill="{Binding $parent[Button].Foreground}" Data="{StaticResource icon_editinternal}" />
+										<Path Stretch="UniformToFill" Fill="{CompiledBinding $parent[Button].Foreground}" Data="{StaticResource icon_editinternal}" />
 									</Viewbox>--><!--
 								</ToggleSwitch>-->
 								<ToggleButton x:Name="PART_EditCheck" IsChecked="{TemplateBinding IsEditing, Mode=TwoWay}"  Margin="0" VerticalAlignment="Center">
 									<Viewbox>
-										<Path Stretch="UniformToFill" Fill="{Binding $parent[Button].Foreground}" Data="{StaticResource icon_edit}" />
+										<Path Stretch="UniformToFill" Fill="{CompiledBinding $parent[Button].Foreground}" Data="{StaticResource icon_edit}" />
 									</Viewbox>
 								</ToggleButton>
 							</StackPanel>

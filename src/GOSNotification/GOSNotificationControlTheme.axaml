@@ -181,8 +181,8 @@
                                                             VerticalAlignment="Center"
                                                             IsClosable="False"
                                                             IsOpen="True"
-                                                            Message="{Binding Message}"
-                                                            Severity="{Binding Severity, Converter={StaticResource ByteToSeverityConverter}}" />
+                                                            Message="{CompiledBinding Message}"
+                                                            Severity="{CompiledBinding Severity, Converter={StaticResource ByteToSeverityConverter}}" />
                                                         <Button
                                                             Margin="0,4,4,0"
                                                             Padding="2"
@@ -213,8 +213,8 @@
                                             <!--  Title="Notification"  -->
                                             <fl:InfoBar
                                                 IsOpen="True"
-                                                Message="{Binding Item.Message}"
-                                                Severity="{Binding Item.Severity, Converter={StaticResource ByteToSeverityConverter}}" />
+                                                Message="{CompiledBinding Item.Message}"
+                                                Severity="{CompiledBinding Item.Severity, Converter={StaticResource ByteToSeverityConverter}}" />
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl>
