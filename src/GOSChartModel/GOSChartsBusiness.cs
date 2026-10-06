@@ -25,7 +25,7 @@ public class GOSChartsBusiness : IGOSChartsBusiness
 
     static DrawMarginFrame DrawMarginFrame;
     static LiveLegendBase _legendBase;
-    static double darkLightness, lightLightness;
+    static double lightLightness;
     static GOSChartsBusiness()
     {
 
@@ -37,7 +37,6 @@ public class GOSChartsBusiness : IGOSChartsBusiness
 
         _legendBase = new LiveLegendLigth();
         lightLightness = 0.44;
-        darkLightness = 0.66;
     }
     public GOSChartsBusiness(IColorServices? colorServices = null, IFileServices? fileServices = null)
     {
@@ -513,14 +512,14 @@ public class GOSChartsBusiness : IGOSChartsBusiness
     /// titulo longo (a descricao da imagem 3D com o L e o plano de projecao) passava da largura da imagem e saia cortado.
     /// Com ele, o texto quebra a linha dentro da largura util.
     /// </summary>
-    internal static LabelVisual CreateExportTitle(string title, int width) => new()
+    internal static DrawnLabelVisual CreateExportTitle(string title, int width) => new(new LabelGeometry
     {
         Text = title,
         TextSize = ExportTitleTextSize,
         Padding = new Padding(ExportTitlePadding),
         MaxWidth = width - 2 * ExportTitlePadding,
         Paint = new SolidColorPaint(0xff303030)
-    };
+    });
 
     private InMemorySkiaSharpChart CreateCartesianChart(IEnumerable<ISeries> series, string title, string xLabel, string yLabel, LegendPosition legendPosition, string filePathToSave, FormatImage format, int width, int height, double? xmin, double? xmax, double? ymin, double? ymax)
     {

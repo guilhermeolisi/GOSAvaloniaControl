@@ -39,10 +39,10 @@ public sealed class GOSChartsBusinessTests
 
         // Act
         var title = GOSChartsBusiness.CreateExportTitle(LongTitle, ExportWidth);
-        LvcSize wrapped = Measure(title.Text, (float)title.MaxWidth);
+        LvcSize wrapped = Measure(title.Label.Text, (float)title.Label.MaxWidth);
 
         // Assert
-        title.Text.Should().Be(LongTitle, "o export leva o titulo inteiro");
+        title.Label.Text.Should().Be(LongTitle, "o export leva o titulo inteiro");
         wrapped.Width.Should().BeLessThanOrEqualTo(ExportWidth, "o titulo quebra a linha dentro da largura da imagem");
         wrapped.Height.Should().BeGreaterThan(singleLine.Height * 1.5f, "o titulo longo ocupa mais de uma linha");
     }
@@ -52,7 +52,7 @@ public sealed class GOSChartsBusinessTests
     {
         var title = GOSChartsBusiness.CreateExportTitle("Size", ExportWidth);
 
-        LvcSize size = Measure(title.Text, (float)title.MaxWidth);
+        LvcSize size = Measure(title.Label.Text, (float)title.Label.MaxWidth);
 
         size.Height.Should().BeApproximately(Measure("Size", float.MaxValue).Height, 0.5f, "titulo curto nao ganha linha");
     }
