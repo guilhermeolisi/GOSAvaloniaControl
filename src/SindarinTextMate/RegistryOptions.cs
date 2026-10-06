@@ -186,10 +186,8 @@ public class RegistryOptions : IRegistryOptions
         }
         catch (Exception ex)
         {
-#if DEBUG
+            // Debug.WriteLine e [Conditional("DEBUG")]: some do Release sozinho, sem o #if que deixava ex sem uso ali.
             Debug.WriteLine($"Erro no {nameof(GetGrammar)}: " + ex.Message);
-            //return null;
-#endif
             throw;
         }
     }
