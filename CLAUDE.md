@@ -10,7 +10,9 @@ Regras compartilhadas em `../CLAUDE.md`; regras de Avalonia/XAML em
 ## Pontos de atencao
 
 - Submodulo git: `src/SindarinTextMate/Grammars/sindarin` aponta para
-  `github.com/guilhermeolisi/sindarin-grammar`. Atualize com `git submodule update`.
+  `github.com/guilhermeolisi/sindarin-grammar`. Quem avanca o ponteiro e o script do workspace,
+  `.claude/ferramentas/sincronizar-gramatica.ps1` (`-Check` confere, `-SoPonteiros` so avanca); nao edite nada ali
+  dentro e nao avance a mao.
 - Testes em `test/<Projeto>.Tests` com `Avalonia.Headless.XUnit` 11.3.x (`[AvaloniaFact]`,
   paralelismo desligado). O primeiro e o modelo: `test/GOSCustomControl.Tests` (E047), com versoes
   literais de pacote (o repositorio nao tem gestao central) e uma aplicacao headless sem tema.
