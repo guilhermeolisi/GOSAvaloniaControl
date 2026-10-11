@@ -154,18 +154,18 @@
                                             Grid.Column="0"
                                             VerticalAlignment="Center"
                                             FontWeight="SemiBold"
-                                            Text="Notificações" />
+                                            Text="Notification" />
                                         <Button
                                             x:Name="PART_clearAll"
                                             Grid.Column="1"
                                             Padding="6,3"
-                                            ToolTip.Tip="Limpar todas as notificações">
+                                            ToolTip.Tip="Clear all notifications">
                                             <StackPanel Orientation="Horizontal" Spacing="4">
                                                 <PathIcon
                                                     Width="12"
                                                     Height="12"
                                                     Data="{StaticResource icon_trash}" />
-                                                <TextBlock VerticalAlignment="Center" Text="Limpar tudo" />
+                                                <TextBlock VerticalAlignment="Center" Text="Clear all" />
                                             </StackPanel>
                                         </Button>
                                     </Grid>
@@ -191,7 +191,7 @@
                                                             Background="Transparent"
                                                             BorderThickness="0"
                                                             Classes="removeNotification"
-                                                            ToolTip.Tip="Remover notificação">
+                                                            ToolTip.Tip="Remove notification">
                                                             <PathIcon
                                                                 Width="8"
                                                                 Height="8"
