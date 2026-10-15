@@ -206,7 +206,7 @@
                             </Flyout>
                         </Button.Flyout>
                         <FlyoutBase.AttachedFlyout>
-                            <Flyout FlyoutPresenterClasses="transparent" Placement="TopEdgeAlignedRight">
+                            <controls:NotificationBalloonFlyout FlyoutPresenterClasses="transparent" Placement="TopEdgeAlignedRight">
                                 <ItemsControl x:Name="PART_ballon" Width="400">
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate DataType="controls:BallonItem">
@@ -218,7 +218,7 @@
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl>
-                            </Flyout>
+                            </controls:NotificationBalloonFlyout>
                         </FlyoutBase.AttachedFlyout>
                     </Button>
                 </Grid>
