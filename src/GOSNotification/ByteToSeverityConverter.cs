@@ -25,14 +25,14 @@ public class ByteToSeverityConverter : IValueConverter
         {
             return number switch
             { 
-                1 => InfoBarSeverity.Success,
-                2 => InfoBarSeverity.Warning,
-                3 => InfoBarSeverity.Error,
-                4 => InfoBarSeverity.Informational,
-                _ => InfoBarSeverity.Informational,
+                1 => FAInfoBarSeverity.Success,
+                2 => FAInfoBarSeverity.Warning,
+                3 => FAInfoBarSeverity.Error,
+                4 => FAInfoBarSeverity.Informational,
+                _ => FAInfoBarSeverity.Informational,
             };
         }
-        else if (value is InfoBarSeverity info)
+        else if (value is FAInfoBarSeverity info)
         {
 #if DEBUG
             var trash = (byte)info;

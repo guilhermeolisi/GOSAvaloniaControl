@@ -114,12 +114,12 @@
                                 Margin="0,-5,-7,0"
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Top">
-								<fl:InfoBadge
+								<fl:FAInfoBadge
                                     x:Name="PART_infoBadge"
                                     Classes="Attention"
                                     IsVisible="False" />
 							</Viewbox>
-							<!--<fl:InfoBadge
+							<!--<fl:FAInfoBadge
 								x:Name="PART_infoBadge"
 								Classes="Attention"
 								IsVisible="False" 
@@ -137,7 +137,7 @@
                                 Margin="0,0,-5,0"
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Top">
-                                <fl:InfoBadge
+                                <fl:FAInfoBadge
                                     x:Name="PART_infoBadge"
                                     Classes="Attention"
                                     IsVisible="False" />
@@ -176,7 +176,7 @@
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate DataType="controls:NotificationItem">
                                                     <Panel Margin="0,2">
-                                                        <fl:InfoBar
+                                                        <fl:FAInfoBar
                                                             MaxHeight="80"
                                                             VerticalAlignment="Center"
                                                             IsClosable="False"
@@ -211,7 +211,7 @@
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate DataType="controls:BallonItem">
                                             <!--  Title="Notification"  -->
-                                            <fl:InfoBar
+                                            <fl:FAInfoBar
                                                 IsOpen="True"
                                                 Message="{CompiledBinding Item.Message}"
                                                 Severity="{CompiledBinding Item.Severity, Converter={StaticResource ByteToSeverityConverter}}" />

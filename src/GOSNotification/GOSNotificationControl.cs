@@ -19,7 +19,7 @@ public class GOSNotificationControl : TemplatedControl, IGOSNotification
     private ItemsControl showNotifications;
     private Flyout flyout;
     private FlyoutBase flyoutBallon;
-    FluentAvalonia.UI.Controls.InfoBadge infoBadge;
+    FluentAvalonia.UI.Controls.FAInfoBadge infoBadge;
 
     public static readonly StyledProperty<ObservableCollection<NotificationItem>> ItemsProperty = AvaloniaProperty.Register<GOSNotificationControl, ObservableCollection<NotificationItem>>(nameof(Items), new ObservableCollection<NotificationItem>(), defaultBindingMode: BindingMode.TwoWay);
     public static readonly StyledProperty<double> SizeBellProperty = AvaloniaProperty.Register<GOSNotificationControl, double>(nameof(Items), 30, defaultBindingMode: BindingMode.OneWay);
@@ -55,7 +55,7 @@ public class GOSNotificationControl : TemplatedControl, IGOSNotification
         //ballons.Items = ItemsBallon;
         ballons.ItemsSource = ItemsBallon;
 
-        infoBadge = e.NameScope.Find<FluentAvalonia.UI.Controls.InfoBadge>("PART_infoBadge");
+        infoBadge = e.NameScope.Find<FluentAvalonia.UI.Controls.FAInfoBadge>("PART_infoBadge");
         //flyout = e.NameScope.Find<Flyout>("PART_flyout");
 
 
@@ -285,7 +285,7 @@ public class GOSNotificationControl : TemplatedControl, IGOSNotification
         if (visual is null)
             return;
 
-        FluentAvalonia.UI.Controls.InfoBar? info = visual.FindAncestorOfType<FluentAvalonia.UI.Controls.InfoBar>();
+        FluentAvalonia.UI.Controls.FAInfoBar? info = visual.FindAncestorOfType<FluentAvalonia.UI.Controls.FAInfoBar>();
 
         if (info is null)
             return;
