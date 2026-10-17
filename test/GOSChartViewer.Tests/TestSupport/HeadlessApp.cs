@@ -19,11 +19,15 @@ namespace GOSChartViewer.Tests.TestSupport;
 public class HeadlessApp : Application
 {
     // Como o App.axaml do Nimloth: o .axaml nao tem x:Class, entao entra pelo StyleInclude e nao pelo construtor.
-    public override void Initialize() =>
+    public override void Initialize()
+    {
+        // Avalonia 12: o avares:// de outro assembly so acha o XAML compilado se o assembly ja estiver carregado.
+        System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(GOSPieChart).TypeHandle);
         Styles.Add(new StyleInclude(new Uri("avares://GOSChartViewer.Tests/"))
         {
             Source = new Uri("avares://GOSChartViewer/GOSChartViewerTheme.axaml"),
         });
+    }
 
     public static AppBuilder BuildAvaloniaApp() =>
         AppBuilder.Configure<HeadlessApp>().UseHeadless(new AvaloniaHeadlessPlatformOptions());

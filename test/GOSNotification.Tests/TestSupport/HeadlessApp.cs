@@ -21,12 +21,15 @@ public class HeadlessApp : Application
     public static AppBuilder BuildAvaloniaApp() =>
         AppBuilder.Configure<HeadlessApp>()
             .UseSkia()
+            .UseHarfBuzz()
             .WithInterFont()
             .UseHeadless(new AvaloniaHeadlessPlatformOptions { UseHeadlessDrawing = false });
 
     public override void Initialize()
     {
         Styles.Add(new FluentAvaloniaTheme());
+        // Avalonia 12: o avares:// de outro assembly so acha o XAML compilado se o assembly ja estiver carregado.
+        System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(GOSAvaloniaControls.GOSNotificationControl).TypeHandle);
         var baseUri = new Uri("avares://GOSNotification.Tests/");
         Styles.Add(new StyleInclude(baseUri) { Source = new Uri("avares://GOSNotification/GOSNotificationControlTheme.axaml") });
     }
