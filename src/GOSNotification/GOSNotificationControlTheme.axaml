@@ -186,7 +186,7 @@
                                                             <fl:FAInfoBar.ActionButton>
                                                                 <Button
                                                                     AutomationProperties.Name="{CompiledBinding ActionText}"
-                                                                    Classes="standard notificationAction"
+                                                                    Classes="secondary notificationAction"
                                                                     Command="{CompiledBinding ActionCommand}"
                                                                     Content="{CompiledBinding ActionText}"
                                                                     IsVisible="{CompiledBinding HasAction}" />
@@ -227,7 +227,7 @@
                                                 <fl:FAInfoBar.ActionButton>
                                                     <Button
                                                         AutomationProperties.Name="{CompiledBinding Item.ActionText}"
-                                                        Classes="standard notificationAction"
+                                                        Classes="secondary notificationAction"
                                                         Command="{CompiledBinding Item.ActionCommand}"
                                                         Content="{CompiledBinding Item.ActionText}"
                                                         IsVisible="{CompiledBinding Item.HasAction}" />
