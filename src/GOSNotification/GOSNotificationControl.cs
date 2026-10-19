@@ -214,22 +214,29 @@ public class GOSNotificationControl : TemplatedControl, IGOSNotification
     }
 
     public void AddNotification(byte severity, string message, bool showBallon)
+        => Add(new NotificationItem(severity, message, showBallon));
+
+    /// <summary>Notificacao com botao de acao no balao e na lista do sino (E175).</summary>
+    public void AddNotification(byte severity, string message, bool showBallon, string actionText, Action action)
+        => Add(new NotificationItem(severity, message, showBallon, actionText, action));
+
+    private void Add(NotificationItem item)
     {
         if (showNotifications is null)
             return;
 
         if (Thread.CurrentThread == mainThread)
         {
-            localMethod(severity, message, showBallon);
+            localMethod(item);
         }
         else
         {
             UIContext?.Post(_ =>
             {
-                localMethod(severity, message, showBallon);
+                localMethod(item);
             }, null);
         }
-        void localMethod(byte severity, string message, bool showBallon)
+        void localMethod(NotificationItem item)
         {
             if (Items is null)
             {
@@ -241,7 +248,7 @@ public class GOSNotificationControl : TemplatedControl, IGOSNotification
             {
                 showNotifications.ItemsSource = Items;
             }
-            Items.Add(new NotificationItem(severity, message, showBallon));
+            Items.Add(item);
         }
         //if (Items is null)
         //{
@@ -268,8 +275,10 @@ public class GOSNotificationControl : TemplatedControl, IGOSNotification
         if (e.Source is not Visual visual)
             return;
 
+        // So o X de remover: o botao de acao do item (E175) tem DataContext NotificationItem tambem, e sem o filtro
+        // removeria o item e marcaria Handled antes de o comando dele rodar.
         var button = visual as Button ?? visual.FindAncestorOfType<Button>();
-        if (button?.DataContext is NotificationItem item)
+        if (button is not null && button.Classes.Contains("removeNotification") && button.DataContext is NotificationItem item)
         {
             Items?.Remove(item);
             e.Handled = true;

@@ -115,4 +115,70 @@ public class GOSNotificationControlTests
         c.Editor.IsFocused.Should().BeTrue();
         c.Editor.Text.Should().Be("x");
     }
+
+    // E175: notificacao com acao ("Open results" no fim de um run). Antes a acao nao existia; a implementacao padrao
+    // da interface a descarta, entao o controle tem de sobrescreve-la e mostrar o botao.
+
+    [AvaloniaFact]
+    public void AddNotificationComAcao_PelaInterface_GuardaTextoEComandoQueRodaAAcao()
+    {
+        var c = Montar();
+        int chamadas = 0;
+
+        ((IGOSNotification)c.Sino).AddNotification(1, "Walk finished", true, "Open results", () => chamadas++);
+        Dispatcher.UIThread.RunJobs();
+
+        // O valor padrao de Items e uma colecao compartilhada entre instancias: os outros testes deixam itens nela.
+        var item = c.Sino.Items.Last();
+        item.Message.Should().Be("Walk finished");
+        item.ActionText.Should().Be("Open results");
+        item.HasAction.Should().BeTrue();
+        item.ActionCommand!.Execute(null);
+        chamadas.Should().Be(1);
+    }
+
+    [AvaloniaFact]
+    public void AddNotificationComAcao_BotaoDoBalaoRodaAAcao()
+    {
+        var c = Montar();
+        int chamadas = 0;
+
+        c.Sino.AddNotification(1, "Walk finished", true, "Open results", () => chamadas++);
+        Dispatcher.UIThread.RunJobs();
+
+        var conteudo = (Control)((Flyout)c.Balao).Content!;
+        var botao = conteudo.GetVisualDescendants().OfType<Button>()
+            .Last(b => b.Classes.Contains("notificationAction") && b.IsVisible);
+        botao.IsVisible.Should().BeTrue();
+        botao.Content.Should().Be("Open results");
+        botao.Command!.Execute(null);
+        chamadas.Should().Be(1);
+    }
+
+    [AvaloniaFact]
+    public void ListaDoSino_CliqueNoBotaoDeAcao_NaoRemoveOItem_CliqueNoXRemove()
+    {
+        var c = Montar();
+        c.Sino.AddNotification(1, "Walk finished", false, "Open results", () => { });
+        c.Sino.AddNotification(1, "Plain message", false);
+        Dispatcher.UIThread.RunJobs();
+        var comAcao = c.Sino.Items[^2];
+        var semAcao = c.Sino.Items[^1];
+        int antes = c.Sino.Items.Count;
+        var botaoSino = c.Sino.GetVisualDescendants().OfType<Button>().Single(b => b.Name == "PART_buttonBell");
+        var lista = (Flyout)botaoSino.Flyout!;
+        lista.ShowAt(botaoSino);
+        Dispatcher.UIThread.RunJobs();
+        var botoes = ((Control)lista.Content!).GetVisualDescendants().OfType<Button>().ToList();
+
+        var acao = botoes.Single(b => b.Classes.Contains("notificationAction") && b.DataContext == comAcao);
+        acao.RaiseEvent(new Avalonia.Interactivity.RoutedEventArgs(Button.ClickEvent));
+        Dispatcher.UIThread.RunJobs();
+        c.Sino.Items.Should().HaveCount(antes, "o botao de acao nao e o X de remover").And.Contain(comAcao);
+
+        var remover = botoes.Single(b => b.Classes.Contains("removeNotification") && b.DataContext == semAcao);
+        remover.RaiseEvent(new Avalonia.Interactivity.RoutedEventArgs(Button.ClickEvent));
+        Dispatcher.UIThread.RunJobs();
+        c.Sino.Items.Should().HaveCount(antes - 1).And.NotContain(semAcao);
+    }
 }

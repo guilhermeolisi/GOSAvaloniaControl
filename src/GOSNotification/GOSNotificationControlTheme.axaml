@@ -182,7 +182,16 @@
                                                             IsClosable="False"
                                                             IsOpen="True"
                                                             Message="{CompiledBinding Message}"
-                                                            Severity="{CompiledBinding Severity, Converter={StaticResource ByteToSeverityConverter}}" />
+                                                            Severity="{CompiledBinding Severity, Converter={StaticResource ByteToSeverityConverter}}">
+                                                            <fl:FAInfoBar.ActionButton>
+                                                                <Button
+                                                                    AutomationProperties.Name="{CompiledBinding ActionText}"
+                                                                    Classes="standard notificationAction"
+                                                                    Command="{CompiledBinding ActionCommand}"
+                                                                    Content="{CompiledBinding ActionText}"
+                                                                    IsVisible="{CompiledBinding HasAction}" />
+                                                            </fl:FAInfoBar.ActionButton>
+                                                        </fl:FAInfoBar>
                                                         <Button
                                                             Margin="0,4,4,0"
                                                             Padding="2"
@@ -206,7 +215,7 @@
                             </Flyout>
                         </Button.Flyout>
                         <FlyoutBase.AttachedFlyout>
-                            <controls:NotificationBalloonFlyout FlyoutPresenterClasses="transparent" Placement="TopEdgeAlignedRight">
+                            <controls:NotificationBalloonFlyout FlyoutPresenterClasses="transparent gos-balloon" Placement="TopEdgeAlignedRight">
                                 <ItemsControl x:Name="PART_ballon" Width="400">
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate DataType="controls:BallonItem">
@@ -214,7 +223,16 @@
                                             <fl:FAInfoBar
                                                 IsOpen="True"
                                                 Message="{CompiledBinding Item.Message}"
-                                                Severity="{CompiledBinding Item.Severity, Converter={StaticResource ByteToSeverityConverter}}" />
+                                                Severity="{CompiledBinding Item.Severity, Converter={StaticResource ByteToSeverityConverter}}">
+                                                <fl:FAInfoBar.ActionButton>
+                                                    <Button
+                                                        AutomationProperties.Name="{CompiledBinding Item.ActionText}"
+                                                        Classes="standard notificationAction"
+                                                        Command="{CompiledBinding Item.ActionCommand}"
+                                                        Content="{CompiledBinding Item.ActionText}"
+                                                        IsVisible="{CompiledBinding Item.HasAction}" />
+                                                </fl:FAInfoBar.ActionButton>
+                                            </fl:FAInfoBar>
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl>
