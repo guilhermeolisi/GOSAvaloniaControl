@@ -112,6 +112,9 @@ public partial class GOSTextEditor : TemplatedControl
 
         _editor = e.NameScope.Find<TextEditor>("PART_Editor");
 
+        // A instalacao do TextMate sobe uma thread de tokenizacao que segura o editor e, por ele, este controle e a View
+        // que o contem: a anterior (template reaplicado) se descarta antes, e a do controle fora da tela, no detach.
+        _textMateInstallation?.Dispose();
         _textMateInstallation = _editor.InstallTextMate(_registryOptions);
 
         Document = _editor.Document;
@@ -134,6 +137,30 @@ public partial class GOSTextEditor : TemplatedControl
             ChangeTheme();
         }
     }
+
+    /// <inheritdoc/>
+    protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnAttachedToVisualTree(e);
+        // Na primeira entrada o template ainda nao existe e o OnApplyTemplate instala; numa volta a tela, reinstala aqui.
+        if (_editor is null || _textMateInstallation is not null)
+            return;
+        _textMateInstallation = _editor.InstallTextMate(_registryOptions);
+        ChangeExtension();
+        ChangeTheme();
+    }
+
+    /// <inheritdoc/>
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        // Sem isto a thread de tokenizacao mantem vivo o controle fora da tela, e com ele a View e a ViewModel.
+        _textMateInstallation?.Dispose();
+        _textMateInstallation = null;
+        base.OnDetachedFromVisualTree(e);
+    }
+
+    /// <summary>Se o realce TextMate esta instalado (para os testes de ciclo de vida).</summary>
+    public bool IsHighlightInstalled => _textMateInstallation is not null;
 
     private async void Clip_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
@@ -190,7 +217,7 @@ public partial class GOSTextEditor : TemplatedControl
     readonly Language _sindarinLanguage;
     readonly RegistryOptions _registryOptions;
     private TextEditor _editor;
-    private AvaloniaEdit.TextMate.TextMate.Installation _textMateInstallation;
+    private AvaloniaEdit.TextMate.TextMate.Installation? _textMateInstallation;
     private void ChangeExtension()
     {
         if (_textMateInstallation is null)
