@@ -220,6 +220,11 @@ public class GOSNotificationControl : TemplatedControl, IGOSNotification
     public void AddNotification(byte severity, string message, bool showBallon, string actionText, Action action)
         => Add(new NotificationItem(severity, message, showBallon, actionText, action));
 
+    /// <summary>Notificacao com duas acoes: o balao mostra a primeira, a lista do sino as duas (E183).</summary>
+    public void AddNotification(byte severity, string message, bool showBallon, string actionText, Action action,
+        string secondActionText, Action secondAction)
+        => Add(new NotificationItem(severity, message, showBallon, actionText, action, secondActionText, secondAction));
+
     private void Add(NotificationItem item)
     {
         if (showNotifications is null)

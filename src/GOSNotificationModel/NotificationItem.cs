@@ -24,6 +24,19 @@ public class NotificationItem
         ActionCommand = new NotificationActionCommand(action);
     }
 
+    /// <summary>
+    /// Notificacao com duas acoes (E183, lei 6.7): o balao mostra so a primeira; a lista do sino, as duas.
+    /// </summary>
+    public NotificationItem(byte severity, string message, bool showBallon, string actionText, Action action,
+        string secondActionText, Action secondAction)
+        : this(severity, message, showBallon, actionText, action)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(secondActionText);
+        ArgumentNullException.ThrowIfNull(secondAction);
+        SecondActionText = secondActionText;
+        SecondActionCommand = new NotificationActionCommand(secondAction);
+    }
+
     public byte Severity { get; set; }
     public string Message { get; set; }
     public bool ShowBallon { get; set; }
@@ -35,6 +48,14 @@ public class NotificationItem
     public ICommand? ActionCommand { get; }
 
     public bool HasAction => ActionCommand is not null;
+
+    /// <summary>Texto da segunda acao, so na lista do sino; nulo quando nao ha.</summary>
+    public string? SecondActionText { get; }
+
+    /// <summary>Comando da segunda acao; nulo quando nao ha.</summary>
+    public ICommand? SecondActionCommand { get; }
+
+    public bool HasSecondAction => SecondActionCommand is not null;
 
     /// <summary>Comando sempre executavel que roda a acao da notificacao.</summary>
     private sealed class NotificationActionCommand(Action action) : ICommand

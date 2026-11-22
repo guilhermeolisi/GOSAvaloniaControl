@@ -32,6 +32,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\GOSCustomControl\GOSCustomControl.csproj" />
+    <!-- E183: a segunda acao da notificacao (modelo e interface, sem UI) -->
+    <ProjectReference Include="..\..\src\GOSNotificationModel\GOSNotificationModel.csproj" />
+    <ProjectReference Include="..\..\src\GOSNotificationInterface\GOSNotificationInterface.csproj" />
   </ItemGroup>
 
 </Project>

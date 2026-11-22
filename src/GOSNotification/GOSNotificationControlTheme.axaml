@@ -191,6 +191,14 @@
                                                                     Content="{CompiledBinding ActionText}"
                                                                     IsVisible="{CompiledBinding HasAction}" />
                                                             </fl:FAInfoBar.ActionButton>
+                                                            <!--  E183: a segunda acao (ex.: "Open log folder") so na lista do sino, lei 6.7  -->
+                                                            <Button
+                                                                Margin="0,0,0,4"
+                                                                AutomationProperties.Name="{CompiledBinding SecondActionText}"
+                                                                Classes="secondary notificationAction notificationSecondAction"
+                                                                Command="{CompiledBinding SecondActionCommand}"
+                                                                Content="{CompiledBinding SecondActionText}"
+                                                                IsVisible="{CompiledBinding HasSecondAction}" />
                                                         </fl:FAInfoBar>
                                                         <Button
                                                             Margin="0,4,4,0"
