@@ -195,7 +195,7 @@
                                                             <Button
                                                                 Margin="0,0,0,4"
                                                                 AutomationProperties.Name="{CompiledBinding SecondActionText}"
-                                                                Classes="secondary notificationAction notificationSecondAction"
+                                                                Classes="secondary notificationSecondAction"
                                                                 Command="{CompiledBinding SecondActionCommand}"
                                                                 Content="{CompiledBinding SecondActionText}"
                                                                 IsVisible="{CompiledBinding HasSecondAction}" />
