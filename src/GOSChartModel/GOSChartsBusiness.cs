@@ -512,16 +512,16 @@ public class GOSChartsBusiness : IGOSChartsBusiness
     /// titulo longo (a descricao da imagem 3D com o L e o plano de projecao) passava da largura da imagem e saia cortado.
     /// Com ele, o texto quebra a linha dentro da largura util.
     /// </summary>
-    internal static DrawnLabelVisual CreateExportTitle(string title, int width) => new(new LabelGeometry
+    internal static DrawnLabelVisual CreateExportTitle(string title, int width, double textScale = 1) => new(new LabelGeometry
     {
         Text = title,
-        TextSize = ExportTitleTextSize,
-        Padding = new Padding(ExportTitlePadding),
-        MaxWidth = width - 2 * ExportTitlePadding,
+        TextSize = (float)(ExportTitleTextSize * textScale),
+        Padding = new Padding((float)(ExportTitlePadding * textScale)),
+        MaxWidth = (float)(width - 2 * ExportTitlePadding * textScale),
         Paint = new SolidColorPaint(0xff303030)
     });
 
-    private InMemorySkiaSharpChart CreateCartesianChart(IEnumerable<ISeries> series, string title, string xLabel, string yLabel, LegendPosition legendPosition, string filePathToSave, FormatImage format, int width, int height, double? xmin, double? xmax, double? ymin, double? ymax)
+    private InMemorySkiaSharpChart CreateCartesianChart(IEnumerable<ISeries> series, string title, string xLabel, string yLabel, LegendPosition legendPosition, string filePathToSave, FormatImage format, int width, int height, double? xmin, double? xmax, double? ymin, double? ymax, double textScale = 1)
     {
         InMemorySkiaSharpChart chart = new SKCartesianChart
         {
@@ -533,7 +533,7 @@ public class GOSChartsBusiness : IGOSChartsBusiness
             EasingFunction = null,
             LegendBackgroundPaint = new SolidColorPaint { Color = SKColors.White },
             Series = series,
-            Title = CreateExportTitle(title, width),
+            Title = CreateExportTitle(title, width, textScale),
             XAxes =
             [
                 new Axis
@@ -563,11 +563,20 @@ public class GOSChartsBusiness : IGOSChartsBusiness
                 }
             ]
         };
-        (chart as SKCartesianChart).Legend = new LiveLegendLigth(legendPosition == LegendPosition.Right || legendPosition == LegendPosition.Left);
+        (chart as SKCartesianChart).Legend = new LiveLegendLigth(legendPosition == LegendPosition.Right || legendPosition == LegendPosition.Left) { TextScale = textScale };
         (chart as SKCartesianChart).LegendPosition = legendPosition;
+        if (textScale != 1)
+        {
+            // Os rotulos e os nomes dos eixos crescem junto com o titulo (E118); na escala 1 tudo fica como era.
+            foreach (Axis axis in ((SKCartesianChart)chart).XAxes.Concat(((SKCartesianChart)chart).YAxes).OfType<Axis>())
+            {
+                axis.TextSize *= textScale;
+                axis.NameTextSize *= textScale;
+            }
+        }
         return chart;
     }
-    private InMemorySkiaSharpChart CreatePieChart(IEnumerable<ISeries> series, LegendPosition legendPosition, string title, int width, int height)
+    private InMemorySkiaSharpChart CreatePieChart(IEnumerable<ISeries> series, LegendPosition legendPosition, string title, int width, int height, double textScale = 1)
     {
         InMemorySkiaSharpChart chart = new SKPieChart
         {
@@ -578,12 +587,32 @@ public class GOSChartsBusiness : IGOSChartsBusiness
             EasingFunction = null,
             LegendBackgroundPaint = new SolidColorPaint { Color = SKColors.White },
             Series = series,
-            Title = CreateExportTitle(title, width),
+            Title = CreateExportTitle(title, width, textScale),
         };
-        (chart as SKPieChart).Legend = new LiveLegendLigth(legendPosition == LegendPosition.Right || legendPosition == LegendPosition.Left);
+        (chart as SKPieChart).Legend = new LiveLegendLigth(legendPosition == LegendPosition.Right || legendPosition == LegendPosition.Left) { TextScale = textScale };
         (chart as SKPieChart).LegendPosition = legendPosition;
         return chart;
     }
+    public byte[] RenderCartesianChartPng(IEnumerable<ISeries> series, string title, string xLabel, string yLabel, LegendPosition legend, int width, int height, double? xmin, double? xmax, double? ymin, double? ymax, double textScale = 1)
+    {
+        InMemorySkiaSharpChart chart = CreateCartesianChart(series, title, xLabel, yLabel, legend, string.Empty, FormatImage.PNG, width, height, xmin, xmax, ymin, ymax, textScale);
+        return EncodePng(chart);
+    }
+
+    public byte[] RenderPieChartPng(IEnumerable<ISeries> series, string title, LegendPosition legend, int width, int height, double textScale = 1)
+    {
+        InMemorySkiaSharpChart chart = CreatePieChart(series, legend, title, width, height, textScale);
+        return EncodePng(chart);
+    }
+
+    /// <summary>O mesmo PNG que o <c>SaveImage</c> grava em arquivo, mas em memoria.</summary>
+    private static byte[] EncodePng(InMemorySkiaSharpChart chart)
+    {
+        using SKImage image = chart.GetImage();
+        using SKData data = image.Encode(SKEncodedImageFormat.Png, 100);
+        return data.ToArray();
+    }
+
     private void SaveChart(InMemorySkiaSharpChart chart, string filePathToSave, FormatImage format)
     {
         filePathToSave = fileServices.Name.FileNameAvailable(filePathToSave);

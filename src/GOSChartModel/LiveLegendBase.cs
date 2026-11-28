@@ -22,6 +22,9 @@ public class LiveLegendBase : SKDefaultLegend
     protected virtual SKColor _fontPaint => SKColors.White;
     public bool IsVertical { get; set; } = false;
 
+    /// <summary>Fator sobre o tamanho do texto da legenda (1 na tela); a imagem impressa em alta resolucao pede mais (E118).</summary>
+    public double TextScale { get; set; } = 1;
+
     public LiveLegendBase()
     {
     }
@@ -56,7 +59,7 @@ public class LiveLegendBase : SKDefaultLegend
 
         foreach (var series in chart.Series.Where(x => x.IsVisibleAtLegend))
         {
-            stackLayout.Children.Add(new LegendItem(series, _fontPaint));
+            stackLayout.Children.Add(new LegendItem(series, _fontPaint, TextScale));
         }
 
         return stackLayout;
@@ -64,7 +67,7 @@ public class LiveLegendBase : SKDefaultLegend
 }
 internal class LegendItem : StackLayout
 {
-    public LegendItem(ISeries series, SKColor fontColor)
+    public LegendItem(ISeries series, SKColor fontColor, double textScale = 1)
     {
         Orientation = ContainerOrientation.Horizontal;
         Padding = new Padding(12, 6);
@@ -94,7 +97,7 @@ internal class LegendItem : StackLayout
             new LabelGeometry
             {
                 Text = series.Name ?? "?",
-                TextSize = 15,
+                TextSize = (float)(15 * textScale),
                 //Paint = new SolidColorPaint(new SKColor(30, 30, 30)),
                 Paint = new SolidColorPaint(fontColor),
                 //Padding = new Padding(8, 2, 0, 2),
